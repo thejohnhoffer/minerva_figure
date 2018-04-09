@@ -55,6 +55,13 @@ def find_files(fmt):
 
 def blend_tile(t, l, z, y, x, **kwargs):
     """
+    Arguments:
+        t: integer time step
+        l: interger level of detail (powers of 2)
+        z: tile offset in depth
+        y: vertical tile offset
+        x: horizontal tile offset
+
     Keywords:
         shape: uint16 2vec y,x pixel shape of one tile
         ranges: float32 2 by N-channel min,max range
