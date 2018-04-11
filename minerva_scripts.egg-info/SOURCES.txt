@@ -1,7 +1,4 @@
-README.md
 setup.cfg
-load/__init__.py
-load/disk.py
 minerva_scripts.egg-info/PKG-INFO
 minerva_scripts.egg-info/SOURCES.txt
 minerva_scripts.egg-info/dependency_links.txt

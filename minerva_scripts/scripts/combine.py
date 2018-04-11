@@ -1,10 +1,11 @@
-import load.disk
-import blend.mem
+import minerva_scripts.load.disk
+import minerva_scripts.blend.mem
 import numpy as np
 import cv2
+import sys
 import os
 
-if __name__ == "__main__":
+def main(args=sys.argv):
 
     # Constants
     IN_DIR = "/media/john/420D-AC8E/cycif_images/40BP_59/tiles/"
@@ -70,3 +71,5 @@ if __name__ == "__main__":
         except Exception as e:
             print (e)
 
+if __name__ == "__main__":
+    main(sys.argv)
