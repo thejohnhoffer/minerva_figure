@@ -8,6 +8,7 @@ with open(os.path.join(here, 'README.md')) as f:
 
 requires = [
     'numpy>=1.11.1',
+    'pyaml>=16.12.2',
     'opencv-python>=3.3.0.10',
 ]
 
