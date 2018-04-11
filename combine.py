@@ -1,4 +1,5 @@
 import load.disk
+import blend.mem
 import numpy as np
 import cv2
 import os
@@ -18,11 +19,11 @@ if __name__ == "__main__":
         os.makedirs(OUT_DIR)
 
     # Full path format of input files
-    in_full_format = os.path.join(IN_DIR, IN_NAME_FORMAT)
-    out_full_format = os.path.join(OUT_DIR, OUT_NAME_FORMAT)
+    in_path_format = os.path.join(IN_DIR, IN_NAME_FORMAT)
+    out_path_format = os.path.join(OUT_DIR, OUT_NAME_FORMAT)
 
     # Find range of image tiles
-    ctlzyx_shape, tile_shape = load.disk.index(in_full_format)
+    ctlzyx_shape, tile_shape = load.disk.index(in_path_format)
     zyx_shape = ctlzyx_shape[-3::]
     n_channel = ctlzyx_shape[0]
 
@@ -49,19 +50,21 @@ if __name__ == "__main__":
         if z != 0:
             continue
 
+        # from disk, load all channels for tile
         all_buffer = load.disk.tile(TIME, LOD, z, y, x, **{
-            'format': in_full_format,
+            'format': in_path_format,
             'count': n_channel,
         })
 
-        img_buffer = load.disk.blend(all_buffer, **{
+        # from memory, blend all channels loaded
+        img_buffer = blend.mem.tile(all_buffer, **{
             'ranges': ALL_THRESH,
             'shape': tile_shape,
             'colors': ALL_BGR,
         })
 
         # Write the image buffer to a file
-        out_file = out_full_format.format(TIME, LOD, z, y, x)
+        out_file = out_path_format.format(TIME, LOD, z, y, x)
         try:
             cv2.imwrite(out_file, img_buffer)
         except Exception as e:
