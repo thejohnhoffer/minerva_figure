@@ -5,7 +5,7 @@ main:
   OUT:
     DIR: "/home/john/2018/data/cycif_out/{NOW}/40BP_59/tiles/"
     NAME: "T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png"
-    NOW: "2018_04_10/5PM"
+    NOW: "2018_04_12/11"
   RANGES:
     - [0, 0.1],
     - [0, 0.05],
