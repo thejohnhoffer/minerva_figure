@@ -130,6 +130,7 @@ def main(args=sys.argv[1:]):
     LOD: *
     """,
     }
+    # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(description=helps['main'])
     cmd.add_argument('config', nargs='*', default='config.yaml', help=helps['main'])
     parsed = cmd.parse_args(args)
