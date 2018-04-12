@@ -1,5 +1,5 @@
-import minerva_scripts.load.disk
-import minerva_scripts.blend.mem
+from minerva_scripts.load import disk
+from minerva_scripts.blend import mem
 import numpy as np
 import datetime
 import argparse
@@ -32,6 +32,7 @@ def log_yaml(i, y):
 def load_config(yml_path, main_key="main"):
     """ Loads a key from a yaml file
     """
+    yml_keys = []
     try:
         with open(yml_path, 'r') as yf:
             yml = yaml.load(yf)
@@ -41,7 +42,8 @@ def load_config(yml_path, main_key="main"):
             return main_entry
     except yaml.parser.ParserError as e:
         log_yaml(type(e).__name__, yml_path)
-    except (AttributeError, KeyError, TypeError)as e:
+        print(e)
+    except (AttributeError, KeyError, TypeError) as e:
         log_yaml('Missing "{}" key'.format(main_key), {
             'keys': yml_keys,
             'yaml': yml_path,
@@ -132,7 +134,7 @@ def main(args=sys.argv[1:]):
     }
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(description=helps['main'])
-    cmd.add_argument('config', nargs='*', default='config.yaml', help=helps['config'])
+    cmd.add_argument('config', nargs='?', default='config.yaml', help=helps['config'])
     parsed = cmd.parse_args(args)
 
     terms = parse_config(parsed.config)
@@ -148,7 +150,7 @@ def main(args=sys.argv[1:]):
     LOD = terms['l']
 
     # Find range of image tiles
-    ctlzyx_shape, tile_shape = load.disk.index(in_path_format)
+    ctlzyx_shape, tile_shape = disk.index(in_path_format)
     zyx_shape = ctlzyx_shape[-3::]
     n_channel = ctlzyx_shape[0]
 
@@ -161,13 +163,18 @@ def main(args=sys.argv[1:]):
             continue
 
         # from disk, load all channels for tile
-        all_buffer = load.disk.tile(TIME, LOD, z, y, x, **{
+        all_buffer = disk.tile(TIME, LOD, z, y, x, **{
             'format': in_path_format,
             'count': n_channel,
         })
+        
+        # Continue if no channel buffers for given tile
+        all_buffer = [b for b in all_buffer if b is not None]
+        if not len(all_buffer):
+            continue
 
         # from memory, blend all channels loaded
-        img_buffer = blend.mem.tile(all_buffer, **{
+        img_buffer = mem.tile(all_buffer, **{
             'ranges': ALL_RANGES,
             'shape': tile_shape,
             'colors': ALL_COLORS,
