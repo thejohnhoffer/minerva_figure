@@ -132,7 +132,7 @@ def main(args=sys.argv[1:]):
     }
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(description=helps['main'])
-    cmd.add_argument('config', nargs='*', default='config.yaml', help=helps['main'])
+    cmd.add_argument('config', nargs='*', default='config.yaml', help=helps['config'])
     parsed = cmd.parse_args(args)
 
     terms = parse_config(parsed.config)
