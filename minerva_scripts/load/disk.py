@@ -1,9 +1,10 @@
 import numpy as np
-import glob, re
+import glob
+import re
 import cv2
 import os
 
-# Load a single image file
+
 def image(fmt, *args):
     """ Load a single file by pattern
 
@@ -18,13 +19,13 @@ def image(fmt, *args):
     if os.path.exists(img_name):
         return cv2.imread(img_name, 0)
     # Print error if nothing loaded
-    msg = "no channel #{0}: t{1},l{2},z{3},y{4},x{5}"
+    msg = "no channel #{0}: t{1}, l{2}, z{3}, y{4}, x{5}"
     print(msg.format(*args))
     return None
 
-# Load all channels for a given tile
+
 def tile(t, l, z, y, x, **kwargs):
-    """
+    """Load all channels for a given tile
     Arguments:
         t: integer time step
         l: interger level of detail (powers of 2)
@@ -33,7 +34,7 @@ def tile(t, l, z, y, x, **kwargs):
         x: horizontal tile offset
 
     Keywords:
-        shape: uint16 2vec y,x pixel shape of one tile
+        shape: uint16 2vec y, x pixel shape of one tile
         count: total number of channels to load
         format: string defining file pattern
 
@@ -48,9 +49,9 @@ def tile(t, l, z, y, x, **kwargs):
     c_range = range(n_channel)
     return [image(in_fmt, c, *const) for c in c_range]
 
-# Find all the file paths in a range
+
 def index(fmt):
-    """ Parse directory structure
+    """Find all the file paths in a range
 
     Args:
         fmt: string defining file pattern
@@ -70,7 +71,7 @@ def index(fmt):
         # Extract parameters for each dimension
         match = next(re.finditer(all_regex, name), None)
         if match is not None:
-            coords = match.group(*range(1,num_dim+1))
+            coords = match.group(*range(1, num_dim+1))
             # Take the maximum of all coordinates
             sizes = np.maximum(sizes, np.uint16(coords))
             # Read first image

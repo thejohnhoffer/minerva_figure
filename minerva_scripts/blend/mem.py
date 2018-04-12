@@ -1,15 +1,15 @@
 import numpy as np
 import cv2
 
-# blend all channels given
+
 def tile(all_buffer, **kwargs):
-    """
+    """blend all channels given
     Arguments:
         all_buffer: list of numpy image channels for a tile
 
     Keywords:
-        ranges: float32 2 by N-channel min,max range
-        colors: float32 2 by N-channel b,g,r max color
+        ranges: float32 2 by N-channel min, max range
+        colors: float32 2 by N-channel b, g, r max color
 
     Returns:
         uint8 y by x by 3 color BGR image

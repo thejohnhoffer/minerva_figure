@@ -12,10 +12,11 @@ requires = [
     'opencv-python>=3.3.0.10',
 ]
 
+
 def read_version():
     config = ConfigParser()
     config.read('setup.cfg')
-    return config.get('metadata','version')
+    return config.get('metadata', 'version')
 
 
 VERSION = read_version()

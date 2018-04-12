@@ -8,14 +8,16 @@ import cv2
 import sys
 import os
 
+
 def safe_yaml(y):
     if isinstance(y, dict):
-        return {str(k):safe_yaml(y[k]) for k in y}
+        return {str(k): safe_yaml(y[k]) for k in y}
     if isinstance(y, (list, tuple, set, np.ndarray)):
         return [safe_yaml(v) for v in y]
     if isinstance(y, np.generic):
         return y.item()
     return y
+
 
 def log_yaml(i, y):
     pretty = {
@@ -25,9 +27,10 @@ def log_yaml(i, y):
     }
     out = safe_yaml(y)
     if i is not None:
-        out = {str(i):out}
+        out = {str(i): out}
     y_str = yaml.dump(out, **pretty)
     print(y_str.decode(encoding='UTF-8'))
+
 
 def load_config(yml_path, main_key="main"):
     """ Loads a key from a yaml file
@@ -53,13 +56,14 @@ def load_config(yml_path, main_key="main"):
 
     return None
 
+
 def parse_config(config_path):
     """
     main:
         IN: {DIR:*, NAME:*}
         OUT: {DIR:*, NAME:*, NOW*}
-        RANGES: [[*,*]..]
-        COLORS: [[*,*]..]
+        RANGES: [[*, *]..]
+        COLORS: [[*, *]..]
         TIME: *
         LOD: *
 
@@ -69,8 +73,8 @@ def parse_config(config_path):
     Returns:
         t: integer timestep
         l: integer power-of-2 level-of-detail
-        r: float32 N channels by 2 min,max
-        c: float32 N channels by 3 b,g,r
+        r: float32 N channels by 2 min, max
+        c: float32 N channels by 3 b, g, r
         o: full output format
         i: full input format
     """
@@ -87,8 +91,8 @@ def parse_config(config_path):
     terms['l'] = int(cfg_data.get('LOD', 0))
 
     # Validate the threshholds and colors
-    terms['r'] = np.float32(cfg_data.get('RANGES', [[0,1]]))
-    terms['c'] = np.float32(cfg_data.get('COLORS', [[1,1,1]]))
+    terms['r'] = np.float32(cfg_data.get('RANGES', [[0, 1]]))
+    terms['c'] = np.float32(cfg_data.get('COLORS', [[1, 1, 1]]))
 
     # Read the paths with defaults
     in_dir = in_args.get('DIR', '~/tmp/minerva_scripts/in')
@@ -118,6 +122,7 @@ def parse_config(config_path):
 
     return terms
 
+
 def main(args=sys.argv[1:]):
 
     # Set up the argument parser
@@ -126,15 +131,24 @@ def main(args=sys.argv[1:]):
         "config": """main:
     IN: {DIR:*, NAME:*}
     OUT: {DIR:*, NAME:*, NOW*}
-    RANGES: [[*,*]..]
-    COLORS: [[*,*]..]
+    RANGES: [[*, *]..]
+    COLORS: [[*, *]..]
     TIME: *
     LOD: *
     """,
     }
+
+    params = {
+        'config': {
+            'nargs': '?',
+            'default': 'config.yaml',
+        }
+    }
+
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(description=helps['main'])
-    cmd.add_argument('config', nargs='?', default='config.yaml', help=helps['config'])
+    for p, kwargs in params.items():
+        cmd.add_argument(p, help=helps[p], **kwargs)
     parsed = cmd.parse_args(args)
 
     terms = parse_config(parsed.config)
@@ -154,9 +168,9 @@ def main(args=sys.argv[1:]):
     zyx_shape = ctlzyx_shape[-3::]
     n_channel = ctlzyx_shape[0]
 
-    # Process all z,y,x tiles
+    # Process all z, y, x tiles
     for i in range(np.prod(zyx_shape)):
-        z,y,x = np.unravel_index(i, zyx_shape)
+        z, y, x = np.unravel_index(i, zyx_shape)
 
         # DERP
         if z != 0:
@@ -167,7 +181,7 @@ def main(args=sys.argv[1:]):
             'format': in_path_format,
             'count': n_channel,
         })
-        
+ 
         # Continue if no channel buffers for given tile
         all_buffer = [b for b in all_buffer if b is not None]
         if not len(all_buffer):
@@ -185,7 +199,8 @@ def main(args=sys.argv[1:]):
         try:
             cv2.imwrite(out_file, img_buffer)
         except Exception as e:
-            print (e)
+            print(e)
+
 
 if __name__ == "__main__":
     main(sys.argv)
