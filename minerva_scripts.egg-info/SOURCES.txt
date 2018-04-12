@@ -1,8 +1,0 @@
-setup.cfg
-minerva_scripts.egg-info/PKG-INFO
-minerva_scripts.egg-info/SOURCES.txt
-minerva_scripts.egg-info/dependency_links.txt
-minerva_scripts.egg-info/entry_points.txt
-minerva_scripts.egg-info/not-zip-safe
-minerva_scripts.egg-info/requires.txt
-minerva_scripts.egg-info/top_level.txt

@@ -1,3 +1,0 @@
-[console_scripts]
-combine = minerva_scripts.scripts.combine:main
-
