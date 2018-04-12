@@ -1,5 +1,5 @@
-from minerva_scripts.load import disk
-from minerva_scripts.blend import mem
+from ..load import disk
+from ..blend import mem
 import numpy as np
 import datetime
 import argparse
