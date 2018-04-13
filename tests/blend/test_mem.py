@@ -22,7 +22,7 @@ class Key(object):
     def square(vec):
         """ Reshape a vector into an square image
         """
-        sq_shape = np.ceil(np.sqrt((vec.shape[0], -1)))
+        sq_shape = np.ceil(np.sqrt((vec.shape[0],)*2))
         return np.reshape(vec, sq_shape.astype(vec.dtype))
 
     def resize(img, scalar):
@@ -37,7 +37,7 @@ class Key(object):
             'fx': scalar,
             'fy': scalar,
         }
-        return cv2.resize(img, **kwargs)
+        return cv2.resize(img, None, **kwargs)
 
     def sq_scale(vec, scalar):
         """ Reshape into square and resize
