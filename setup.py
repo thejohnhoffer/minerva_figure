@@ -7,6 +7,7 @@ with open(os.path.join(here, 'README.md')) as f:
     README = f.read()
 
 requires = [
+    'pytest>=3.5.0',
     'numpy>=1.11.1',
     'pyaml>=16.12.2',
     'opencv-python>=3.3.0.10',
@@ -23,7 +24,7 @@ VERSION = read_version()
 DESCRIPTION = 'minerva scripts'
 AUTHOR = 'D.P.W. Russell'
 LICENSE = 'AGPL-3.0'
-HOMEPAGE = 'https://github.com/thejohnhoffer/minerva-scripts'
+HOMEPAGE = 'https://github.com/thejohnhoffer/minerva_scripts'
 
 setup(
     name='minerva_scripts',
@@ -35,7 +36,7 @@ setup(
     install_requires=requires,
     entry_points={
         'console_scripts': [
-            'combine=minerva_scripts.scripts.combine:main',
+            'combine=src.minerva_scripts.scripts.combine:main',
         ]
     },
     classifiers=[
