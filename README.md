@@ -1,7 +1,7 @@
 ### Installation
 
 ```bash
-cd minerva_scripts/src
+cd minerva-scripts/src
 pip install -e .
 ```
 
