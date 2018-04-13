@@ -1,4 +1,4 @@
-from minerva_scripts.blend.mem import tile
+from minsc.blend.mem import tile
 import numpy as np
 import cv2
 
