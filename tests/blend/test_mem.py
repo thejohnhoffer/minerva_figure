@@ -10,14 +10,17 @@ class TestKey(Key):
     u16 = np.uint16(range(2**16))
 
     # Sample ranges and colors
-    range_full = np.float32([0, 1])
-    range_0to50 = np.float32([0, 0.5])
-    color_white = np.float32([1, 1, 1])
+    fro0to100 = np.float32([0, 1])
+    fro0to50 = np.float32([0, 0.5])
+    fro50to100 = np.float32([0.5, 1])
+    white = np.float32([1, 1, 1])
+    green = np.float32([0, 1, 0])
 
     # Test input images
     u16_all = Key.square(u16)
     # Test intermediate images
-    u16_0to50 = Key.norm_cut(u16_all, range_0to50)
+    u16_0to50 = Key.norm_cut(u16_all, fro0to50)
+    u16_50to100 = Key.norm_cut(u16_all, fro50to100)
 
     def sanity_check(tile_pair):
         """ Compare basic details of two images
@@ -100,8 +103,8 @@ def test_tile_1channel_gray():
     tiles_in = TestKey.u16_all[np.newaxis]
     tile_ok = TestKey.to_bgr(TestKey.u16_all)
     test_keys = {
-        'ranges': TestKey.range_full[np.newaxis],
-        'colors': TestKey.color_white[np.newaxis],
+        'ranges': TestKey.fro0to100[np.newaxis],
+        'colors': TestKey.white[np.newaxis],
         'shape': tiles_in[0].shape
     }
     generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
@@ -112,8 +115,20 @@ def test_tile_1channel_gray():
     tiles_in = TestKey.u16_all[np.newaxis]
     tile_ok = TestKey.to_bgr(TestKey.u16_0to50)
     test_keys = {
-        'ranges': TestKey.range_0to50[np.newaxis],
-        'colors': TestKey.color_white[np.newaxis],
+        'ranges': TestKey.fro0to50[np.newaxis],
+        'colors': TestKey.white[np.newaxis],
+        'shape': tiles_in[0].shape
+    }
+    generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
+    del (test_id, test_keys, tiles_in, tile_ok)
+
+    # START TEST
+    test_id = '1channel_green_50to100'
+    tiles_in = TestKey.u16_all[np.newaxis]
+    tile_ok = TestKey.to_bgr(TestKey.u16_50to100, TestKey.green)
+    test_keys = {
+        'ranges': TestKey.fro50to100[np.newaxis],
+        'colors': TestKey.green[np.newaxis],
         'shape': tiles_in[0].shape
     }
     generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
