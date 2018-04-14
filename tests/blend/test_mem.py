@@ -92,7 +92,6 @@ def generic_test_tile(test_id, test_keys, tiles_in, tile_ok):
 def test_tile_1channel_gray():
     """ 1 channel map to white
     """
-    u16_grays = Key.to_bgr(Key.square(Key.all_u16))
     # START TEST
     # Input u16 grays, expect all u8 gray bgr
     tiles_in = TestKey.u16_mono[np.newaxis]

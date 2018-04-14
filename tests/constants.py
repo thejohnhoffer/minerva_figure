@@ -45,9 +45,6 @@ class Key(object):
         # Give the image a color dimension
         f_vol = f_img[:, :, np.newaxis]
         f_bgr = np.repeat(f_vol, 3, 2) * color
-        print(256*f_bgr[0, 120:130, 0])
-        print(np.uint8(256*f_bgr[0, 120:130, 0]))
-        #assert f_bgr[0, 120:130, 0] is None
         return np.uint8(256*f_bgr)
 
     def square(vec):
