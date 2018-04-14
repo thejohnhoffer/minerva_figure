@@ -91,7 +91,7 @@ def generic_test_tile(test_id, test_keys, tiles_in, tile_ok):
 
 
 def test_tile_1channel_gray():
-    """ 1 channel map to white
+    """ 1 channel cut and color
     """
     # START TEST
     test_id = '1channel_gray_all'
