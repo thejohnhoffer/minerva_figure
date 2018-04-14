@@ -53,9 +53,10 @@ class Key(object):
         sq_shape = np.ceil(np.sqrt((vec.shape[0],)*2))
         return np.reshape(vec, sq_shape.astype(vec.dtype))
 
+
 class Log(object):
 
-    def diff(a1,a2):
+    def diff(a1, a2):
         """ Iterate nonzero indices of images
 
         Returns
@@ -69,11 +70,11 @@ class Log(object):
         # Iterate through the image pixels
         for yi in range(height):
             for xi in range(width):
-                diff = a2[yi,xi] - a1[yi,xi]
+                diff = a2[yi, xi] - a1[yi, xi]
                 if not any(diff):
                     continue
                 # Yield different pixels
-                yield yi,xi,a1[yi,xi],a2[yi,xi]
+                yield yi, xi, a1[yi, xi], a2[yi, xi]
 
     def assume(condition, msg, args):
         """ Log msg with args if not condition
@@ -93,7 +94,7 @@ class Log(object):
                 print(msg.format(*args), file=sys.stderr)
             raise a_e
 
-    def write_image(a,name='tmp'):
+    def write_image(a, name='tmp'):
         """ write array to temp image file
         """
         f_name = name + '.png'

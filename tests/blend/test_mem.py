@@ -7,14 +7,15 @@ import numpy as np
 class TestKey(Key):
     """ Constants used for testing
     """
-    # Test sample ranges and colors
+    # Sample ranges and colors
     range_full = np.float32([0, 1])
     range_0to50 = np.float32([0, 0.5])
     color_white = np.float32([1, 1, 1])
+
     # Test input images
-    u16_mono = Key.square(Key.all_u16)
-    # Test output images
-    u16_grays = Key.to_bgr(Key.square(Key.all_u16))
+    u16_all = Key.square(Key.all_u16)
+    # Test intermediate images
+    u16_0to50 = Key.norm_cut(u16_all, range_0to50)
 
     def sanity_check(tile_pair):
         """ Compare basic details of two images
@@ -62,6 +63,7 @@ class TestKey(Key):
         # Log if some pixels differ
         full_msg = "pixel at {}y, {}x: truth {}, result {}"
         first_diff = next(Log.diff(*tile_pair), None)
+
         def full_goal():
             """ Assume the results have all the same pixels
             """
@@ -92,10 +94,9 @@ def test_tile_1channel_gray():
     """ 1 channel map to white
     """
     # START TEST
-    # Input u16 grays, expect all u8 gray bgr
-    tiles_in = TestKey.u16_mono[np.newaxis]
-    tile_ok = TestKey.u16_grays
-    test_id = '1channel_gray'
+    test_id = '1channel_gray_all'
+    tiles_in = TestKey.u16_all[np.newaxis]
+    tile_ok = TestKey.to_bgr(TestKey.u16_all)
     test_keys = {
         'ranges': TestKey.range_full[np.newaxis],
         'colors': TestKey.color_white[np.newaxis],
@@ -106,12 +107,10 @@ def test_tile_1channel_gray():
 
     # START TEST
     test_id = '1channel_gray_0to50'
-    test_range = TestKey.range_0to50
-    tiles_in = TestKey.u16_mono[np.newaxis]
-    tile_cut = TestKey.norm_cut(TestKey.u16_mono, test_range)
-    tile_ok = TestKey.to_bgr(tile_cut)
+    tiles_in = TestKey.u16_all[np.newaxis]
+    tile_ok = TestKey.to_bgr(TestKey.u16_0to50)
     test_keys = {
-        'ranges': test_range[np.newaxis],
+        'ranges': TestKey.range_0to50[np.newaxis],
         'colors': TestKey.color_white[np.newaxis],
         'shape': tiles_in[0].shape
     }
