@@ -28,29 +28,6 @@ class Key(object):
         sq_shape = np.ceil(np.sqrt((vec.shape[0],)*2))
         return np.reshape(vec, sq_shape.astype(vec.dtype))
 
-    def resize(img, scalar):
-        """ Scale an image by a scalar
-
-        Arguments
-        img: image to scale
-        scalar: scale factor
-        """
-        kwargs = {
-            'interpolation': cv2.INTER_NEAREST,
-            'fx': scalar,
-            'fy': scalar,
-        }
-        return cv2.resize(img, None, **kwargs)
-
-    def sq_scale(vec, scalar):
-        """ Reshape into square and resize
-
-        Arguments
-            vec: flattened image
-            scalar: scale factor
-        """
-        return Key.resize(Key.square(vec), scalar)
-
 
 class TestKey(Key):
     """ Constants used for testing
@@ -62,7 +39,7 @@ class TestKey(Key):
     img16_u8 = Key.square(Key.all_u8)
     img256_u16 = Key.square(Key.all_u16)
     # Test output images
-    img256_grays = Key.to_bgr(Key.sq_scale(Key.all_u8, 2**4))
+    img256_grays = Key.to_bgr(Key.square(Key.all_u16)/256)
 
     def diff(a1,a2):
         """ Iterate nonzero indices of images
@@ -150,6 +127,7 @@ def test_tile__1channel_gray():
     TestKey.assume(shape_goal, shape_msg, shape_pair)
     # Write out the actual diff
     diff_image = np.subtract(*tile_pair)
+    TestKey.write_image(gray_in[0], 'a_in')
     TestKey.write_image(gray_bgr_ok, 'a_ok')
     TestKey.write_image(gray_bgr_out, 'a_out')
     TestKey.write_image(diff_image, 'a_diff')
