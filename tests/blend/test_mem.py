@@ -15,7 +15,7 @@ class TestKey(Key):
     img16_u8 = Key.square(Key.all_u8)
     img256_u16 = Key.square(Key.all_u16)
     # Test output images
-    img256_grays = Key.to_bgr(Key.square(Key.all_u16)/256)
+    img256_grays = Key.to_bgr(Key.square(Key.all_u16))
 
     def sanity_check(tile_pair):
         """ Compare basic details of two images
@@ -92,12 +92,6 @@ def generic_test_tile(test_id, test_keys, tiles_in, tile_ok):
 def test_tile_1channel_gray():
     """ 1 channel map to white
     """
-    # Clip array within range
-    cut = lambda a, r: a * (a >= r[0]) * (a < r[1])
-    norm_cut = lambda a, r: (cut(a, r) - r[0]) / np.diff(r)
-    uint8_cut = lambda a, r: np.uint8(256*norm_cut(a/256, r))
-    # clip = lambda a, r: np.clip(a, *r).astype(a.dtype)
-
     # START TEST
     # Input u16 grays, expect all u8 gray bgr
     tiles_in = TestKey.img256_u16[np.newaxis]
@@ -115,7 +109,7 @@ def test_tile_1channel_gray():
     test_id = '1channel_gray_0to50'
     test_range = TestKey.range_0to50
     tiles_in = TestKey.img256_u16[np.newaxis]
-    tile_ok = uint8_cut(TestKey.img256_grays, test_range)
+    tile_ok = TestKey.norm_cut(TestKey.img256_grays, test_range)
     test_keys = {
         'ranges': test_range[np.newaxis],
         'colors': TestKey.color_white[np.newaxis],
