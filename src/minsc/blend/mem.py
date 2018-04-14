@@ -2,6 +2,29 @@ import numpy as np
 import cv2
 
 
+def to_f32(img):
+    """Scale the dynamic range to 0.0 - 1.0
+
+    Arguments:
+    img: an integer image
+    """
+    n_bits = 8 * img.itemsize
+    bit_factor = 1.0 / (2.0 ** n_bits)
+    return np.float32(img * bit_factor)
+
+
+def f32_to_bgr(f_img, color=[1, 1, 1]):
+    """ Reshape into a color image
+
+    Arguments:
+    f_img: float32 image to reshape
+    """
+    # Give the image a color dimension
+    f_vol = f_img[:, :, np.newaxis]
+    f_bgr = np.repeat(f_vol, 3, 2) * color
+    return (256*f_bgr).astype(np.uint8)
+
+
 def tile(all_buffer, **kwargs):
     """blend all channels given
     Arguments:
@@ -24,13 +47,10 @@ def tile(all_buffer, **kwargs):
 
     # Process all channels
     for c_bgr, c_thresh, c_img in zip(all_bgr, all_thresh, all_buffer):
-        # Scale the dynamic range to 0.0 - 1.0
-        n_bits = 8 * c_img.itemsize
-        bit_factor = 1.0 / (2.0 ** n_bits)
-        img_data = np.float32(c_img * bit_factor)
+        img_data = to_f32(c_img)
         # Maximum color for this channel
         avg_factor = 1.0 / len(all_buffer)
-        color_factor = 256.0 * c_bgr * avg_factor
+        color_factor = c_bgr * avg_factor
         # Fraction of full range
         lowest, highest = c_thresh
         clip_size = highest - lowest
@@ -39,7 +59,7 @@ def tile(all_buffer, **kwargs):
         norm_data = (clip_data - lowest) / clip_size
         # Add the colored data to the image
         y_shape, x_shape = norm_data.shape
-        gray_bgr_data = cv2.cvtColor(norm_data, cv2.COLOR_GRAY2RGB)
-        img_buffer[0:y_shape, 0:x_shape] += gray_bgr_data * color_factor
+        gray_bgr_data = f32_to_bgr(norm_data, color_factor)
+        img_buffer[0:y_shape, 0:x_shape] += gray_bgr_data
 
     return np.uint8(img_buffer)
