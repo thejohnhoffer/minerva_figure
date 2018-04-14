@@ -1,4 +1,9 @@
+*tmp
+
+#vi
 .*.sw*
+
+#py
 *.pyc
 *.egg-info
 .pytest_cache

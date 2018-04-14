@@ -3,6 +3,7 @@ import numpy as np
 import inspect
 import cv2
 import sys
+import os
 
 
 class Key(object):
@@ -101,6 +102,23 @@ class TestKey(Key):
                 print(msg.format(*args), file=sys.stderr)
             raise a_e
 
+    def write_image(a,name='tmp'):
+        """ write array to temp image file
+        """
+        f_name = name + '.png'
+        f_root = os.path.dirname(__file__)
+        f_path = inspect.stack()[1].function
+        tmp_path = os.path.join(f_root, 'tmp', f_path)
+        tmp_png = os.path.join(tmp_path, f_name)
+        # write image with temp name
+        print('writing {}'.format(f_name))
+        try:
+            os.makedirs(tmp_path)
+            os.remove(tmp_png)
+        except OSError:
+            pass
+        cv2.imwrite(tmp_png, a)
+
 def test_tile__1channel_gray():
     """ 1 channel map to white
     """
@@ -117,14 +135,24 @@ def test_tile__1channel_gray():
     # u8 output from 1-channel u16 input
     gray_bgr_out = tile(gray_in, **keywords)
     tile_pair = gray_bgr_ok, gray_bgr_out
+    type_pair = [x.dtype for x in tile_pair]
     shape_pair = [x.shape for x in tile_pair]
     # Log messages if results are unexpected
+    type_msg = "dtypes differ: truth {}, result {}"
     shape_msg = "shapes differ: truth {}, result {}"
     full_msg = "pixel at {}y,{}x: truth {}, result {}"
 
-    # Assume the same output sizes
+    # Assume the same data types
+    type_goal = lambda: len(set(type_pair)) == 1
+    TestKey.assume(type_goal, type_msg, type_pair)
+    # Assume the same output shapes
     shape_goal = lambda: not np.subtract(*shape_pair).any()
     TestKey.assume(shape_goal, shape_msg, shape_pair)
+    # Write out the actual diff
+    diff_image = np.subtract(*tile_pair)
+    TestKey.write_image(gray_bgr_ok, 'a_ok')
+    TestKey.write_image(gray_bgr_out, 'a_out')
+    TestKey.write_image(diff_image, 'a_diff')
     # Assume the same output tiles
     first_diff = next(TestKey.diff(*tile_pair), None)
     full_goal = lambda: not np.subtract(*tile_pair).any()
