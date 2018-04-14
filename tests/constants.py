@@ -30,7 +30,7 @@ class Key(object):
         """Scale the dynamic range to 0.0 - 1.0
 
         Arguments:
-        img: an integer image
+            img: an integer image
         """
         n_values = np.iinfo(img.dtype).max + 1
         return np.float32(img / n_values)
@@ -39,7 +39,7 @@ class Key(object):
         """ Reshape into a color image
 
         Arguments:
-        img: the image to reshape
+            img: integer image to colorize
         """
         f_img = Key.to_float(img)
         # Give the image a color dimension

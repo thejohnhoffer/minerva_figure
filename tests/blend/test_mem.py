@@ -12,7 +12,6 @@ class TestKey(Key):
     range_0to50 = np.float32([0, 0.5])
     color_white = np.float32([1, 1, 1])
     # Test input images
-    u8_mono = Key.square(Key.all_u8)
     u16_mono = Key.square(Key.all_u16)
     # Test output images
     u16_grays = Key.to_bgr(Key.square(Key.all_u16))
