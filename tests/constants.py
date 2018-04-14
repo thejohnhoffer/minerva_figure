@@ -17,11 +17,14 @@ class Key(object):
         Arguments:
             img: the integer image to cut
             r: the min and max used to cut
+
+        Returns:
+            uint8 cut and normalized image
         """
         f_img = Key.to_float(img)
         cut_img = f_img * (f_img >= r[0]) * (f_img < r[1])
         norm_img = (cut_img - r[0]) / np.diff(r)
-        return norm_img.astype(img.dtype)
+        return np.uint8(256*norm_img)
 
     def to_float(img):
         """Scale the dynamic range to 0.0 - 1.0
@@ -29,9 +32,8 @@ class Key(object):
         Arguments:
         img: an integer image
         """
-        n_bits = 8 * img.itemsize
-        bit_factor = 1.0 / (2.0 ** n_bits)
-        return np.float32(img * bit_factor)
+        n_values = np.iinfo(img.dtype).max + 1
+        return np.float32(img / n_values)
 
     def to_bgr(img, color=[1, 1, 1]):
         """ Reshape into a color image
@@ -43,7 +45,10 @@ class Key(object):
         # Give the image a color dimension
         f_vol = f_img[:, :, np.newaxis]
         f_bgr = np.repeat(f_vol, 3, 2) * color
-        return (256*f_bgr).astype(np.uint8)
+        print(256*f_bgr[0, 120:130, 0])
+        print(np.uint8(256*f_bgr[0, 120:130, 0]))
+        #assert f_bgr[0, 120:130, 0] is None
+        return np.uint8(256*f_bgr)
 
     def square(vec):
         """ Reshape a vector into an square image

@@ -12,10 +12,10 @@ class TestKey(Key):
     range_0to50 = np.float32([0, 0.5])
     color_white = np.float32([1, 1, 1])
     # Test input images
-    img16_u8 = Key.square(Key.all_u8)
-    img256_u16 = Key.square(Key.all_u16)
+    u8_mono = Key.square(Key.all_u8)
+    u16_mono = Key.square(Key.all_u16)
     # Test output images
-    img256_grays = Key.to_bgr(Key.square(Key.all_u16))
+    u16_grays = Key.to_bgr(Key.square(Key.all_u16))
 
     def sanity_check(tile_pair):
         """ Compare basic details of two images
@@ -92,10 +92,11 @@ def generic_test_tile(test_id, test_keys, tiles_in, tile_ok):
 def test_tile_1channel_gray():
     """ 1 channel map to white
     """
+    u16_grays = Key.to_bgr(Key.square(Key.all_u16))
     # START TEST
     # Input u16 grays, expect all u8 gray bgr
-    tiles_in = TestKey.img256_u16[np.newaxis]
-    tile_ok = TestKey.img256_grays
+    tiles_in = TestKey.u16_mono[np.newaxis]
+    tile_ok = TestKey.u16_grays
     test_id = '1channel_gray'
     test_keys = {
         'ranges': TestKey.range_full[np.newaxis],
@@ -108,8 +109,8 @@ def test_tile_1channel_gray():
     # START TEST
     test_id = '1channel_gray_0to50'
     test_range = TestKey.range_0to50
-    tiles_in = TestKey.img256_u16[np.newaxis]
-    tile_ok = TestKey.norm_cut(TestKey.img256_grays, test_range)
+    tiles_in = TestKey.u16_mono[np.newaxis]
+    tile_ok = TestKey.norm_cut(TestKey.u16_grays, test_range)
     test_keys = {
         'ranges': test_range[np.newaxis],
         'colors': TestKey.color_white[np.newaxis],
