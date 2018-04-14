@@ -6,10 +6,8 @@ import os
 
 
 class Key(object):
-    """ Used to derive test constants
+    """ Helper functions for unit tests
     """
-    all_u16 = np.uint16(range(2**16))
-    all_u8 = np.uint8(range(2**8))
 
     def norm_cut(img, r):
         """ Cut and normalize image to range

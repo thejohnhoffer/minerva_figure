@@ -7,13 +7,15 @@ import numpy as np
 class TestKey(Key):
     """ Constants used for testing
     """
+    u16 = np.uint16(range(2**16))
+
     # Sample ranges and colors
     range_full = np.float32([0, 1])
     range_0to50 = np.float32([0, 0.5])
     color_white = np.float32([1, 1, 1])
 
     # Test input images
-    u16_all = Key.square(Key.all_u16)
+    u16_all = Key.square(u16)
     # Test intermediate images
     u16_0to50 = Key.norm_cut(u16_all, range_0to50)
 
