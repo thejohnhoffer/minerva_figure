@@ -108,7 +108,8 @@ def test_tile_1channel_gray():
     test_id = '1channel_gray_0to50'
     test_range = TestKey.range_0to50
     tiles_in = TestKey.u16_mono[np.newaxis]
-    tile_ok = TestKey.norm_cut(TestKey.u16_grays, test_range)
+    tile_cut = TestKey.norm_cut(TestKey.u16_mono, test_range)
+    tile_ok = TestKey.to_bgr(tile_cut)
     test_keys = {
         'ranges': test_range[np.newaxis],
         'colors': TestKey.color_white[np.newaxis],
