@@ -1,11 +1,4 @@
 main:
-  IN:
-    DIR: "/media/j/420D-AC8E/cycif_images/40BP_59/tiles/"
-    NAME: "C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png"
-  OUT:
-    DIR: "/home/j/2018/data/cycif_out/{NOW}/40BP_59/tiles/"
-    NAME: "T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png"
-    NOW: "2018_04_12/15"
   RANGES:
     - [0, 0.1]
     - [0, 0.05]

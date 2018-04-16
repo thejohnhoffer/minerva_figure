@@ -4,7 +4,6 @@ from ..load import disk
 from ..blend import mem
 from ..helper import config
 import numpy as np
-import datetime
 import argparse
 import pathlib
 import cv2
@@ -15,8 +14,6 @@ import os
 def parse_config(**kwargs):
     """
     main:
-        IN: {DIR:*, NAME:*}
-        OUT: {DIR:*, NAME:*, NOW*}
         RANGES: [[*, *]..]
         COLORS: [[*, *]..]
         TIME: *
@@ -35,15 +32,15 @@ def parse_config(**kwargs):
         o: full output format
         i: full input format
     """
+    in_name = 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
+    out_name = 'T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
     cfg_data = config.load_yaml(kwargs['config'])
+    # Allow empty config file
     if cfg_data is None:
-        # Allow empty config file
         cfg_data = {}
     terms = {}
 
     # Read root values from config
-    in_args = cfg_data.get('IN', {})
-    out_args = cfg_data.get('OUT', {})
     terms['t'] = int(cfg_data.get('TIME', 0))
     terms['l'] = int(cfg_data.get('LOD', 0))
 
@@ -52,24 +49,13 @@ def parse_config(**kwargs):
     terms['c'] = np.float32(cfg_data.get('COLORS', [[1, 1, 1]]))
 
     # Read the paths with defaults
-    in_dir = kwargs.get('i', in_args.get('DIR', '~/tmp/minerva_scripts/in'))
-    out_dir = kwargs.get('o', out_args.get('DIR', '~/tmp/minerva_scripts/out'))
-    in_name = in_args.get('NAME', '{}_{}_{}_{}_{}_{}.png')
-    out_name = out_args.get('NAME', '{}_{}_{}_{}_{}.png')
-    # Output stored to current date and time
-    now_date = datetime.datetime.now()
-    now_time = now_date.time()
-    default_date = "{0:04d}_{1:02d}_{2:02d}{4}{3:02d}".format(*[
-        now_date.year,
-        now_date.month,
-        now_date.day,
-        now_time.hour,
-        os.sep,
-    ])
-    out_date = out_args.get('NOW', default_date)
+    try:
+        in_dir = kwargs['o']
+        out_dir = kwargs['i']
+    except KeyError as k_e:
+        raise k_e
 
-    # Format the full paths properly
-    out_dir = out_dir.format(NOW=out_date)
+    # Join the full paths properly
     terms['i'] = str(pathlib.Path(in_dir, in_name))
     terms['o'] = str(pathlib.Path(out_dir, out_name))
 
@@ -89,21 +75,23 @@ def main(args=sys.argv[1:]):
     )
     cmd.add_argument(
         'config', nargs='?', default='config.yaml',
-        help='main: IN: {DIR:*, NAME:*}'
-        'OUT: {DIR:*, NAME:*, NOW* TIME: * LOD: *'
-        'RANGES: [[*, *]..] COLORS: [[*, *]..]'
+        help='main: {'
+        ' TIME: * LOD: *'
+        ' RANGES: [[*, *]..]'
+        ' COLORS: [[*, *]..]'
+        ' }'
     )
     cmd.add_argument(
-        '-o', default=argparse.SUPPRESS,
+        '-o', default=str(pathlib.Path.cwd()),
         help="output directory"
     )
     cmd.add_argument(
-        '-i', default=argparse.SUPPRESS,
+        '-i', required="True",
         help="input directory"
     )
 
-    # Actually parse and read arguments
     parsed = vars(cmd.parse_args(args))
+    # Actually parse and read arguments
     terms = parse_config(**parsed)
 
     # Full path format of input files
