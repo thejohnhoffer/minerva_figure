@@ -8,9 +8,9 @@ class Key(object):
     """ Constants used for testing
     """
     # Sample named ranges
-    range_all = np.float32([0, 100])
-    range_hi = np.float32([50, 100])
-    range_lo = np.float32([0, 50])
+    range_all = np.float32([0, 1])
+    range_hi = np.float32([0.5, 1])
+    range_lo = np.float32([0, 256./65535.])
 
     # Sample named colors
     white = np.float32([1, 1, 1])
@@ -56,6 +56,7 @@ def generic_test_tile(t_chans, t_ok, t_keys, t_list=None):
     # Blend all input tiles
     t_out = tile(t_chans, **t_keys)
     t_pair = t_ok, t_out
+    print (t_pair)
 
     # Run standard tests by default
     if not t_list:
@@ -119,7 +120,7 @@ def test_tile_1channel_gray():
     # START TEST
     t_ok = np.uint8([
         [[0, 0, 0]],
-        [[127, 127, 127]],
+        [[1, 1, 1]],
         [[255, 255, 255]],
     ])
     # Check mapping all values to white
