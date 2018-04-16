@@ -3,10 +3,10 @@
 from ..load import disk
 from ..blend import mem
 from ..helper import config
-from ..helper import parser
 import numpy as np
 import datetime
 import argparse
+import pathlib
 import cv2
 import sys
 import os
@@ -70,8 +70,8 @@ def parse_config(**kwargs):
 
     # Format the full paths properly
     out_dir = out_dir.format(NOW=out_date)
-    terms['o'] = parser.real_path(out_name, out_dir)
-    terms['i'] = parser.real_path(in_name, in_dir)
+    terms['i'] = str(pathlib.Path(in_dir, in_name))
+    terms['o'] = str(pathlib.Path(out_dir, out_name))
 
     # Create output directory if nonexistant
     if not os.path.exists(out_dir):
