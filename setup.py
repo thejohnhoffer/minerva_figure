@@ -44,6 +44,7 @@ setup(
     entry_points={
         'console_scripts': [
             'combine=minerva_scripts.scripts.combine:main',
+            'debug-tile=minerva_scripts.scripts.debug.visual:main',
         ]
     },
     classifiers=[
