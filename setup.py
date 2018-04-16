@@ -33,7 +33,7 @@ LICENSE = 'AGPL-3.0'
 HOMEPAGE = 'https://github.com/thejohnhoffer/minerva_scripts'
 
 setup(
-    name='minsc',
+    name='minerva-scripts',
     version=VERSION,
     package_dir={'': 'src'},
     description=DESCRIPTION,
@@ -43,7 +43,7 @@ setup(
     install_requires=REQUIRES,
     entry_points={
         'console_scripts': [
-            'combine=minsc.scripts.combine:main',
+            'combine=minerva_scripts.scripts.combine:main',
         ]
     },
     classifiers=[
