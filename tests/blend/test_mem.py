@@ -3,7 +3,6 @@
 import numpy as np
 from minerva_scripts.blend.mem import tile
 from ..constants import Key
-from ..constants import Log
 
 
 class TestKey(Key):
@@ -30,64 +29,28 @@ class TestKey(Key):
     u16_bar2 = np.tile(Key.square(u16)[2::64].T, 3)
 
     @staticmethod
-    def sanity_check(*args):
+    def sanity_check(t_pair):
         """ Compare basic details of two images
 
         Arguments:
             t_pair: list of two images to compare
-            t_id: identity of test
         """
-        t_pair = args[0]
         type_pair = [x.dtype for x in t_pair]
         shape_pair = [x.shape for x in t_pair]
-        # Log messages if results are unexpected
-        type_msg = "dtypes differ: truth {}, result {}"
-        shape_msg = "shapes differ: truth {}, result {}"
 
-        def type_goal():
-            """Assume the same data types
-            """
-            return len(set(type_pair)) == 1
-        Log.assume(type_goal, type_msg, type_pair)
-
-        def shape_goal():
-            """Assume the same output shapes
-            """
-            return not np.subtract(*shape_pair).any()
-        Log.assume(shape_goal, shape_msg, shape_pair)
+        # Assume data type and shape
+        assert len(set(type_pair)) == 1
+        assert not np.subtract(*shape_pair).any()
 
     @staticmethod
-    def visual_check(t_pair, t_id='?'):
-        """ Visually compare two images
-
-        Arguments:
-            t_pair: list of two images to compare
-            t_id: id of test for output images
-        """
-        # Write out actual images
-        diff_image = np.subtract(*t_pair)
-        Log.write_image(t_pair[0], t_id+'_ok')
-        Log.write_image(t_pair[1], t_id+'_out')
-        Log.write_image(diff_image, t_id+'_diff')
-
-    @staticmethod
-    def full_check(*args):
+    def full_check(t_pair):
         """ Expect two images to be idential
 
         Arguments:
             t_pair: two arrays assumed identical
-            t_id: identity of test
         """
-        t_pair = args[0]
-        # Log if some pixels differ
-        full_msg = "pixel at {}y, {}x: truth {}, result {}"
-        first_diff = next(Log.diff(*t_pair), None)
-
-        def full_goal():
-            """ Assume the results have all the same pixels
-            """
-            return not np.subtract(*t_pair).any()
-        Log.assume(full_goal, full_msg, first_diff)
+        # Assume pixel-for-pixel image
+        assert not np.subtract(*t_pair).any()
 
 
 def generic_test_tile(t_chans, t_id, t_keys, t_ok, t_list=None):
@@ -108,11 +71,10 @@ def generic_test_tile(t_chans, t_id, t_keys, t_ok, t_list=None):
     if not t_list:
         t_list = [
             TestKey.sanity_check,
-            TestKey.visual_check,
             TestKey.full_check,
         ]
     for t_fn in t_list:
-        t_fn(t_pair, t_id)
+        t_fn(t_pair)
 
 
 def easy_test_tile(t_r, t_c, t_in, t_id, t_list=None):
