@@ -53,6 +53,9 @@ class Key(object):
         # Map channels to colors
         step_1 = zip(norm_list, c_list)
         color_list = [Key.colorize(*s) for s in step_1]
+        # All channels must have the same shape
+        sh = set([x.shape for x in color_list])
+        assert len(sh) == 1
         # Return the mean of the colors
         mean_image = np.mean(color_list, 0)
         return Key.to_u8(mean_image)

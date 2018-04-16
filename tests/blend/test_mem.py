@@ -30,14 +30,15 @@ class TestKey(Key):
     u16_0to50 = Key.u8_cut_norm(u16_all, Key.fro(0, 50))
     u16_50to100 = Key.u8_cut_norm(u16_all, Key.fro(50, 100))
 
-    def sanity_check(tile_pair):
+    def sanity_check(t_pair, t_id='?'):
         """ Compare basic details of two images
 
         Arguments:
-            tile_pair: list of two images to compare
+            t_pair: list of two images to compare
+            t_id: identity of test
         """
-        type_pair = [x.dtype for x in tile_pair]
-        shape_pair = [x.shape for x in tile_pair]
+        type_pair = [x.dtype for x in t_pair]
+        shape_pair = [x.shape for x in t_pair]
         # Log messages if results are unexpected
         type_msg = "dtypes differ: truth {}, result {}"
         shape_msg = "shapes differ: truth {}, result {}"
@@ -54,114 +55,121 @@ class TestKey(Key):
             return not np.subtract(*shape_pair).any()
         Log.assume(shape_goal, shape_msg, shape_pair)
 
-    def visual_check(tile_pair, pre='a'):
+    def visual_check(t_pair, t_id='?'):
         """ Visually compare two images
 
         Arguments:
-            tile_pair: list of two images to compare
-            pre: prefix for output images
+            t_pair: list of two images to compare
+            t_id: id of test for output images
         """
         # Write out actual images
-        diff_image = np.subtract(*tile_pair)
-        Log.write_image(tile_pair[0], pre+'_ok')
-        Log.write_image(tile_pair[1], pre+'_out')
-        Log.write_image(diff_image, pre+'_diff')
+        diff_image = np.subtract(*t_pair)
+        Log.write_image(t_pair[0], t_id+'_ok')
+        Log.write_image(t_pair[1], t_id+'_out')
+        Log.write_image(diff_image, t_id+'_diff')
 
-    def full_check(tile_pair):
+    def full_check(t_pair, t_id='?'):
         """ Expect two images to be idential
 
         Arguments:
-            tile_pair: two arrays assumed identical
+            t_pair: two arrays assumed identical
+            t_id: identity of test
         """
         # Log if some pixels differ
         full_msg = "pixel at {}y, {}x: truth {}, result {}"
-        first_diff = next(Log.diff(*tile_pair), None)
+        first_diff = next(Log.diff(*t_pair), None)
 
         def full_goal():
             """ Assume the results have all the same pixels
             """
-            return not np.subtract(*tile_pair).any()
+            return not np.subtract(*t_pair).any()
         Log.assume(full_goal, full_msg, first_diff)
 
 
-def generic_test_tile(test_id, test_keys, tiles_in, tile_ok):
+def generic_test_tile(t_id, t_keys, t_chans, t_ok, t_list=[]):
     """ Run test on tile blend function
 
     Arguments:
-        test_id: str name of test
-        test_keys: keywords for call
-        tiles_in: list of input channels
-        tile_ok: assumed output channel
+        t_id: str name of test
+        t_keys: keywords for call
+        t_chans: list of input channels
+        t_ok: assumed output channel
+        t_list: list of tests to run
     """
     # Blend all input tiles
-    tile_out = tile(tiles_in, **test_keys)
-    tile_pair = tile_ok, tile_out
+    t_out = tile(t_chans, **t_keys)
+    t_pair = t_ok, t_out
 
-    # Rough and fine checks
-    TestKey.sanity_check(tile_pair)
-    TestKey.visual_check(tile_pair, test_id)
-    TestKey.full_check(tile_pair)
+    # Run standard tests by default
+    if not t_list:
+        t_list = [
+            TestKey.sanity_check,
+            TestKey.visual_check,
+            TestKey.full_check,
+        ]
+    for t_fn in t_list:
+        t_fn(t_pair, t_id)
 
 
 def test_tile_1channel_gray():
     """ 1 channel cut and color
     """
     # START TEST
-    test_id = '1channel_gray_all'
-    tiles_in = TestKey.u16_all[np.newaxis]
-    tile_ok = TestKey.u8_colorize(TestKey.u16_all)
-    test_keys = {
+    t_id = '1channel_gray_all'
+    t_chans = TestKey.u16_all[np.newaxis]
+    t_ok = TestKey.u8_colorize(TestKey.u16_all)
+    t_keys = {
         'ranges': TestKey.fro(0, 100)[np.newaxis],
         'colors': TestKey.white[np.newaxis],
-        'shape': tiles_in[0].shape
+        'shape': t_chans[0].shape
     }
-    generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
-    del (test_id, test_keys, tiles_in, tile_ok)
+    generic_test_tile(t_id, t_keys, t_chans, t_ok)
+    del (t_id, t_keys, t_chans, t_ok)
 
     # START TEST
-    test_id = '1channel_gray_0to50'
-    tiles_in = TestKey.u16_all[np.newaxis]
-    tile_ok = TestKey.u8_colorize(TestKey.u16_0to50)
-    test_keys = {
+    t_id = '1channel_gray_0to50'
+    t_chans = TestKey.u16_all[np.newaxis]
+    t_ok = TestKey.u8_colorize(TestKey.u16_0to50)
+    t_keys = {
         'ranges': TestKey.fro(0, 50)[np.newaxis],
         'colors': TestKey.white[np.newaxis],
-        'shape': tiles_in[0].shape
+        'shape': t_chans[0].shape
     }
-    generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
-    del (test_id, test_keys, tiles_in, tile_ok)
+    generic_test_tile(t_id, t_keys, t_chans, t_ok)
+    del (t_id, t_keys, t_chans, t_ok)
 
     # START TEST
-    test_id = '1channel_green_50to100'
-    tiles_in = TestKey.u16_all[np.newaxis]
-    tile_ok = TestKey.u8_colorize(TestKey.u16_50to100, TestKey.green)
-    test_keys = {
+    t_id = '1channel_green_50to100'
+    t_chans = TestKey.u16_all[np.newaxis]
+    t_ok = TestKey.u8_colorize(TestKey.u16_50to100, TestKey.green)
+    t_keys = {
         'ranges': TestKey.fro(50, 100)[np.newaxis],
         'colors': TestKey.green[np.newaxis],
-        'shape': tiles_in[0].shape
+        'shape': t_chans[0].shape
     }
-    generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
-    del (test_id, test_keys, tiles_in, tile_ok)
+    generic_test_tile(t_id, t_keys, t_chans, t_ok)
+    del (t_id, t_keys, t_chans, t_ok)
 
 
 def test_tile_2channel_chess():
     """ 2 channel cut and color
     """
-    full_ranges = np.stack((TestKey.fro(0,100),)*2)
+    full_ranges = np.stack((TestKey.fro(0, 100),)*2)
     by_colors = np.stack((TestKey.blue, TestKey.yellow))
     # START TEST
-    test_id = '2channel_chess'
-    tiles_in = [
+    t_id = '2channel_chess'
+    t_chans = [
         TestKey.u16_chess0,
         TestKey.u16_chess1,
     ]
     colors = by_colors
     ranges = full_ranges
-    tile_ok = TestKey.u8_cut_norm_mean(tiles_in, ranges, colors)
-    test_keys = {
+    t_ok = TestKey.u8_cut_norm_mean(t_chans, ranges, colors)
+    t_keys = {
         'ranges': ranges,
         'colors': colors,
-        'shape': tiles_in[0].shape
+        'shape': t_chans[0].shape
     }
     # Combine 3 striped images in varied colors
-    generic_test_tile(test_id, test_keys, tiles_in, tile_ok)
-    del (test_id, test_keys, tiles_in, tile_ok, colors, ranges)
+    generic_test_tile(t_id, t_keys, t_chans, t_ok)
+    del (t_id, t_keys, t_chans, t_ok, colors, ranges)
