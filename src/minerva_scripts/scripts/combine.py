@@ -87,15 +87,18 @@ def main(args=sys.argv[1:]):
     cmd = argparse.ArgumentParser(
         description="combine channels for all tiles"
     )
-    cmd.add_argument('config', nargs='?', default='config.yaml',
+    cmd.add_argument(
+        'config', nargs='?', default='config.yaml',
         help='main: IN: {DIR:*, NAME:*}'
         'OUT: {DIR:*, NAME:*, NOW* TIME: * LOD: *'
         'RANGES: [[*, *]..] COLORS: [[*, *]..]'
     )
-    cmd.add_argument('-o', default=argparse.SUPPRESS,
+    cmd.add_argument(
+        '-o', default=argparse.SUPPRESS,
         help="output directory"
     )
-    cmd.add_argument('-i', default=argparse.SUPPRESS,
+    cmd.add_argument(
+        '-i', default=argparse.SUPPRESS,
         help="input directory"
     )
 
