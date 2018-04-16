@@ -1,7 +1,9 @@
+""" Compare blend results with expected output
+"""
+import numpy as np
 from minsc.blend.mem import tile
 from ..constants import Key
 from ..constants import Log
-import numpy as np
 
 
 class TestKey(Key):
@@ -26,17 +28,16 @@ class TestKey(Key):
     u16_bar0 = np.tile(Key.square(u16)[:-2:64].T, 3)
     u16_bar1 = np.tile(Key.square(u16)[1:-1:64].T, 3)
     u16_bar2 = np.tile(Key.square(u16)[2::64].T, 3)
-    # Test intermediate images
-    u16_0to50 = Key.u8_cut_norm(u16_all, Key.fro(0, 50))
-    u16_50to100 = Key.u8_cut_norm(u16_all, Key.fro(50, 100))
 
-    def sanity_check(t_pair, t_id='?'):
+    @staticmethod
+    def sanity_check(*args):
         """ Compare basic details of two images
 
         Arguments:
             t_pair: list of two images to compare
             t_id: identity of test
         """
+        t_pair = args[0]
         type_pair = [x.dtype for x in t_pair]
         shape_pair = [x.shape for x in t_pair]
         # Log messages if results are unexpected
@@ -55,6 +56,7 @@ class TestKey(Key):
             return not np.subtract(*shape_pair).any()
         Log.assume(shape_goal, shape_msg, shape_pair)
 
+    @staticmethod
     def visual_check(t_pair, t_id='?'):
         """ Visually compare two images
 
@@ -68,13 +70,15 @@ class TestKey(Key):
         Log.write_image(t_pair[1], t_id+'_out')
         Log.write_image(diff_image, t_id+'_diff')
 
-    def full_check(t_pair, t_id='?'):
+    @staticmethod
+    def full_check(*args):
         """ Expect two images to be idential
 
         Arguments:
             t_pair: two arrays assumed identical
             t_id: identity of test
         """
+        t_pair = args[0]
         # Log if some pixels differ
         full_msg = "pixel at {}y, {}x: truth {}, result {}"
         first_diff = next(Log.diff(*t_pair), None)
@@ -86,7 +90,7 @@ class TestKey(Key):
         Log.assume(full_goal, full_msg, first_diff)
 
 
-def generic_test_tile(t_id, t_keys, t_chans, t_ok, t_list=[]):
+def generic_test_tile(t_chans, t_id, t_keys, t_ok, t_list=None):
     """ Run test on tile blend function
 
     Arguments:
@@ -111,44 +115,74 @@ def generic_test_tile(t_id, t_keys, t_chans, t_ok, t_list=[]):
         t_fn(t_pair, t_id)
 
 
+def easy_test_tile(t_r, t_c, t_in, t_id, t_list=None):
+    """ Combine many channels to expected output and compare
+
+    Arguments:
+        t_r: 2 min,max float32
+        t_c: 3 b,g,r float32
+        t_id: str name of test
+        t_in: input channel
+        t_list: list of tests to run
+    """
+    t_keys = {
+        'ranges': t_r[np.newaxis],
+        'colors': t_c[np.newaxis],
+        'shape': t_in.shape
+    }
+    t_ok = TestKey.u8_colorize(TestKey.u8_cut_norm(t_in, t_r), t_c)
+    generic_test_tile([t_in], t_id, t_keys, t_ok, t_list)
+
+
+def many_test_tile(ranges, colors, t_chans, t_id, t_list=None):
+    """ Combine many channels to expected output and compare
+
+    Arguments:
+        ranges: N channels by 2 min,max float32
+        colors: N channels by 3 b,g,r float32
+        t_id: str name of test
+        t_chans: list of input channels
+        t_list: list of tests to run
+    """
+    t_keys = {
+        'ranges': ranges,
+        'colors': colors,
+        'shape': t_chans[0].shape
+    }
+    t_ok = TestKey.u8_cut_norm_mean(t_chans, ranges, colors)
+    generic_test_tile(t_chans, t_id, t_keys, t_ok, t_list)
+
+# _________________________
+# Actual pytest entrypoints
+
+
 def test_tile_1channel_gray():
     """ 1 channel cut and color
     """
+    range_all = TestKey.fro(0, 100)
+    range_hi = TestKey.fro(50, 100)
+    range_lo = TestKey.fro(0, 50)
+
     # START TEST
     t_id = '1channel_gray_all'
-    t_chans = TestKey.u16_all[np.newaxis]
-    t_ok = TestKey.u8_colorize(TestKey.u16_all)
-    t_keys = {
-        'ranges': TestKey.fro(0, 100)[np.newaxis],
-        'colors': TestKey.white[np.newaxis],
-        'shape': t_chans[0].shape
-    }
-    generic_test_tile(t_id, t_keys, t_chans, t_ok)
-    del (t_id, t_keys, t_chans, t_ok)
+    t_in = TestKey.u16_all
+    # Check mapping all values to white
+    easy_test_tile(range_all, TestKey.white, t_in, t_id)
+    del (t_in, t_id)
 
     # START TEST
     t_id = '1channel_gray_0to50'
-    t_chans = TestKey.u16_all[np.newaxis]
-    t_ok = TestKey.u8_colorize(TestKey.u16_0to50)
-    t_keys = {
-        'ranges': TestKey.fro(0, 50)[np.newaxis],
-        'colors': TestKey.white[np.newaxis],
-        'shape': t_chans[0].shape
-    }
-    generic_test_tile(t_id, t_keys, t_chans, t_ok)
-    del (t_id, t_keys, t_chans, t_ok)
+    t_in = TestKey.u16_all
+    # Check mapping low values to white
+    easy_test_tile(range_lo, TestKey.white, t_in, t_id)
+    del (t_in, t_id)
 
     # START TEST
     t_id = '1channel_green_50to100'
-    t_chans = TestKey.u16_all[np.newaxis]
-    t_ok = TestKey.u8_colorize(TestKey.u16_50to100, TestKey.green)
-    t_keys = {
-        'ranges': TestKey.fro(50, 100)[np.newaxis],
-        'colors': TestKey.green[np.newaxis],
-        'shape': t_chans[0].shape
-    }
-    generic_test_tile(t_id, t_keys, t_chans, t_ok)
-    del (t_id, t_keys, t_chans, t_ok)
+    t_in = TestKey.u16_all
+    # Check mapping high values to green
+    easy_test_tile(range_hi, TestKey.green, t_in, t_id)
+    del (t_in, t_id)
 
 
 def test_tile_2channel_chess():
@@ -162,14 +196,6 @@ def test_tile_2channel_chess():
         TestKey.u16_chess0,
         TestKey.u16_chess1,
     ]
-    colors = by_colors
-    ranges = full_ranges
-    t_ok = TestKey.u8_cut_norm_mean(t_chans, ranges, colors)
-    t_keys = {
-        'ranges': ranges,
-        'colors': colors,
-        'shape': t_chans[0].shape
-    }
-    # Combine 3 striped images in varied colors
-    generic_test_tile(t_id, t_keys, t_chans, t_ok)
-    del (t_id, t_keys, t_chans, t_ok, colors, ranges)
+    # Make sure blue/yellow grid has no overlaps
+    many_test_tile(full_ranges, by_colors, t_chans, t_id)
+    del (t_chans, t_id)

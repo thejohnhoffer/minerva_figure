@@ -1,12 +1,14 @@
+""" Scrpits for Minerva development
+"""
 import os
 from configparser import ConfigParser
 from setuptools import setup, find_packages
 
-here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'README.md')) as f:
+HERE = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(HERE, 'README.md')) as f:
     README = f.read()
 
-requires = [
+REQUIRES = [
     'pytest>=3.5.0',
     'numpy>=1.11.1',
     'pyaml>=16.12.2',
@@ -15,6 +17,10 @@ requires = [
 
 
 def read_version():
+    """
+    Returns:
+        Version string of this module
+    """
     config = ConfigParser()
     config.read('setup.cfg')
     return config.get('metadata', 'version')
@@ -34,7 +40,7 @@ setup(
     long_description=README,
     packages=find_packages('src'),
     include_package_data=True,
-    install_requires=requires,
+    install_requires=REQUIRES,
     entry_points={
         'console_scripts': [
             'combine=minsc.scripts.combine:main',
