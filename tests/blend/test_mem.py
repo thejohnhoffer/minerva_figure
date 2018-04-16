@@ -1,7 +1,7 @@
 """ Compare blend results with expected output
 """
 import numpy as np
-from minsc.blend.mem import tile
+from minerva_scripts.blend.mem import tile
 from ..constants import Key
 from ..constants import Log
 
