@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 
 
 def to_f32(img):
