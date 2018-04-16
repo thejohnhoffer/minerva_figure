@@ -83,38 +83,21 @@ def parse_config(**kwargs):
 def main(args=sys.argv[1:]):
     """ Combine channels for all tiles
     """
-    # Help for each argument
-    helps = {
-        "main": "combine channels for all tiles",
-        "config": """main:
-    IN: {DIR:*, NAME:*}
-    OUT: {DIR:*, NAME:*, NOW*}
-    RANGES: [[*, *]..]
-    COLORS: [[*, *]..]
-    TIME: *
-    LOD: *
-    """,
-        "-o": "output directory",
-        "-i": "input directory",
-    }
-    # Define each argument
-    params = {
-        'config': {
-            'nargs': '?',
-            'default': 'config.yaml',
-        },
-        '-o': {
-            'default': argparse.SUPPRESS,
-        },
-        '-i': {
-            'default': argparse.SUPPRESS,
-        }
-    }
-
     # Read from a configuration file at a default location
-    cmd = argparse.ArgumentParser(description=helps['main'])
-    for arg, kwargs in params.items():
-        cmd.add_argument(arg, help=helps[arg], **kwargs)
+    cmd = argparse.ArgumentParser(
+        description="combine channels for all tiles"
+    )
+    cmd.add_argument('config', nargs='?', default='config.yaml',
+        help='main: IN: {DIR:*, NAME:*}'
+        'OUT: {DIR:*, NAME:*, NOW* TIME: * LOD: *'
+        'RANGES: [[*, *]..] COLORS: [[*, *]..]'
+    )
+    cmd.add_argument('-o', default=argparse.SUPPRESS,
+        help="output directory"
+    )
+    cmd.add_argument('-i', default=argparse.SUPPRESS,
+        help="input directory"
+    )
 
     # Actually parse and read arguments
     parsed = vars(cmd.parse_args(args))
