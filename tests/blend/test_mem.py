@@ -116,7 +116,7 @@ def generic_test_tile(t_chans, t_id, t_keys, t_ok, t_list=None):
 
 
 def easy_test_tile(t_r, t_c, t_in, t_id, t_list=None):
-    """ Combine many channels to expected output and compare
+    """ Combine one channel to expected output and compare
 
     Arguments:
         t_r: 2 min,max float32
