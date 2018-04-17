@@ -117,10 +117,8 @@ def main(args=sys.argv[1:]):
             continue
 
         # from disk, load all channels for tile
-        all_buffer = disk.tile(k_time, k_detail, z, y, x, **{
-            'format': in_path_format,
-            'count': n_channel,
-        })
+        all_buffer = disk.tile(k_time, k_detail, z, y, x,
+                               n_channel, in_path_format)
 
         # Continue if no channel buffers for given tile
         all_buffer = [b for b in all_buffer if b is not None]
