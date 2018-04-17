@@ -126,8 +126,7 @@ def main(args=sys.argv[1:]):
             continue
 
         # from memory, blend all channels loaded
-        img_buffer = mem.tile(all_buffer, tile_shape,
-                              all_colors, all_ranges)
+        img_buffer = mem.tile(all_buffer, all_colors, all_ranges)
 
         # Write the image buffer to a file
         out_file = out_path_format.format(k_time, k_detail, z, y, x)
