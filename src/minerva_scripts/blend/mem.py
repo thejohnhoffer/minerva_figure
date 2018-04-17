@@ -24,34 +24,33 @@ def f32_to_bgr(f_img, color=[1, 1, 1]):
     return (256*f_bgr).astype(np.uint8)
 
 
-def tile(all_buffer, **kwargs):
+def tile(all_img, t_shape, colors, ranges=None):
     """blend all channels given
     Arguments:
-        all_buffer: list of numpy image channels for a tile
-
-    Keywords:
-        ranges: float32 2 by N-channel min, max range
-        colors: float32 2 by N-channel b, g, r max color
+        all_img: list of numpy image channels for a tile
+        t_shape: uint16 height, width tile shape
+        colors: N-channel by b, g, r float32 color
+        ranges: N-channel by min, max float32 range
 
     Returns:
         uint8 y by x by 3 color BGR image
     """
-    all_bgr = kwargs.get('colors', np.float32([(1.0, 1.0, 1.0)]))
-    all_thresh = kwargs.get('ranges', np.float32([(0.0, 1.0)]))
-    tile_shape = kwargs.get('shape', np.uint16([1024, 1024]))
+    n_chan = len(list(zip(colors, all_img)))
+    if ranges is None:
+        ranges = np.float32(([0, 1],)*n_chan)
 
     # final buffer for blending
-    color_tile_shape = tuple(tile_shape) + (3,)
-    img_buffer = np.zeros(color_tile_shape, dtype=np.float32)
+    t_shape_color = tuple(t_shape) + (3,)
+    img_buffer = np.zeros(t_shape_color, dtype=np.float32)
 
-    # Process all channels
-    for c_bgr, c_thresh, c_img in zip(all_bgr, all_thresh, all_buffer):
+    # Process as many channesl as have colors and ranges
+    for c_color, c_range, c_img in zip(colors, ranges, all_img):
         img_data = to_f32(c_img)
         # Maximum color for this channel
-        avg_factor = 1.0 / len(all_buffer)
-        color_factor = c_bgr * avg_factor
+        avg_factor = 1.0 / len(all_img)
+        color_factor = c_color * avg_factor
         # Fraction of full range
-        lowest, highest = c_thresh
+        lowest, highest = c_range
         clip_size = highest - lowest
         # Clip the image
         clip_data = np.clip(img_data, lowest, highest)

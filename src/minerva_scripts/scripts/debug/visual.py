@@ -75,8 +75,11 @@ def generic_test_tile(t_chans, t_id, t_keys, t_ok, t_list=None):
         t_ok: assumed output channel
         t_list: list of tests to run
     """
+    shape = t_keys.get('shape')
+    colors = t_keys.get('colors')
+    ranges = t_keys.get('ranges')
     # Blend all input tiles
-    t_out = mem.tile(t_chans, **t_keys)
+    t_out = mem.tile(t_chans, shape, colors, ranges)
     t_pair = t_ok, t_out
 
     # Run standard tests by default
