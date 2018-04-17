@@ -147,7 +147,7 @@ def test_tile_1channel_gray():
 def test_tile_2channel_chess():
     """ 2 channel cut and color
     """
-    all_x2 = np.stack((Key.range_all,)*2)
+    ranges_all = np.stack((Key.range_all,)*2)
     blu_yel = np.stack((Key.blue, Key.yellow))
     # On/off grid
     t_chans = np.uint16([[
@@ -163,4 +163,4 @@ def test_tile_2channel_chess():
         [Key.blue, Key.yellow],
     ])
     # Make sure blue/yellow grid has no overlaps
-    many_test_tile(all_x2, blu_yel, t_chans, t_ok)
+    many_test_tile(ranges_all, blu_yel, t_chans, t_ok)
