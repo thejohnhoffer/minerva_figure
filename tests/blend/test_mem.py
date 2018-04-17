@@ -53,11 +53,10 @@ def generic_test_tile(t_chans, t_ok, t_keys, t_list=None):
         t_ok: assumed output image
         t_list: list of tests to run
     """
-    shape = t_keys.get('shape')
     colors = t_keys.get('colors')
     ranges = t_keys.get('ranges')
     # Blend all input tiles
-    t_out = tile(t_chans, shape, colors, ranges)
+    t_out = tile(t_chans, colors, ranges)
     t_pair = t_ok, t_out
 
     # Run standard tests by default
@@ -83,7 +82,6 @@ def easy_test_tile(t_r, t_c, t_in, t_ok, t_list=None):
     t_keys = {
         'ranges': t_r[np.newaxis],
         'colors': t_c[np.newaxis],
-        'shape': t_in.shape
     }
     generic_test_tile([t_in], t_ok, t_keys, t_list)
 
@@ -101,7 +99,6 @@ def many_test_tile(ranges, colors, t_chans, t_ok, t_list=None):
     t_keys = {
         'ranges': ranges,
         'colors': colors,
-        'shape': t_chans[0].shape
     }
     generic_test_tile(t_chans, t_ok, t_keys,  t_list)
 

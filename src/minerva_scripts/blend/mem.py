@@ -24,11 +24,10 @@ def f32_to_bgr(f_img, color=[1, 1, 1]):
     return (256*f_bgr).astype(np.uint8)
 
 
-def tile(all_img, t_shape, colors, ranges=None):
+def tile(all_img, colors, ranges=None):
     """blend all channels given
     Arguments:
         all_img: list of numpy image channels for a tile
-        t_shape: uint16 height, width tile shape
         colors: N-channel by b, g, r float32 color
         ranges: N-channel by min, max float32 range
 
@@ -36,11 +35,13 @@ def tile(all_img, t_shape, colors, ranges=None):
         uint8 y by x by 3 color BGR image
     """
     n_chan = len(list(zip(colors, all_img)))
+    t_shape = np.amax([a.shape for a in all_img], 0)
+    t_shape_color = tuple(t_shape) + (3,)
+    # Default range to 0,1 for all channels
     if ranges is None:
         ranges = np.float32(([0, 1],)*n_chan)
 
     # final buffer for blending
-    t_shape_color = tuple(t_shape) + (3,)
     img_buffer = np.zeros(t_shape_color, dtype=np.float32)
 
     # Process as many channesl as have colors and ranges
