@@ -24,7 +24,7 @@ def image(fmt, *args):
     return None
 
 
-def tile(t, l, z, y, x, **kwargs):
+def tile(t, l, z, y, x, n_channel=1, in_fmt=None):
     """Load all channels for a given tile
     Arguments:
         t: integer time step
@@ -32,17 +32,14 @@ def tile(t, l, z, y, x, **kwargs):
         z: tile offset in depth
         y: vertical tile offset
         x: horizontal tile offset
-
-    Keywords:
-        shape: uint16 2vec y, x pixel shape of one tile
-        count: total number of channels to load
-        format: string defining file pattern
+        n_channel: total number of channels to load
+        in_fmt: string defining file pattern
 
     Returns:
         list of numpy image channels for a tile
     """
-    in_fmt = kwargs.get('format', '{}_{}_{}_{}_{}_{}.png')
-    n_channel = kwargs.get('count', 1)
+    if in_fmt is None:
+        in_fmt = '{}_{}_{}_{}_{}_{}.png'
 
     # Load all channels
     const = t, l, z, y, x
