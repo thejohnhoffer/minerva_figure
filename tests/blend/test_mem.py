@@ -56,7 +56,6 @@ def generic_test_tile(t_chans, t_ok, t_keys, t_list=None):
     # Blend all input tiles
     t_out = tile(t_chans, **t_keys)
     t_pair = t_ok, t_out
-    print (t_pair)
 
     # Run standard tests by default
     if not t_list:
