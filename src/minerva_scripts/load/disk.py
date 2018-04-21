@@ -70,24 +70,31 @@ def index(fmt):
         image tile size in pixels: y, x
     """
     num_dim = 6
-    voxels = np.uint16([1, 0, 0])
+    pixels = np.uint16([0, 0])
+    dims = range(1, num_dim + 1)
     sizes = np.zeros(num_dim, dtype=np.uint16)
-    all_iglob = fmt.format(*(('*',) * num_dim))
-    all_regex = fmt.format(*(('(\d+)',) * num_dim))
+
+    # Interpret the format string
+    fmt_order = fmt.format(*dims)
+    fmt_iglob = fmt.format(*(('*',) * num_dim))
+    fmt_regex = fmt.format(*(('(\d+)',) * num_dim))
+
+    # Get the order of the parameters
+    re_order = re.match(fmt_regex, fmt_order)
+    order = list(map(int, map(re_order.group, dims)))
 
     # Find all files matching the pattern
-    for name in glob.iglob(all_iglob):
+    for name in glob.iglob(fmt_iglob):
         # Extract parameters for each dimension
-        match = next(re.finditer(all_regex, name), None)
+        match = next(re.finditer(fmt_regex, name), None)
         if match is not None:
-            coords = match.group(*range(1, num_dim+1))
+            coords = list(map(match.group, order))
             # Take the maximum of all coordinates
-            sizes = np.maximum(sizes, np.uint16(coords))
+            sizes = np.maximum(sizes, 1 + np.uint16(coords))
             # Read first image
-            if not all(voxels):
+            if not all(pixels):
                 file_name = match.group(0)
                 file_data = cv2.imread(file_name, 0)
-                voxels[-2::] = file_data.shape
+                pixels[:] = file_data.shape
 
-    # zero-based sizes
-    return sizes + 1, voxels[-2::]
+    return sizes, pixels

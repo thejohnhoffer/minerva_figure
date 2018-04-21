@@ -112,10 +112,6 @@ def main(args=sys.argv[1:]):
     for i in range(np.prod(zyx_shape)):
         z, y, x = np.unravel_index(i, zyx_shape)
 
-        # DERP
-        if z != 0:
-            continue
-
         # from disk, load all channels for tile
         all_buffer = disk.tile(k_time, k_detail, z, y, x,
                                n_channel, in_path_format)
