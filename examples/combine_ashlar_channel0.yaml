@@ -1,0 +1,9 @@
+main:
+  CHANNELS:
+    - 0
+  RANGES:
+    - [0, 0.5]
+  COLORS:
+    - [0, 0, 1]
+  TIME: 0
+  LOD: 0
