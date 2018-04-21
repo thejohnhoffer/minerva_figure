@@ -14,6 +14,9 @@ REQUIRES = [
     'pyaml>=16.12.2',
     'opencv-python>=3.3.0.10',
 ]
+LINKS = [
+    'git+https://github.com/sorgerlab/minerva-lib-python#egg=minerva-lib',
+]
 
 
 def read_version():
@@ -41,10 +44,10 @@ setup(
     packages=find_packages('src'),
     include_package_data=True,
     install_requires=REQUIRES,
+    dependency_links=LINKS,
     entry_points={
         'console_scripts': [
             'combine=minerva_scripts.scripts.combine:main',
-            'debug-tile=minerva_scripts.scripts.debug.visual:main',
         ]
     },
     classifiers=[

@@ -1,7 +1,7 @@
 """ Test to combine all channels for all tiles
 """
 from ..load import disk
-from ..blend import mem
+from minerva_lib.blend import linear_bgr
 from ..helper import config
 import numpy as np
 import argparse
@@ -50,8 +50,8 @@ def parse_config(**kwargs):
 
     # Read the paths with defaults
     try:
-        in_dir = kwargs['o']
-        out_dir = kwargs['i']
+        in_dir = kwargs['i']
+        out_dir = kwargs['o']
     except KeyError as k_e:
         raise k_e
 
@@ -126,7 +126,8 @@ def main(args=sys.argv[1:]):
             continue
 
         # from memory, blend all channels loaded
-        img_buffer = mem.tile(all_buffer, all_colors, all_ranges)
+        all_in = zip(all_buffer, all_colors, all_ranges)
+        img_buffer = linear_bgr(list(map(disk.format_input, all_in)))
 
         # Write the image buffer to a file
         out_file = out_path_format.format(k_time, k_detail, z, y, x)
