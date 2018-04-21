@@ -24,7 +24,7 @@ def image(fmt, *args):
     return None
 
 
-def tile(t, l, z, y, x, n_channel=1, in_fmt=None):
+def tile(t, l, z, y, x, c_order, in_fmt=None):
     """Load all channels for a given tile
     Arguments:
         t: integer time step
@@ -32,7 +32,7 @@ def tile(t, l, z, y, x, n_channel=1, in_fmt=None):
         z: tile offset in depth
         y: vertical tile offset
         x: horizontal tile offset
-        n_channel: total number of channels to load
+        c_order: list of channels to load
         in_fmt: string defining file pattern
 
     Returns:
@@ -43,8 +43,7 @@ def tile(t, l, z, y, x, n_channel=1, in_fmt=None):
 
     # Load all channels
     const = t, l, z, y, x
-    c_range = range(n_channel)
-    return [image(in_fmt, c, *const) for c in c_range]
+    return [image(in_fmt, c, *const) for c in c_order]
 
 
 def format_input(args):

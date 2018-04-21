@@ -14,6 +14,7 @@ import os
 def parse_config(**kwargs):
     """
     main:
+        CHANNELS: [0, 1..]
         RANGES: [[*, *]..]
         COLORS: [[*, *]..]
         TIME: *
@@ -26,6 +27,7 @@ def parse_config(**kwargs):
 
     Returns:
         t: integer timestep
+        chan: integer N channels by 1 index
         l: integer power-of-2 level-of-detail
         r: float32 N channels by 2 min, max
         c: float32 N channels by 3 b, g, r
@@ -47,6 +49,13 @@ def parse_config(**kwargs):
     # Validate the threshholds and colors
     terms['r'] = np.float32(cfg_data.get('RANGES', [[0, 1]]))
     terms['c'] = np.float32(cfg_data.get('COLORS', [[1, 1, 1]]))
+    n_channel = min(map(len, map(terms.get, 'rc')))
+    terms['r'] = terms['r'][:n_channel]
+    terms['c'] = terms['c'][:n_channel]
+
+    # Set order of channels
+    default_order = np.arange(n_channel, dtype=np.uint16)
+    terms['chan'] = cfg_data.get('CHANNELS', default_order)
 
     # Read the paths with defaults
     try:
@@ -97,7 +106,9 @@ def main(args=sys.argv[1:]):
     # Full path format of input files
     in_path_format = terms['i']
     out_path_format = terms['o']
+
     # Important parameters
+    channel_order = terms['chan']
     all_ranges = terms['r']
     all_colors = terms['c']
     k_time = terms['t']
@@ -106,7 +117,6 @@ def main(args=sys.argv[1:]):
     # Find range of image tiles
     ctlzyx_shape, tile_shape = disk.index(in_path_format)
     zyx_shape = ctlzyx_shape[-3::]
-    n_channel = ctlzyx_shape[0]
 
     # Process all z, y, x tiles
     for i in range(np.prod(zyx_shape)):
@@ -114,7 +124,7 @@ def main(args=sys.argv[1:]):
 
         # from disk, load all channels for tile
         all_buffer = disk.tile(k_time, k_detail, z, y, x,
-                               n_channel, in_path_format)
+                               channel_order, in_path_format)
 
         # Continue if no channel buffers for given tile
         all_buffer = [b for b in all_buffer if b is not None]
