@@ -12,11 +12,7 @@ REQUIRES = [
     'pytest>=3.3.2',
     'numpy>=1.11.1',
     'pyaml>=16.12.2',
-    'opencv-python>=3.3.0.10',
-    'minerva-lib-python'
-]
-LINKS = [
-    'pip@https://github.com/sorgerlab/minerva-lib-python/archive/master.zip'
+    'opencv-python>=3.3.0.10'
 ]
 
 
@@ -45,7 +41,6 @@ setup(
     packages=find_packages('src'),
     include_package_data=True,
     install_requires=REQUIRES,
-    dependency_links=LINKS,
     entry_points={
         'console_scripts': [
             'combine=minerva_scripts.scripts.combine:main',

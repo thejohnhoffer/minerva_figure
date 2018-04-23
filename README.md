@@ -1,8 +1,8 @@
 ### Installation
 
 ```bash
-cd minerva-scripts/src
-pip install -e .
+cd minerva-scripts
+pip install -r requirements.txt -e .
 ```
 
 ### Testing
