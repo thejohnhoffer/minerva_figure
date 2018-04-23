@@ -13,9 +13,10 @@ REQUIRES = [
     'numpy>=1.11.1',
     'pyaml>=16.12.2',
     'opencv-python>=3.3.0.10',
+    'minerva-lib-python'
 ]
 LINKS = [
-    'git+https://github.com/thejohnhoffer/minerva-lib-python@master#egg=minerva-lib',
+    'pip@https://github.com/sorgerlab/minerva-lib-python/archive/master.zip'
 ]
 
 
