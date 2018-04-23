@@ -15,7 +15,7 @@ REQUIRES = [
     'opencv-python>=3.3.0.10',
 ]
 LINKS = [
-    'git+https://github.com/sorgerlab/minerva-lib-python#egg=minerva-lib',
+    'git+https://github.com/thejohnhoffer/minerva-lib-python@master#egg=minerva-lib',
 ]
 
 

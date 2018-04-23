@@ -1,6 +1,7 @@
 """ Test to combine all channels for all tiles
 """
 from ..load import disk
+from memory_profiler import profile
 from minerva_lib.blend import linear_bgr
 from ..helper import config
 import numpy as np
@@ -74,6 +75,12 @@ def parse_config(**kwargs):
 
     return terms
 
+@profile
+def debug_linear_bgr(all_in):
+    ''' Combine all inputs
+    '''
+    return linear_bgr(list(map(disk.format_input, all_in)))
+
 
 def main(args=sys.argv[1:]):
     """ Combine channels for all tiles
@@ -133,8 +140,8 @@ def main(args=sys.argv[1:]):
 
         # from memory, blend all channels loaded
         all_in = zip(all_buffer, all_colors, all_ranges)
-        img_buffer = linear_bgr(list(map(disk.format_input, all_in)))
 
+        img_buffer = debug_linear_bgr(all_in)
         # Write the image buffer to a file
         out_file = out_path_format.format(k_time, k_detail, z, y, x)
         try:
