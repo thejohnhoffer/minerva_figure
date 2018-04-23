@@ -18,9 +18,7 @@ def image(fmt, *args):
     img_name = fmt.format(*args)
     if os.path.exists(img_name):
         return cv2.imread(img_name, 0)
-    # Print error if nothing loaded
-    msg = "no channel #{0}: t{1}, l{2}, z{3}, y{4}, x{5}"
-    print(msg.format(*args))
+
     return None
 
 

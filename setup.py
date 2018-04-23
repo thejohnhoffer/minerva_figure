@@ -44,6 +44,7 @@ setup(
     entry_points={
         'console_scripts': [
             'combine=minerva_scripts.scripts.combine:main',
+            'precompute=minerva_scripts.scripts.precompute:main',
         ]
     },
     classifiers=[

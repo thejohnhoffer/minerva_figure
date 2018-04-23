@@ -1,7 +1,9 @@
 """ Help load yaml config file
 """
 import yaml
+import pathlib
 import numpy as np
+import os
 
 
 def safe_yaml(y_val):
@@ -65,3 +67,67 @@ def load_yaml(yml_path, main_key="main"):
         log_yaml('IOError', i_e.strerror)
 
     return None
+
+
+def parse(**kwargs):
+    """
+    main:
+        CHANNELS: [0, 1..]
+        RANGES: [[*, *]..]
+        COLORS: [[*, *]..]
+        TIME: *
+        LOD: *
+
+    Keyword Arguments:
+        config: path to yaml with above keys
+        o: output directory
+        i: input directory
+
+    Returns:
+        t: integer timestep
+        chan: integer N channels by 1 index
+        l: integer power-of-2 level-of-detail
+        r: float32 N channels by 2 min, max
+        c: float32 N channels by 3 b, g, r
+        o: full output format
+        i: full input format
+    """
+    in_name = 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
+    out_name = 'T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
+    cfg_data = load_yaml(kwargs['config'])
+    # Allow empty config file
+    if cfg_data is None:
+        cfg_data = {}
+    terms = {}
+
+    # Read root values from config
+    terms['t'] = int(cfg_data.get('TIME', 0))
+    terms['l'] = int(cfg_data.get('LOD', 0))
+
+    # Validate the threshholds and colors
+    terms['r'] = np.float32(cfg_data.get('RANGES', [[0, 1]]))
+    terms['c'] = np.float32(cfg_data.get('COLORS', [[1, 1, 1]]))
+    n_channel = min(map(len, map(terms.get, 'rc')))
+    terms['r'] = terms['r'][:n_channel]
+    terms['c'] = terms['c'][:n_channel]
+
+    # Set order of channels
+    default_order = np.arange(n_channel, dtype=np.uint16)
+    terms['chan'] = cfg_data.get('CHANNELS', default_order)
+
+    # Read the paths with defaults
+    try:
+        in_dir = kwargs['i']
+        out_dir = kwargs['o']
+    except KeyError as k_e:
+        raise k_e
+
+    # Join the full paths properly
+    terms['i'] = str(pathlib.Path(in_dir, in_name))
+    terms['o'] = str(pathlib.Path(out_dir, out_name))
+
+    # Create output directory if nonexistant
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
+    return terms
