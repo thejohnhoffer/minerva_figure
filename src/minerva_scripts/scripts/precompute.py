@@ -21,14 +21,6 @@ def main(args=sys.argv[1:]):
         description="combine channels for all tiles"
     )
     cmd.add_argument(
-        'config', nargs='?', default='config.yaml',
-        help='main: {'
-        ' TIME: * LOD: *'
-        ' RANGES: [[*, *]..]'
-        ' COLORS: [[*, *]..]'
-        ' }'
-    )
-    cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
         help="output directory"
     )
@@ -44,11 +36,7 @@ def main(args=sys.argv[1:]):
     # Full path format of input files
     in_path_format = terms['i']
     out_root = parsed['o']
-
-    # Important parameters
-    all_ranges = terms['r']
-    all_colors = terms['c']
-    k_time = terms['t']
+    k_time = 0
 
     # Find range of image tiles
     ctlzyx_shape, tile_shape = disk.index(in_path_format)

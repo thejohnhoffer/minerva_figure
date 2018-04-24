@@ -94,11 +94,14 @@ def parse(**kwargs):
     """
     in_name = 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
     out_name = 'T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
-    cfg_data = load_yaml(kwargs['config'])
-    # Allow empty config file
-    if cfg_data is None:
-        cfg_data = {}
+
     terms = {}
+    cfg_data = {}
+
+    # Allow config file
+    if 'config' in kwargs:
+        data = load_yaml(kwargs['config'])
+        cfg_data = data if data else {}
 
     # Read root values from config
     terms['t'] = int(cfg_data.get('TIME', 0))
