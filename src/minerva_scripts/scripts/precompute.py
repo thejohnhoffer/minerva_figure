@@ -1,5 +1,5 @@
-""" Test to combine all channels for all tiles
-"""
+''' Test to combine all channels for all tiles
+'''
 from ..load import disk
 from ..write import precompute
 from ..helper import config
@@ -12,21 +12,50 @@ import sys
 import os
 
 
+def lod_index_shape(zyx_shape, lod):
+    ''' calculate index of last tile in lod
+
+    Arguments:
+        zyx_shape: zyx indices at full resolution
+        lod: any power-of-2 resolution
+
+    Returns:
+        zyx indices at lod
+    '''
+    zyx_res = (1, 2 ** lod, 2 ** lod)
+    return (zyx_shape - 1) // zyx_res
+
+
+def lod_voxel_shape(last_tile, block_shape, lod_zyx):
+    ''' calculate full shape at given level of detail
+
+    Arguments:
+        last_tile: the last tile for lod
+        block_shape: the z,y,x shape of normal tiles
+        lod_zyx: the index of last tile in lod
+
+    Returns:
+        np.uint32 Z,Y,X array of voxel shape for LOD
+    '''
+    margin = np.uint32((1,) + last_tile.shape)
+    return margin + block_shape * lod_zyx
+
+
 def main(args=sys.argv[1:]):
-    """ Convert all tiles to precompute directory structure
+    ''' Convert all tiles to precompute directory structure
     for neuroglacner
-    """
+    '''
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(
-        description="combine channels for all tiles"
+        description='combine channels for all tiles'
     )
     cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
-        help="output directory"
+        help='output directory'
     )
     cmd.add_argument(
-        '-i', required="True",
-        help="input directory"
+        '-i', required='True',
+        help='input directory'
     )
 
     parsed = vars(cmd.parse_args(args))
@@ -47,15 +76,20 @@ def main(args=sys.argv[1:]):
     n_chan = ctlzyx_shape[0]
     n_lod = ctlzyx_shape[2]
 
-    # Caluclate full shape
-    lz, ly, lx = np.uint32(zyx_shape) - 1
-    last_tile = disk.tile(0, 0, lz, ly, lx, [0], in_path_format)[0]
-    last_shape = np.uint32((1,) + last_tile.shape)
-    full_shape = last_shape + (lz, ly, lx) * block_shape
+    lod_list = []
+    for lod in range(n_lod):
 
-    # Get metadata
-    dtype = str(last_tile.dtype)
-    info = precompute.get_index(dtype, full_shape, block_shape, n_lod)
+        # Data type at current LOD
+        lod_zyx = lod_index_shape(zyx_shape, lod)
+        tile_args = tuple(lod_zyx) + ([0], in_path_format)
+        last_tile = disk.tile(0, lod, *tile_args)[0]
+        dtype = str(last_tile.dtype)
+        
+        # Calculate voxel shape at LOD
+        lod_voxels = lod_voxel_shape(last_tile, block_shape, lod_zyx)
+        lod_list.append(lod_voxels)
+    
+    info = precompute.get_index(dtype, lod_list, block_shape)
 
     # Write metadata files
     for c in range(n_chan):
@@ -65,7 +99,7 @@ def main(args=sys.argv[1:]):
         if not os.path.exists(c_root):
             os.makedirs(c_root)
 
-        # Write metadata
+        # Write metadata to channel directory
         c_info_path = os.path.join(c_root, 'info')
         with open(c_info_path, 'w') as info_file:
             json.dump(info, info_file)
@@ -108,5 +142,5 @@ def main(args=sys.argv[1:]):
                     print(o_e)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main(sys.argv)

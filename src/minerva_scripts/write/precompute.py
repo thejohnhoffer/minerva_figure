@@ -24,28 +24,28 @@ def get_path(image, indices, block_shape, lod):
     return os.path.join(str(lod), file_name)
 
 
-def get_index(data_type, full_shape, block_shape, lods):
+def get_index(data_type, lod_shapes, block_shape):
     ''' Give precomputed metadata for neuroglancer
 
     Arguments:
         data_type: string such as 'uint16'
-        full_shape: ZYX size of full image
+        lod_shape: ZYX size of image at all LOD
         block_shape: ZYX size of a single tile
-        lods: the number of levels of detail
 
     Returns:
         dictionary expected by precomputed info API
     '''
     chunk_size = block_shape[::-1].tolist()
-    full_size = full_shape[::-1].tolist()
+    all_lod = enumerate(lod_shapes)
 
     def index_(lod):
         ''' Provide configuration for each resolution
         '''
-        res = int(2 ** lod)
+        l, lod_shape = lod
+        res = int(2 ** l)
         return {
-            'key': str(res),
-            'size': full_size,
+            'key': str(l),
+            'size': lod_shape.tolist()[::-1],
             'resolution': [res, res, 1],
             'chunk_sizes': [chunk_size],
             'voxel_offset': [0, 0, 0],
@@ -56,6 +56,6 @@ def get_index(data_type, full_shape, block_shape, lods):
     return {
         'num_channels': 1,
         'data_type': data_type,
-        'scales': [index_(lod) for lod in range(lods)],
-        'type': 'segmentation',
+        'scales': list(map(index_, all_lod)),
+        'type': 'image',
     }
