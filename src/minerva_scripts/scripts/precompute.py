@@ -81,8 +81,6 @@ def main(args=sys.argv[1:]):
             for i in range(np.prod(zyx_shape)):
                 z, y, x = np.unravel_index(i, zyx_shape)
 
-                import ipdb
-                ipdb.set_trace()
                 # from disk, load all channels for tile
                 all_buffer = disk.tile(k_time, lod, z, y, x,
                                        [c], in_path_format)
@@ -95,16 +93,17 @@ def main(args=sys.argv[1:]):
                 # write output jpeg
                 out_path = precompute.get_path(image, [z, y, x],
                                                block_shape, lod)
-                jpeg_out_path = out_path + '.jpg'
+                full_out_path = os.path.join(c_root, out_path)
+                jpeg_out_path = full_out_path + '.jpg'
 
                 # Write jpeg without extension
-                if os.path.exists(out_path):
-                    os.remove(out_path)
+                if os.path.exists(full_out_path):
+                    os.remove(full_out_path)
 
                 cv2.imwrite(jpeg_out_path, image)
 
                 try:
-                    os.rename(jpeg_out_path, out_path)
+                    os.rename(jpeg_out_path, full_out_path)
                 except OSError as o_e:
                     print(o_e)
 
