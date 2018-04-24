@@ -36,6 +36,8 @@ def get_index(data_type, full_shape, block_shape, lods):
     Returns:
         dictionary expected by precomputed info API
     '''
+    chunk_size = block_shape[::-1].tolist()
+    full_size = full_shape[::-1].tolist()
 
     def index_(lod):
         ''' Provide configuration for each resolution
@@ -43,9 +45,9 @@ def get_index(data_type, full_shape, block_shape, lods):
         res = int(2 ** lod)
         return {
             'key': str(res),
-            'size': list(map(int, full_shape[::-1])),
+            'size': full_size,
             'resolution': [res, res, 1],
-            'chunk_sizes': list(map(int, block_shape[::-1])),
+            'chunk_sizes': [chunk_size],
             'voxel_offset': [0, 0, 0],
             'encoding': 'jpeg',
         }
