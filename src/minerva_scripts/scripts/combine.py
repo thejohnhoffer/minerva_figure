@@ -2,7 +2,7 @@
 """
 from ..load import disk
 from memory_profiler import profile
-from minerva_lib.blend import linear_bgr
+from minerva_lib.blend import linear_rgb
 from ..helper import config
 import numpy as np
 import argparse
@@ -12,10 +12,10 @@ import sys
 
 
 @profile
-def debug_linear_bgr(all_in):
+def debug_linear_rgb(all_in):
     ''' Combine all inputs
     '''
-    return linear_bgr(list(map(disk.format_input, all_in)))
+    return linear_rgb(list(map(disk.format_input, all_in)))
 
 
 def main(args=sys.argv[1:]):
@@ -77,7 +77,7 @@ def main(args=sys.argv[1:]):
         # from memory, blend all channels loaded
         all_in = zip(all_buffer, all_colors, all_ranges)
 
-        img_buffer = debug_linear_bgr(all_in)
+        img_buffer = debug_linear_rgb(all_in)
         # Write the image buffer to a file
         out_file = out_path_format.format(k_time, k_detail, z, y, x)
         try:

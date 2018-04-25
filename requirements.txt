@@ -1,1 +1,1 @@
-git+https://github.com/sorgerlab/minerva-lib-python@master#minerva-lib
+git+https://github.com/thejohnhoffer/minerva-lib-python@fix_clipping#minerva-lib
