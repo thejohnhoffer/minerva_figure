@@ -2,7 +2,7 @@
 """
 from ..load import disk
 from memory_profiler import profile
-from minerva_lib.blend import linear_rgb
+from minerva_lib.blend import composite_channels
 from ..helper import config
 import numpy as np
 import argparse
@@ -15,7 +15,7 @@ import sys
 def debug_linear_rgb(all_in):
     ''' Combine all inputs
     '''
-    return linear_rgb(list(map(disk.format_input, all_in)))
+    return composite_channels(list(map(disk.format_input, all_in)))
 
 
 def main(args=sys.argv[1:]):
