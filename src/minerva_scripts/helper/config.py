@@ -69,7 +69,7 @@ def load_yaml(yml_path, main_key="main"):
     return None
 
 
-def parse(**kwargs):
+def parse_main(config):
     """
     main:
         CHANNELS: [0, 1..]
@@ -78,29 +78,22 @@ def parse(**kwargs):
         TIME: *
         LOD: *
 
-    Keyword Arguments:
+    Arguments:
         config: path to yaml with above keys
-        o: output directory
-        i: input directory
 
-    Returns:
+    Return Keywords:
         t: integer timestep
         chan: integer N channels by 1 index
         l: integer power-of-2 level-of-detail
         r: float32 N channels by 2 min, max
         c: float32 N channels by 3 b, g, r
-        o: full output format
-        i: full input format
     """
-    in_name = 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
-    out_name = 'T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
 
     terms = {}
     cfg_data = {}
 
-    # Allow config file
-    if 'config' in kwargs:
-        data = load_yaml(kwargs['config'])
+    if config:
+        data = load_yaml(config)
         cfg_data = data if data else {}
 
     # Read root values from config
@@ -117,6 +110,59 @@ def parse(**kwargs):
     # Set order of channels
     default_order = np.arange(n_channel, dtype=np.uint16)
     terms['chan'] = cfg_data.get('CHANNELS', default_order)
+
+    return terms
+
+
+def parse_scaled_region(terms, config):
+    """
+    render_scaled_region:
+        URL: "<matching OMERO.figure API>"
+
+    Arguments:
+        config: path to yaml with above keys
+
+    Return Keywords:
+        t: integer timestep
+        chan: integer N channels by 1 index
+        l: integer power-of-2 level-of-detail
+        r: float32 N channels by 2 min, max
+        c: float32 N channels by 3 b, g, r
+    """
+
+    cfg_data = {}
+
+    # Allow config file
+    if config:
+        key = 'render_scaled_region'
+        data = load_yaml(config, key)
+        cfg_data = data if data else {}
+
+    print(cfg_data)
+
+    return terms
+
+
+def parse(key='main', **kwargs):
+    """
+    Arguments:
+        key: key for yaml config file
+
+    Keyword Arguments:
+        config: path to yaml config file
+        o: output directory
+        i: input directory
+
+    Returns:
+        configured terms with defaults
+    """
+    in_name = 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
+    out_name = 'T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
+
+    terms = {
+        'main': parse_main,
+        'region': parse_scaled_region
+    }[key](kwargs.get('config', ''))
 
     # Read the paths with defaults
     try:
