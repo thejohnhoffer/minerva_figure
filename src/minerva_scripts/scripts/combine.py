@@ -15,7 +15,7 @@ import sys
 def debug_linear_rgb(all_in):
     ''' Combine all inputs
     '''
-    return composite_channels(list(map(disk.format_input, all_in)))
+    return 255*composite_channels(list(map(disk.format_input, all_in)))
 
 
 def main(args=sys.argv[1:]):
