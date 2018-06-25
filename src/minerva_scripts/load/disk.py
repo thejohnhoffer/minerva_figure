@@ -44,18 +44,6 @@ def tile(t, l, z, y, x, c_order, in_fmt=None):
     return [image(in_fmt, c, *const) for c in c_order]
 
 
-def format_input(args):
-    ''' Combine all parameters
-    '''
-    image_, color_, range_ = args
-    return {
-        'image': image_,
-        'color': color_,
-        'min': range_[0],
-        'max': range_[1],
-    }
-
-
 def index(fmt):
     """Find all the file paths in a range
 

@@ -11,11 +11,23 @@ import cv2
 import sys
 
 
+def format_input(args):
+    ''' Combine all parameters
+    '''
+    image_, color_, range_ = args
+    return {
+        'image': image_,
+        'color': color_,
+        'min': range_[0],
+        'max': range_[1],
+    }
+
+
 @profile
 def debug_linear_rgb(all_in):
     ''' Combine all inputs
     '''
-    return 255*composite_channels(list(map(disk.format_input, all_in)))
+    return 255*composite_channels(list(map(format_input, all_in)))
 
 
 def main(args=sys.argv[1:]):
