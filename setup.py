@@ -44,6 +44,7 @@ setup(
     install_requires=REQUIRES,
     entry_points={
         'console_scripts': [
+            'crop=minerva_scripts.scripts.crop:main',
             'combine=minerva_scripts.scripts.combine:main',
             'precompute=minerva_scripts.scripts.precompute:main',
         ]

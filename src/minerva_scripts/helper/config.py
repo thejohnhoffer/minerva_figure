@@ -5,6 +5,8 @@ import pathlib
 import numpy as np
 import os
 
+from . import api
+
 
 def safe_yaml(y_val):
     """ Handle numpy values when printing yaml
@@ -86,7 +88,7 @@ def parse_main(config):
         chan: integer N channels by 1 index
         l: integer power-of-2 level-of-detail
         r: float32 N channels by 2 min, max
-        c: float32 N channels by 3 b, g, r
+        c: float32 N channels by 3 r, g, b
     """
 
     terms = {}
@@ -114,33 +116,70 @@ def parse_main(config):
     return terms
 
 
-def parse_scaled_region(terms, config):
+def parse_scaled_region(config):
     """
     render_scaled_region:
         URL: "<matching OMERO.figure API>"
+        LIMIT: <maximum integer for range>
 
     Arguments:
         config: path to yaml with above keys
 
     Return Keywords:
         t: integer timestep
+        origin:
+            integer [x, y, z]
+        shape:
+            [width, height]
         chan: integer N channels by 1 index
         l: integer power-of-2 level-of-detail
         r: float32 N channels by 2 min, max
-        c: float32 N channels by 3 b, g, r
+        c: float32 N channels by 3 r, g, b
     """
 
-    cfg_data = {}
+    cfg_url = '/render_scaled_region/1337/0/0/?'
+    cfg_url += 'c=1|0:65535$0000FF&&region=0,0,512,512'
+    cfg_limit = 255
 
     # Allow config file
     if config:
         key = 'render_scaled_region'
         data = load_yaml(config, key)
-        cfg_data = data if data else {}
+        cfg_url = data.get('URL', cfg_url)
+        cfg_limit = data.get('LIMIT', cfg_limit)
 
-    print(cfg_data)
+    def get_range(chan):
+        r = np.array([chan['min'], chan['max']])
+        return np.clip(r / cfg_limit, 0, 1)
 
-    return terms
+    def get_color(chan):
+        c = np.array(chan['color']) / 255
+        return np.clip(c, 0, 1)
+
+    # Parse the url
+    cfg_data = api.scaled_region(cfg_url)
+    x, y, width, height = cfg_data['region']
+    longest_side = max(width, height)
+    max_size = cfg_data['max_size']
+
+    # Calculate the level of detail
+    lod = np.ceil(np.log2(longest_side / max_size))
+    shape = np.array([width, height]) / (2 ** lod)
+    origin = np.array([x, y, cfg_data['z']]) / (2 ** lod)
+
+    # Get active channels
+    channels = cfg_data['channels']
+    chan = [c for c in channels if c['shown']]
+
+    return {
+        'r': np.array([get_range(c) for c in chan]),
+        'c': np.array([get_color(c) for c in chan]),
+        'chan': np.int64([c['cid'] for c in chan]),
+        'origin': np.int64(np.floor(origin)),
+        'shape': np.int64(np.floor(shape)),
+        't': cfg_data['t'],
+        'l': int(lod)
+    }
 
 
 def parse(key='main', **kwargs):
