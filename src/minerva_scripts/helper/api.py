@@ -28,8 +28,8 @@ def scaled_region(url):
         return {
             'min': _min,
             'max': _max,
-            'cid': abs(cid),
             'shown': cid > 0,
+            'cid': abs(cid) - 1,
             'color': struct.unpack('BBB', hex_bytes)
         }
 
