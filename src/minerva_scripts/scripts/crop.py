@@ -77,7 +77,7 @@ def main(args=sys.argv[1:]):
     k_shape = apply_lod(terms['shape'], k_detail)
 
     # Create variables for cropping
-    out = np.zeros(tuple(k_shape) + (3,))
+    out = (221 / 255) * np.ones(tuple(k_shape) + (3,))
     args = tile_shape, k_origin, k_shape
 
     # stitch tiles for all tile indices
