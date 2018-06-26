@@ -127,8 +127,10 @@ def parse_scaled_region(config):
 
     Return Keywords:
         t: integer timestep
+        z: integer z position in stack
+        max_size: maximum extent in x or y
         origin:
-            integer [x, y, z]
+            integer [x, y]
         shape:
             [width, height]
         chan: integer N channels by 1 index
@@ -159,13 +161,10 @@ def parse_scaled_region(config):
     # Parse the url
     cfg_data = api.scaled_region(cfg_url)
     x, y, width, height = cfg_data['region']
-    longest_side = max(width, height)
     max_size = cfg_data['max_size']
 
-    # Calculate the level of detail
-    lod = np.ceil(np.log2(longest_side / max_size))
-    shape = np.array([width, height]) / (2 ** lod)
-    origin = np.array([x, y, cfg_data['z']]) / (2 ** lod)
+    shape = np.array([width, height])
+    origin = np.array([x, y])
 
     # Get active channels
     channels = cfg_data['channels']
@@ -175,10 +174,12 @@ def parse_scaled_region(config):
         'r': np.array([get_range(c) for c in chan]),
         'c': np.array([get_color(c) for c in chan]),
         'chan': np.int64([c['cid'] for c in chan]),
-        'origin': np.int64(np.floor(origin)),
-        'shape': np.int64(np.floor(shape)),
         't': cfg_data['t'],
-        'l': int(lod)
+        'z': cfg_data['z'],
+        'max_size': max_size,
+        'origin': origin,
+        'shape': shape,
+        'l': 0
     }
 
 
