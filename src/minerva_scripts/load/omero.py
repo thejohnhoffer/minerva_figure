@@ -85,6 +85,7 @@ def index(image_id):
     config = {}
     url = 'https://omero.hms.harvard.edu/webgateway/'
     url += 'imgData/{}'.format(image_id)
+    print(url)
 
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req) as response:

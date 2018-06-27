@@ -8,6 +8,7 @@ from minerva_lib.crop import stitch_channels
 from minerva_lib.crop import get_out_bounds
 from minerva_lib.crop import get_tile_bounds
 from ..helper import config
+from ..helper import api
 import numpy as np
 import argparse
 import pathlib
@@ -37,9 +38,12 @@ def main(args=sys.argv[1:]):
         description="combine channels for all tiles"
     )
     cmd.add_argument(
-        'config', nargs='?', default='config.yaml',
-        help='See config.parse for behavior of the keys:'
-        ' main, render_scaled_region'
+        'url', nargs='?', default='',
+        help='OMERO.figure render_scaled_region url'
+    )
+    cmd.add_argument(
+        '-y', default=None,
+        help='render_scaled_region: URL: {}'
     )
     cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
@@ -48,12 +52,22 @@ def main(args=sys.argv[1:]):
 
     parsed = cmd.parse_args(args)
 
+    # Config if no command line arguments
+    key = 'render_scaled_region'
+    data = config.load_yaml(parsed.y, key)
+
+    URL = parsed.url
+    if not URL:
+        default = '/render_scaled_region/548111/0/0/'
+        default += '?c=1|0:65535$FF0000,3|0:65535$0000FF'
+        default += '&region=-100,-100,1300,1300'
+        URL = data.get('URL', default)
+
     # Read parameters from url in request
-    terms = config.parse_scaled_region(parsed.config)
+    terms = api.scaled_region(URL)
 
     # Full path format of output files
-    out_name = 'T{0:}-Z{2:}-L{1:}.png'
-    out_format = str(pathlib.Path(parsed.o, out_name))
+    out_file = str(pathlib.Path(parsed.o, 'out.png'))
 
     # Parameters from config url
     all_ranges = terms['r']
@@ -103,7 +117,6 @@ def main(args=sys.argv[1:]):
         stitch_channels(out, tile_bounds, out_bounds, channels)
 
     # Write the image buffer to a file
-    out_file = out_format.format(k_time, k_detail, k_z)
     try:
         cv2.imwrite(out_file, 255 * out)
     except OSError as o_e:

@@ -401,8 +401,10 @@ def parse_api(url):
         limit: max image pixel value
     """
 
-    url_match = re.search('render_scaled_region/', url)
+    url_match = re.search('render_scaled_region', url)
     url = url[(lambda x: x.end() if x else 0)(url_match):]
+    if url[0] == '/':
+        url = url[1:]
 
     def parse_channel(c):
         cid, _min, _max, _hex = re.split('[:|$]', c)
