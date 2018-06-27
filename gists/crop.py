@@ -5,9 +5,14 @@ import skimage.exposure
 import skimage.io
 import argparse
 import pathlib
+import urllib
 import struct
+import json
 import sys
+import ssl
 import re
+import os
+import io
 
 ######
 # blend.py
@@ -261,19 +266,103 @@ def stitch_channels(out, tile_bounds, out_bounds, channels):
 # Minerva Library usage
 ###
 
+HEADERS = {
+    'Cookie': os.environ['OME_COOKIE'],
+}
 
-def get_tile(c_order, range_limit, tile_shape, *args):
-    ''' Fake tile_loading with test images
+ssl._create_default_https_context = ssl._create_unverified_context
+
+
+def omero_image(c, limit, *args):
+    ''' Load a single channel by pattern
+
+    Args:
+        c: zero-based channel index
+        limit: max image pixel value
+        args: tuple completing pattern
+
+    Returns:
+        numpy array loaded from file
     '''
-    def get_channel(c, l, x, y):
-        out = np.zeros(tile_shape)
-        rectangle = tile_shape / 2 ** (np.array([x, y]) + c)
-        y0, x0 = np.int64((tile_shape - rectangle) / 2)
-        y1, x1 = np.int64((tile_shape + rectangle) / 2)
-        out[y0:y1, x0:x1] = range_limit / 2 ** l
-        return out
 
-    return [get_channel(c, *args) for c in c_order]
+    def format_channel(c):
+        api_c = c + 1
+        selected = '{}|0:{}$000000'.format(api_c, limit)
+        filler = [str(-i) for i in range(1, api_c)] + ['']
+        return ','.join(filler) + selected
+
+    url = 'https://omero.hms.harvard.edu/webgateway/render_image_region/'
+    url += '{}/{}/{}/?m=g&format={}&tile={},{},{}'.format(*args)
+    url += '&c=' + format_channel(c)
+    print(url)
+
+    req = urllib.request.Request(url, headers=HEADERS)
+    try:
+        with urllib.request.urlopen(req) as response:
+            f = io.BytesIO(response.read())
+            return skimage.io.imread(f)[:, :, 0]
+    except urllib.error.HTTPError as e:
+        print(e)
+        return None
+
+    return None
+
+
+def omero_tile(t, l, z, y, x, c_order, image_id,
+               limit=65535, img_fmt='tif'):
+    '''Load all channels for a given tile
+    Arguments:
+        t: integer time step
+        l: interger level of detail (powers of 2)
+        z: tile offset in depth
+        y: vertical tile offset
+        x: horizontal tile offset
+        c_order: list of channels to load
+        image_id: the id of image in omero
+        limit: max pixel value
+        img_fmt: image encoding
+
+    Returns:
+        list of numpy image channels for a tile
+    '''
+    # Load all channels
+    const = limit, image_id, z, t, img_fmt, l, x, y
+    return [omero_image(c, *const) for c in c_order]
+
+
+def omero_index(image_id):
+    '''Find all the file paths in a range
+
+    Args:
+        image_id: the id of image in omero
+
+    Returns:
+        indices: size in channels, times, LOD, Z, Y, X
+        tile: image tile size in pixels: y, x
+        limit: max image pixel value
+    '''
+    config = {}
+    url = 'https://omero.hms.harvard.edu/webgateway/'
+    url += 'imgData/{}'.format(image_id)
+
+    req = urllib.request.Request(url, headers=HEADERS)
+    with urllib.request.urlopen(req) as response:
+        config = json.loads(response.read())
+
+    lod = config['levels']
+    dtype = config['meta']['pixelsType']
+    tw, th = map(config['tile_size'].get,
+                 ('width', 'height'))
+    w, h, c, t, z = map(config['size'].get,
+                        ('width', 'height', 'c', 't', 'z'))
+    y = int(np.ceil(h / th))
+    x = int(np.ceil(w / tw))
+
+    return {
+        'limit': np.iinfo(getattr(np, dtype)).max,
+        'indices': [c, t, lod, y, x],
+        'tile': [th, tw],
+    }
 
 
 def format_input(args):
@@ -290,23 +379,30 @@ def format_input(args):
     }
 
 
-def parse_api(url, range_limit):
+def parse_api(url):
     """ Just parse the rendered_scaled_region API
     Arguments:
         url: "<matching OMERO.figure API>"
-        range_limit: the maximum integer for ranges
 
     Return Keywords:
+        iid: image id
+        t: integer timestep
+        z: integer z position in stack
         max_size: maximum extent in x or y
         origin:
             integer [x, y]
         shape:
             [width, height]
         chan: integer N channels by 1 index
-        l: integer power-of-2 level-of-detail
         r: float32 N channels by 2 min, max
         c: float32 N channels by 3 r, g, b
+        indices: size in channels, times, LOD, Z, Y, X
+        tile: image tile size in pixels: y, x
+        limit: max image pixel value
     """
+
+    url_match = re.search('render_scaled_region/', url)
+    url = url[(lambda x: x.end() if x else 0)(url_match):]
 
     def parse_channel(c):
         cid, _min, _max, _hex = re.split('[:|$]', c)
@@ -322,8 +418,9 @@ def parse_api(url, range_limit):
     def parse_region(r):
         return list(map(float, r.split(',')))
 
-    # Ignore .../<image_id>/<z>/<t>/?
-    query = url.split('?')[-1]
+    print(url)
+    iid, z, t = url.split('?')[0].split('/')[:3]
+    query = url.split('?')[1]
     parameters = {}
 
     # Make parameters dicitonary
@@ -344,34 +441,39 @@ def parse_api(url, range_limit):
     shape = np.array([width, height])
     origin = np.array([x, y])
 
+    # Make API request to interpret url
+    meta = omero_index(iid)
+
     def get_range(chan):
         r = np.array([chan['min'], chan['max']])
-        return np.clip(r / range_limit, 0, 1)
+        return np.clip(r / meta['limit'], 0, 1)
 
     def get_color(chan):
         c = np.array(chan['color']) / 255
         return np.clip(c, 0, 1)
 
     return {
+        'tile': meta['tile'],
+        'limit': meta['limit'],
+        'indices': meta['indices'],
         'r': np.array([get_range(c) for c in chans]),
         'c': np.array([get_color(c) for c in chans]),
         'chan': np.int64([c['cid'] for c in chans]),
         'max_size': int(max_size),
         'origin': origin,
-        'shape': shape
+        'shape': shape,
+        'iid': int(iid),
+        't': int(t),
+        'z': int(z)
     }
 
 
 def main(args):
     ''' Crop a region
     '''
-    GRAY = 221
-    LIMIT = 65535
-    N_LEVELS = 4
-    TILE_SHAPE = np.int64([512, 512])
 
     # API for rendering channels 0 and 2
-    URL = '/render_scaled_region/ignore/ignore/ignore/'
+    URL = '/render_scaled_region/548111/0/0/'
     URL += '?c=1|0:65535$FF0000,3|0:65535$0000FF'
     URL += '&region=-100,-100,1300,1300'
 
@@ -380,14 +482,21 @@ def main(args):
         description='Crop a region'
     )
     cmd.add_argument(
+        'url', nargs='?', default=URL,
+        help='OMERO.figure render_scaled_region url'
+    )
+    cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
         help='output directory'
     )
 
-    parsed = vars(cmd.parse_args(args))
-    out_file = str(pathlib.Path(parsed['o']).joinpath('out.png'))
-    # Actually parse and read arguments
-    terms = parse_api(URL, LIMIT)
+    parsed = cmd.parse_args(args)
+
+    # Read parameters from url in request
+    terms = parse_api(parsed.url)
+
+    # Full path format of output files
+    out_file = str(pathlib.Path(parsed.o, 'out.png'))
 
     # Parameters from config url
     all_ranges = terms['r']
@@ -395,18 +504,25 @@ def main(args):
     channel_order = terms['chan']
     max_size = terms['max_size']
     k_w, k_h = terms['shape']
+    image_id = terms['iid']
+    k_time = terms['t']
+    k_z = terms['z']
+    # Parameters from API request
+    n_levels = terms['indices'][2]
+    tile_shape = terms['tile']
+    px_limit = terms['limit']
 
     # Compute parameters following figure API
-    k_detail = get_lod(N_LEVELS, max_size, k_w, k_h)
+    k_detail = get_lod(n_levels, max_size, k_w, k_h)
     k_origin = apply_lod(terms['origin'], k_detail)
     k_shape = apply_lod(terms['shape'], k_detail)
 
     # Create variables for cropping
-    out = (GRAY / 255) * np.ones(tuple(k_shape) + (3,))
-    metrics = TILE_SHAPE, k_origin, k_shape
+    out = (221 / 255) * np.ones(tuple(k_shape) + (3,))
+    args = tile_shape, k_origin, k_shape
 
     # stitch tiles for all tile indices
-    for indices in select_tiles(*metrics):
+    for indices in select_tiles(*args):
 
         x, y = indices
 
@@ -415,19 +531,23 @@ def main(args):
             continue
 
         # from disk, load all channels for tile
-        all_buffer = get_tile(channel_order, LIMIT, TILE_SHAPE,
-                              k_detail, x, y)
+        all_buffer = omero_tile(k_time, k_detail, k_z, y, x,
+                                channel_order, image_id, px_limit)
         all_in = zip(all_buffer, all_colors, all_ranges)
         channels = [c for c in map(format_input, all_in) if c]
 
+        # Skip if no channels
+        if not channels:
+            continue
+
         # Calculate bounds for given indices
-        tile_bounds = get_tile_bounds(indices, *metrics)
-        out_bounds = get_out_bounds(indices, *metrics)
+        tile_bounds = get_tile_bounds(indices, *args)
+        out_bounds = get_out_bounds(indices, *args)
         stitch_channels(out, tile_bounds, out_bounds, channels)
 
     # Write the image buffer to a file
     try:
-        skimage.io.imsave(out_file, np.uint8(255*out))
+        skimage.io.imsave(out_file, np.uint8(255 * out))
     except OSError as o_e:
         print(o_e)
 
