@@ -152,13 +152,20 @@ def parse_scaled_region(config):
         data = load_yaml(config, key)
         cfg_url = data.get('URL', cfg_url)
 
-    # Parse the url
+    # Extract data from API
     cfg_data = api.scaled_region(cfg_url)
     x, y, width, height = cfg_data['region']
     max_size = cfg_data['max_size']
+    channels = cfg_data['channels']
+    iid = cfg_data['iid']
+
+    # Reformat data from API
+    chans = [c for c in channels if c['shown']]
+    shape = np.array([width, height])
+    origin = np.array([x, y])
 
     # Make API request to interpret url
-    meta = omero.index(cfg_data['iid'])
+    meta = omero.index(iid)
 
     def get_range(chan):
         r = np.array([chan['min'], chan['max']])
@@ -168,21 +175,14 @@ def parse_scaled_region(config):
         c = np.array(chan['color']) / 255
         return np.clip(c, 0, 1)
 
-    shape = np.array([width, height])
-    origin = np.array([x, y])
-
-    # Get active channels
-    channels = cfg_data['channels']
-    chan = [c for c in channels if c['shown']]
-
     return {
+        'iid': iid,
         'tile': meta['tile'],
         'limit': meta['limit'],
-        'iid': cfg_data['iid'],
         'indices': meta['indices'],
-        'r': np.array([get_range(c) for c in chan]),
-        'c': np.array([get_color(c) for c in chan]),
-        'chan': np.int64([c['cid'] for c in chan]),
+        'r': np.array([get_range(c) for c in chans]),
+        'c': np.array([get_color(c) for c in chans]),
+        'chan': np.int64([c['cid'] for c in chans]),
         't': cfg_data['t'],
         'z': cfg_data['z'],
         'max_size': max_size,
