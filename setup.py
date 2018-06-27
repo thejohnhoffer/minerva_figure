@@ -12,6 +12,7 @@ REQUIRES = [
     'pytest>=3.3.2',
     'numpy>=1.11.1',
     'pyaml>=16.12.2',
+    'parse>=1.8.4',
     'opencv-python>=3.3.0.10',
     'memory_profiler>=0.52.0'
 ]
