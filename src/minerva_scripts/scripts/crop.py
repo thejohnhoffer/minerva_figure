@@ -93,6 +93,10 @@ def main(args=sys.argv[1:]):
         all_in = zip(all_buffer, all_colors, all_ranges)
         channels = [c for c in map(format_input, all_in) if c]
 
+        # Skip if no channels
+        if not channels:
+            continue
+
         # Calculate bounds for given indices
         tile_bounds = get_tile_bounds(indices, *args)
         out_bounds = get_out_bounds(indices, *args)

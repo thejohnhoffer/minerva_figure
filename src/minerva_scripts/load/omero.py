@@ -38,9 +38,13 @@ def image(c, limit, *args):
     print(url)
 
     req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req) as response:
-        f = io.BytesIO(response.read())
-        return skimage.io.imread(f)[:, :, 0]
+    try:
+        with urllib.request.urlopen(req) as response:
+            f = io.BytesIO(response.read())
+            return skimage.io.imread(f)[:, :, 0]
+    except urllib.error.HTTPError as e:
+        print(e)
+        return None
 
     return None
 
