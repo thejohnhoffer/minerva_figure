@@ -6,6 +6,7 @@ import numpy as np
 import os
 
 from . import api
+from ..load import omero
 
 
 def safe_yaml(y_val):
@@ -116,16 +117,16 @@ def parse_main(config):
     return terms
 
 
-def parse_scaled_region(config, limit=65535):
+def parse_scaled_region(config):
     """
     render_scaled_region:
         URL: "<matching OMERO.figure API>"
 
     Arguments:
         config: path to yaml with above keys
-        limit: maximum integer for range
 
     Return Keywords:
+        iid: image id
         t: integer timestep
         z: integer z position in stack
         max_size: maximum extent in x or y
@@ -137,9 +138,12 @@ def parse_scaled_region(config, limit=65535):
         l: integer power-of-2 level-of-detail
         r: float32 N channels by 2 min, max
         c: float32 N channels by 3 r, g, b
+        indices: size in channels, times, LOD, Z, Y, X
+        tile: image tile size in pixels: y, x
+        limit: max image pixel value
     """
 
-    cfg_url = '/render_scaled_region/1337/0/0/?'
+    cfg_url = '/render_scaled_region/1000/0/0/?'
     cfg_url += 'c=1|0:65535$0000FF&&region=0,0,512,512'
 
     # Allow config file
@@ -148,18 +152,21 @@ def parse_scaled_region(config, limit=65535):
         data = load_yaml(config, key)
         cfg_url = data.get('URL', cfg_url)
 
-    def get_range(chan):
-        r = np.array([chan['min'], chan['max']])
-        return np.clip(r / limit, 0, 1)
-
-    def get_color(chan):
-        c = np.array(chan['color']) / 255
-        return np.clip(c, 0, 1)
-
     # Parse the url
     cfg_data = api.scaled_region(cfg_url)
     x, y, width, height = cfg_data['region']
     max_size = cfg_data['max_size']
+
+    # Make API request to interpret url
+    meta = omero.index(cfg_data['iid'])
+
+    def get_range(chan):
+        r = np.array([chan['min'], chan['max']])
+        return np.clip(r / meta['limit'], 0, 1)
+
+    def get_color(chan):
+        c = np.array(chan['color']) / 255
+        return np.clip(c, 0, 1)
 
     shape = np.array([width, height])
     origin = np.array([x, y])
@@ -169,6 +176,10 @@ def parse_scaled_region(config, limit=65535):
     chan = [c for c in channels if c['shown']]
 
     return {
+        'tile': meta['tile'],
+        'limit': meta['limit'],
+        'iid': cfg_data['iid'],
+        'indices': meta['indices'],
         'r': np.array([get_range(c) for c in chan]),
         'c': np.array([get_color(c) for c in chan]),
         'chan': np.int64([c['cid'] for c in chan]),

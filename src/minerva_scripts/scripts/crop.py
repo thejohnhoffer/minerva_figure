@@ -42,24 +42,14 @@ def main(args=sys.argv[1:]):
         ' main, render_scaled_region'
     )
     cmd.add_argument(
-        'id', default=548111,
-        help="input image id"
-    )
-    cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
         help="output directory"
     )
 
     parsed = cmd.parse_args(args)
-    image_id = parsed.id
-    # Actually parse and read arguments
-    meta = omero.index(image_id)
-    n_levels = meta['indices'][2]
-    tile_shape = meta['tile']
-    px_limit = meta['limit']
 
     # Read parameters from url in request
-    terms = config.parse_scaled_region(parsed.config, px_limit)
+    terms = config.parse_scaled_region(parsed.config)
 
     # Full path format of output files
     out_name = 'T{0:}-Z{2:}-L{1:}.png'
@@ -71,8 +61,13 @@ def main(args=sys.argv[1:]):
     channel_order = terms['chan']
     max_size = terms['max_size']
     k_w, k_h = terms['shape']
+    image_id = terms['iid']
     k_time = terms['t']
     k_z = terms['z']
+    # Parameters from API request
+    n_levels = terms['indices'][2]
+    tile_shape = terms['tile']
+    px_limit = terms['limit']
 
     # Compute parameters following figure API
     k_detail = get_lod(n_levels, max_size, k_w, k_h)

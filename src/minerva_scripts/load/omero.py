@@ -74,7 +74,7 @@ def index(image_id):
         image_id: the id of image in omero
 
     Returns:
-        shape: size in channels, times, LOD, Z, Y, X
+        indices: size in channels, times, LOD, Z, Y, X
         tile: image tile size in pixels: y, x
         limit: max image pixel value
     '''

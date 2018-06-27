@@ -15,10 +15,10 @@ combine examples/combine_ashlar_tiles.yaml -i input/folder -o output/folder
 
 ### Testing Crop
 
-Crop any region from any omero image id `<IID>`.
+Crop any region from any omero image id.
 Get the `Cookie` header to any valid omero request. Export value as `OME_COOKIE`
 
 ```bash
 export OME_COOKIE="csrftoken=<TOKEN>; sessionid=<SESSION:
-crop examples/crop_simple.yaml <IID> -o output/folder
+crop examples/crop_simple.yaml -o output/folder
 ```

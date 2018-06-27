@@ -56,11 +56,9 @@ def scaled_region(url):
         # 'maps': json.loads(parameters['maps']),
         # 'm': parameters['m'],
 
-        # Ignore Image ID
-        # 'iid': iid,
-
         't': t,
         'z': z,
+        'iid': iid,
         'max_size': max_size,
         'region': parse_region(region),
         'channels': list(map(parse_channel, channels))
