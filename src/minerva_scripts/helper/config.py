@@ -116,14 +116,14 @@ def parse_main(config):
     return terms
 
 
-def parse_scaled_region(config):
+def parse_scaled_region(config, limit=65535):
     """
     render_scaled_region:
         URL: "<matching OMERO.figure API>"
-        LIMIT: <maximum integer for range>
 
     Arguments:
         config: path to yaml with above keys
+        limit: maximum integer for range
 
     Return Keywords:
         t: integer timestep
@@ -141,18 +141,16 @@ def parse_scaled_region(config):
 
     cfg_url = '/render_scaled_region/1337/0/0/?'
     cfg_url += 'c=1|0:65535$0000FF&&region=0,0,512,512'
-    cfg_limit = 255
 
     # Allow config file
     if config:
         key = 'render_scaled_region'
         data = load_yaml(config, key)
         cfg_url = data.get('URL', cfg_url)
-        cfg_limit = data.get('LIMIT', cfg_limit)
 
     def get_range(chan):
         r = np.array([chan['min'], chan['max']])
-        return np.clip(r / cfg_limit, 0, 1)
+        return np.clip(r / limit, 0, 1)
 
     def get_color(chan):
         c = np.array(chan['color']) / 255
@@ -199,17 +197,11 @@ def parse(key='main', **kwargs):
     in_name = 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
     out_name = 'T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
 
-    terms = {
-        'main': parse_main,
-        'region': parse_scaled_region
-    }[key](kwargs.get('config', ''))
+    terms = parse_main(kwargs.get('config', ''))
 
     # Read the paths with defaults
-    try:
-        in_dir = kwargs['i']
-        out_dir = kwargs['o']
-    except KeyError as k_e:
-        raise k_e
+    in_dir = kwargs.get('i', '')
+    out_dir = kwargs.get('o', '')
 
     # Join the full paths properly
     terms['i'] = str(pathlib.Path(in_dir, in_name))

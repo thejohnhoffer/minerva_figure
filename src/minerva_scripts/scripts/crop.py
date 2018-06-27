@@ -1,6 +1,6 @@
 """ Test to crop all tiles in a region
 """
-from ..load import disk
+from ..load import omero
 from minerva_lib.crop import get_lod
 from minerva_lib.crop import apply_lod
 from minerva_lib.crop import select_tiles
@@ -30,7 +30,7 @@ def format_input(args):
 
 
 def main(args=sys.argv[1:]):
-    """ Combine tiles in a region
+    """ Crop tiles in a region
     """
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(
@@ -42,21 +42,28 @@ def main(args=sys.argv[1:]):
         ' main, render_scaled_region'
     )
     cmd.add_argument(
+        'id', default=548111,
+        help="input image id"
+    )
+    cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
         help="output directory"
     )
-    cmd.add_argument(
-        '-i', required="True",
-        help="input directory"
-    )
 
-    parsed = vars(cmd.parse_args(args))
+    parsed = cmd.parse_args(args)
+    image_id = parsed.id
     # Actually parse and read arguments
-    terms = config.parse('region', **parsed)
+    meta = omero.index(image_id)
+    n_levels = meta['indices'][2]
+    tile_shape = meta['tile']
+    px_limit = meta['limit']
 
-    # Full path format of input files
-    in_path_format = terms['i']
-    out_path_format = terms['o']
+    # Read parameters from url in request
+    terms = config.parse_scaled_region(parsed.config, px_limit)
+
+    # Full path format of output files
+    out_name = 'T{0:}-Z{2:}-L{1:}.png'
+    out_format = str(pathlib.Path(parsed.o, out_name))
 
     # Parameters from config url
     all_ranges = terms['r']
@@ -66,10 +73,6 @@ def main(args=sys.argv[1:]):
     k_w, k_h = terms['shape']
     k_time = terms['t']
     k_z = terms['z']
-
-    # Parameters from file system
-    extents, tile_shape = disk.index(in_path_format)
-    n_levels = extents[2]
 
     # Compute parameters following figure API
     k_detail = get_lod(n_levels, max_size, k_w, k_h)
@@ -90,8 +93,8 @@ def main(args=sys.argv[1:]):
             continue
 
         # from disk, load all channels for tile
-        all_buffer = disk.tile(k_time, k_detail, k_z, y, x,
-                               channel_order, in_path_format)
+        all_buffer = omero.tile(k_time, k_detail, k_z, y, x,
+                                channel_order, image_id, px_limit)
         all_in = zip(all_buffer, all_colors, all_ranges)
         channels = [c for c in map(format_input, all_in) if c]
 
@@ -101,7 +104,7 @@ def main(args=sys.argv[1:]):
         stitch_channels(out, tile_bounds, out_bounds, channels)
 
     # Write the image buffer to a file
-    out_file = out_path_format.format(k_time, k_detail, k_z, 0, 0)
+    out_file = out_format.format(k_time, k_detail, k_z)
     try:
         cv2.imwrite(out_file, 255 * out)
     except OSError as o_e:
