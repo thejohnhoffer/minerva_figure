@@ -589,8 +589,16 @@ def do_crop(load_tile, channels, tile_size, origin, shape,
     '''.format(2**k_lod, k_origin, k_shape)
     print(msg)
 
-    # Minerva reads tile
     def store_tile(tile):
+        ''' Load an 'image' for the tile
+
+        Args:
+            A tile dict from `iterate_tiles`
+
+        Returns:
+            A tile dict for `stitch_tiles`
+        '''
+
         c = tile['channel']
         i, j = tile['indices']
 
@@ -598,12 +606,14 @@ def do_crop(load_tile, channels, tile_size, origin, shape,
         if i < 0 or j < 0:
             return None
 
+        # Load image from Omero
         image = load_tile(c, k_lod, i, j)
 
         # Disallow empty images
         if image is None:
             return None
 
+        # Return image to Minerva
         tile['image'] = image
         return tile
 
