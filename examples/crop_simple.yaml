@@ -1,2 +1,2 @@
 render_scaled_region:
-  URL: "https://omero.hms.harvard.edu/figure/render_scaled_region/548111/0/0/?c=1|0:65535$FF0000,3|0:65535$0000FF&region=-8160,-16416,48960,48960"
+  URL: '/548111/0/0/?c=1|1000:10000$FF0000,3|3000:10000$0000FF&region=0,0,400,400'

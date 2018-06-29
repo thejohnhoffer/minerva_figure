@@ -83,9 +83,10 @@ def scaled_region(url):
         return np.clip(c, 0, 1)
 
     return {
-        'tile': meta['tile'],
+        'ctxy': meta['ctxy'],
         'limit': meta['limit'],
-        'indices': meta['indices'],
+        'levels': meta['levels'],
+        'tile_size': meta['tile_size'],
         'r': np.array([get_range(c) for c in chans]),
         'c': np.array([get_color(c) for c in chans]),
         'chan': np.int64([c['cid'] for c in chans]),

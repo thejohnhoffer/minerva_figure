@@ -1,5 +1,6 @@
 ''' Test to crop all tiles in a region
 '''
+from functools import reduce
 import numpy as np
 import skimage.exposure
 import skimage.io
@@ -116,150 +117,297 @@ def composite_channels(channels):
 # git+https://github.com/thejohnhoffer/minerva-lib-python@crop#minerva-lib
 ###
 
+class crop():
 
-def get_lod(lods, max_size, width, height):
-    ''' Calculate the level of detail
+    @staticmethod
+    def get_lod(lods, max_size, width, height):
+        ''' Calculate the level of detail
 
-    Arguments:
-        lods: Number of available levels of detail
-        max_size: Maximum image extent in x or y
-        width: Extent of image in x
-        height: Extent of image in y
+        Arguments:
+            lods: Number of available levels of detail
+            max_size: Maximum image extent in x or y
+            width: Extent of image in x
+            height: Extent of image in y
 
-    Returns:
-        Integer power of 2 level of detail
-    '''
+        Returns:
+            Integer power of 2 level of detail
+        '''
 
-    longest_side = max(width, height)
-    lod = np.ceil(np.log2(longest_side / max_size))
-    return int(np.clip(lod, 0, lods - 1))
+        longest_side = max(width, height)
+        lod = np.ceil(np.log2(longest_side / max_size))
+        return int(np.clip(lod, 0, lods - 1))
 
+    @staticmethod
+    def apply_lod(coordinates, lod):
+        ''' Apply the level of detail to coordinates
 
-def apply_lod(coordinates, lod):
-    ''' Apply the level of detail to coordinates
+        Arguments:
+            coordinates: Coordinates to downscale by _lod_
+            lod: Integer power of 2 level of detail
 
-    Arguments:
-        coordinates: Coordinates to downscale by _lod_
-        lod: Integer power of 2 level of detail
+        Returns:
+            downscaled integer coordinates
+        '''
 
-    Returns:
-        downscaled integer coordinates
-    '''
+        scaled_coords = np.array(coordinates) / (2 ** lod)
+        return np.int64(np.floor(scaled_coords))
 
-    scaled_coords = np.array(coordinates) / (2 ** lod)
-    return np.int64(np.floor(scaled_coords))
+    @staticmethod
+    def select_tiles(tile_size, origin, crop_size):
+        ''' Select tile coordinates covering crop region
 
+        Args:
+            tile_size: width, height of one tile
+            origin: x, y coordinates to begin subregion
+            crop_size: width, height to select
 
-def select_tiles(tile_size, origin, crop_size):
-    ''' Select tile coordinates covering crop region
+        Returns:
+            List of integer i, j tile indices
+        '''
+        start = np.array(origin)
+        end = start + crop_size
+        fractional_start = start / tile_size
+        fractional_end = end / tile_size
 
-    Args:
-        tile_size: width, height of one tile
-        origin: x, y coordinates to begin selection
-        crop_size: width, height to select
+        # Round to get indices containing subregion
+        first_index = np.int64(np.floor(fractional_start))
+        last_index = np.int64(np.ceil(fractional_end))
 
-    Returns:
-        List of integer i, j tile indices
-    '''
-    start = np.array(origin)
-    end = start + crop_size
-    fractional_start = start / tile_size
-    fractional_end = end / tile_size
+        # Calculate all indices between first and last
+        index_shape = last_index - first_index
+        offsets = np.argwhere(np.ones(index_shape))
+        indices = first_index + offsets
 
-    # Round to get indices containing selection
-    first_index = np.int64(np.floor(fractional_start))
-    last_index = np.int64(np.ceil(fractional_end))
+        return indices.tolist()
 
-    # Calculate all indices between first and last
-    index_shape = last_index - first_index
-    offsets = np.argwhere(np.ones(index_shape))
-    indices = first_index + offsets
+    @staticmethod
+    def get_subregion(indices, tile_size, origin, crop_size):
+        ''' Define subregion to select from within tile
 
-    return indices.tolist()
+        Args:
+            indices: integer i, j tile indices
+            tile_size: width, height of one tile
+            origin: x, y coordinates to begin subregion
+            crop_size: width, height to select
 
+        Returns:
+            start uv, end uv relative to tile
+        '''
 
-def get_tile_bounds(indices, tile_size, origin, crop_size):
-    ''' Define subregion to extract relative to tile
+        crop_end = np.int64(origin) + crop_size
+        tile_start = np.int64(indices) * tile_size
+        tile_end = tile_start + tile_size
 
-    Args:
-        indices: integer i, j tile indices
-        tile_size: width, height of one tile
-        origin: x, y coordinates to begin selection
-        crop_size: width, height to select
+        return [
+            np.maximum(origin, tile_start) - tile_start,
+            np.minimum(tile_end, crop_end) - tile_start
+        ]
 
-    Returns:
-        start uv, end uv relative to tile
-    '''
+    @staticmethod
+    def get_position(indices, tile_size, origin):
+        ''' Define position of cropped tile relative to origin
 
-    crop_end = np.int64(origin) + crop_size
-    tile_start = np.int64(indices) * tile_size
-    tile_end = tile_start + tile_size
+        Args:
+            indices: integer i, j tile indices
+            tile_size: width, height of one tile
+            origin: x, y coordinates to begin subregion
 
-    # Relative to tile start
-    return [
-        np.maximum(origin, tile_start) - tile_start,
-        np.minimum(tile_end, crop_end) - tile_start
-    ]
+        Returns:
+            The xy position relative to origin
+        '''
 
+        tile_start = np.int64(indices) * tile_size
 
-def get_out_bounds(indices, tile_size, origin, crop_size):
-    ''' Define position of cropped tile relative to origin
+        return np.maximum(origin, tile_start) - origin
 
-    Args:
-        indices: integer i, j tile indices
-        tile_size: width, height of one tile
-        origin: x, y coordinates to begin selection
-        crop_size: width, height to select
+    @staticmethod
+    def stitch_tile(out, subregion, position, tile):
+        ''' Position image tile into output array
 
-    Returns:
-        start xy, end xy relative to origin
-    '''
+        Args:
+            out: 2D RGB numpy array to contain stitched channels
+            subregion: Start uv, end uv to get from tile
+            position: Origin of tile when composited in _out_
+            tile: 2D numpy array to stitch within _out_
 
-    crop_end = np.int64(origin) + crop_size
-    tile_start = np.int64(indices) * tile_size
-    tile_end = tile_start + tile_size
+        Returns:
+            A reference to _out_
+        '''
 
-    # Relative to origin
-    return [
-        np.maximum(origin, tile_start) - origin,
-        np.minimum(tile_end, crop_end) - origin
-    ]
+        # Take subregion from tile
+        [u0, v0], [u1, v1] = subregion
+        subtile = tile[v0:v1, u0:u1]
+        shape = np.int64(subtile.shape)
 
+        # Define boundary
+        x0, y0 = position
+        y1, x1 = [y0, x0] + shape[:2]
 
-def stitch_channels(out, tile_bounds, out_bounds, channels):
-    ''' Position channels from tile into output image
+        # Assign subregion within boundary
+        out[y0:y1, x0:x1] += subtile
 
-    Args:
-        out: 2D numpy array to contain stitched channels
-        tile_bounds: start uv, end uv to get from tile
-        out_bounds: start xy, end xy to put in _out_
-        channels: List of dicts for channels to blend.
-            Each dict in the list must have the
-            following rendering settings:
+        return out
+
+    @staticmethod
+    def stitch_tiles(tiles, tile_size, crop_size, order='before'):
+        ''' Position all image tiles for all channels
+
+        Args:
+            tiles: Iterator of tiles to blend. Each dict in the
+                list must have the following rendering settings:
+                {
+                    channel: Integer channel index
+                    indices: Integer i, j tile indices
+                    image: Numpy 2D image data of any type
+                    color: Color as r, g, b float array within 0, 1
+                    min: Threshhold range minimum, float within 0, 1
+                    max: Threshhold range maximum, float within 0, 1
+                    subregion: The start uv, end uv relative to tile
+                    position: The xy position relative to origin
+                }
+            tile_size: width, height of one tile
+            crop_size: The width, height of output image
+            order: Composite `'before'` or `'after'` stitching
+
+        Returns:
+            For a given `shape` of `(width, height)`,
+            returns a float32 RGB color image with shape
+            `(height, width, 3)` and values in the range 0 to 1
+        '''
+        def stitch(a, t):
+            return crop.stitch_tile(a, t['subregion'],
+                                    t['position'], t['image'])
+
+        def composite(a, t):
+            h, w = t['image'].shape
+            return composite_channel(a[:h, :w], t['image'], t['color'],
+                                     t['min'], t['max'], a[:h, :w])
+
+        class Group():
+
+            composite_keys = {'color', 'min', 'max'}
+            stitch_keys = {'position', 'subregion'}
+
+            if order == 'before':
+                size = tuple(tile_size) + (3,)
+                dtype = staticmethod(lambda t: np.float32)
+                index = staticmethod(lambda t: tuple(t['indices']))
+                first_call = staticmethod(composite)
+                second_call = staticmethod(stitch)
+                in_keys = composite_keys
+                out_keys = stitch_keys
+
+            if order == 'after':
+                size = tuple(crop_size)
+                dtype = staticmethod(lambda t: t['image'].dtype)
+                index = staticmethod(lambda t: t['channel'])
+                first_call = staticmethod(stitch)
+                second_call = staticmethod(composite)
+                in_keys = stitch_keys
+                out_keys = composite_keys
+
+            def __init__(self, t):
+                d = self.dtype(t)
+                self.buffer = {k: t[k] for k in self.out_keys}
+                self.buffer['image'] = np.zeros(self.size, dtype=d)
+                self.inputs = []
+                self += t
+
+            def __iadd__(self, t):
+                self.inputs += [
+                    {k: t[k] for k in self.in_keys | {'image'}}
+                ]
+                return self
+
+        def hash_groups(groups, tile):
+            '''
+            If before: group channels by tile
+            If after: group tiles by channel
+            '''
+
+            idx = Group.index(tile)
+
+            if idx not in groups:
+                groups[idx] = Group(tile)
+            else:
+                groups[idx] += tile
+
+            return groups
+
+        def combine_groups(out, group):
+            '''
+            If before: Composite to RGBA float tile then stitch
+            If after: Stitch to gray integer image then composite
+            '''
+            for t in group.inputs:
+                group.first_call(group.buffer['image'], t)
+            group.second_call(out, group.buffer)
+
+            return out
+
+        inputs = [t for t in tiles if t]
+        out = np.zeros(tuple(crop_size) + (3,))
+
+        # Make groups by channel or by tile
+        groups = reduce(hash_groups, inputs, {}).values()
+        # Stitch and Composite in either order
+        out = reduce(combine_groups, groups, out)
+
+        # Return gamma correct image within 0, 1
+        np.clip(out, 0, 1, out=out)
+        return skimage.exposure.adjust_gamma(out, 1 / 2.2)
+
+    @staticmethod
+    def iterate_tiles(channels, tile_size, origin, crop_size):
+        ''' Return crop settings for channel tiles
+
+        Args:
+            channels: An iterator of dicts for channels to blend. Each
+                dict in the list must have the following settings:
+                {
+                    channel: Integer channel index
+                    color: Color as r, g, b float array within 0, 1
+                    min: Threshhold range minimum, float within 0, 1
+                    max: Threshhold range maximum, float within 0, 1
+                }
+            tile_size: width, height of one tile
+            origin: x, y coordinates to begin subregion
+            crop_size: width, height to select
+
+        Returns:
+            An iterator of tiles to render for the given region.
+            Each dict in the list has the following settings:
             {
-                image: Numpy 2D image data of any type
+                channel: Integer channel index
+                indices: Integer i, j tile indices
                 color: Color as r, g, b float array within 0, 1
                 min: Threshhold range minimum, float within 0, 1
                 max: Threshhold range maximum, float within 0, 1
             }
+        '''
 
-    Returns:
-        A reference to the modified _out_ array
-    '''
+        for cid, channel in enumerate(channels):
 
-    # Take data from tile
-    composite = composite_channels(channels)
-    [u0, v0], [u1, v1] = tile_bounds
-    subregion = composite[v0:v1, u0:u1]
+            (r, g, b) = channel['color']
+            _min = channel['min']
+            _max = channel['max']
 
-    # Adjust bounds to actual subregion shape
-    x0, y0 = out_bounds[0]
-    x1, y1 = out_bounds[0] + subregion.shape[:2][::-1]
+            for indices in crop.select_tiles(tile_size, origin, crop_size):
 
-    # Assign subregion to output
-    out[y0:y1, x0:x1] = subregion
+                (i, j) = indices
+                (x0, y0) = crop.get_position(indices, tile_size, origin)
+                (u0, v0), (u1, v1) = crop.get_subregion(indices, tile_size,
+                                                        origin, crop_size)
 
-    return out
+                yield {
+                    'channel': cid,
+                    'indices': (i, j),
+                    'position': (x0, y0),
+                    'subregion': ((u0, v0), (u1, v1)),
+                    'color': (r, g, b),
+                    'min': _min,
+                    'max': _max,
+                }
 
 
 ######
@@ -273,219 +421,261 @@ HEADERS = {
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-def omero_image(c, limit, *args):
-    ''' Load a single channel by pattern
+class omero():
 
-    Args:
-        c: zero-based channel index
-        limit: max image pixel value
-        args: tuple completing pattern
+    @staticmethod
+    def image(c, limit, *args):
+        ''' Load a single channel by pattern
 
-    Returns:
-        numpy array loaded from file
-    '''
+        Args:
+            c: zero-based channel index
+            limit: max image pixel value
+            args: tuple completing pattern
 
-    def format_channel(c):
-        api_c = c + 1
-        selected = '{}|0:{}$000000'.format(api_c, limit)
-        filler = [str(-i) for i in range(1, api_c)] + ['']
-        return ','.join(filler) + selected
+        Returns:
+            numpy array loaded from file
+        '''
 
-    url = 'https://omero.hms.harvard.edu/webgateway/render_image_region/'
-    url += '{}/{}/{}/?m=g&format={}&tile={},{},{}'.format(*args)
-    url += '&c=' + format_channel(c)
-    print(url)
+        def format_channel(c):
+            api_c = c + 1
+            selected = '{}|0:{}$000000'.format(api_c, limit)
+            filler = [str(-i) for i in range(1, api_c)] + ['']
+            return ','.join(filler) + selected
 
-    req = urllib.request.Request(url, headers=HEADERS)
-    try:
-        with urllib.request.urlopen(req) as response:
-            f = io.BytesIO(response.read())
-            return skimage.io.imread(f)[:, :, 0]
-    except urllib.error.HTTPError as e:
-        print(e)
+        url = 'https://omero.hms.harvard.edu/webgateway/render_image_region/'
+        url += '{}/{}/{}/?m=g&format=tif&tile={},{},{}'.format(*args)
+        url += '&c=' + format_channel(c)
+        print(url)
+
+        req = urllib.request.Request(url, headers=HEADERS)
+        try:
+            with urllib.request.urlopen(req) as response:
+                f = io.BytesIO(response.read())
+                return skimage.io.imread(f)[:, :, 0]
+        except urllib.error.HTTPError as e:
+            print(e)
+            return None
+
         return None
 
-    return None
+    @staticmethod
+    def index(image_id):
+        '''Find all the file paths in a range
+
+        Args:
+            image_id: the id of image in omero
+
+        Returns:
+            indices: size in channels, times, LOD, Z, Y, X
+            tile: image tile size in pixels: y, x
+            limit: max image pixel value
+        '''
+        config = {}
+        url = 'https://omero.hms.harvard.edu/webgateway/'
+        url += 'imgData/{}'.format(image_id)
+        print(url)
+
+        req = urllib.request.Request(url, headers=HEADERS)
+        with urllib.request.urlopen(req) as response:
+            config = json.loads(response.read())
+
+        dtype = config['meta']['pixelsType']
+        tw, th = map(config['tile_size'].get,
+                     ('width', 'height'))
+        w, h, c, t, z = map(config['size'].get,
+                            ('width', 'height', 'c', 't', 'z'))
+        y = int(np.ceil(h / th))
+        x = int(np.ceil(w / tw))
+
+        return {
+            'limit': np.iinfo(getattr(np, dtype)).max,
+            'levels': config['levels'],
+            'tile_size': [th, tw],
+            'ctxy': [c, t, x, y],
+        }
 
 
-def omero_tile(t, l, z, y, x, c_order, image_id,
-               limit=65535, img_fmt='tif'):
-    '''Load all channels for a given tile
-    Arguments:
-        t: integer time step
-        l: interger level of detail (powers of 2)
-        z: tile offset in depth
-        y: vertical tile offset
-        x: horizontal tile offset
-        c_order: list of channels to load
-        image_id: the id of image in omero
-        limit: max pixel value
-        img_fmt: image encoding
+class api():
 
-    Returns:
-        list of numpy image channels for a tile
-    '''
-    # Load all channels
-    const = limit, image_id, z, t, img_fmt, l, x, y
-    return [omero_image(c, *const) for c in c_order]
+    @staticmethod
+    def scaled_region(url):
+        """ Just parse the rendered_scaled_region API
+        Arguments:
+            url: "<matching OMERO.figure API>"
 
+        Return Keywords:
+            iid: image id
+            t: integer timestep
+            z: integer z position in stack
+            max_size: maximum extent in x or y
+            origin:
+                integer [x, y]
+            shape:
+                [width, height]
+            chan: integer N channels by 1 index
+            r: float32 N channels by 2 min, max
+            c: float32 N channels by 3 r, g, b
+            indices: size in channels, times, LOD, Z, Y, X
+            tile: image tile size in pixels: y, x
+            limit: max image pixel value
+        """
 
-def omero_index(image_id):
-    '''Find all the file paths in a range
+        url_match = re.search('render_scaled_region', url)
+        url = url[(lambda x: x.end() if x else 0)(url_match):]
+        if url[0] == '/':
+            url = url[1:]
 
-    Args:
-        image_id: the id of image in omero
+        def parse_channel(c):
+            cid, _min, _max, _hex = re.split('[:|$]', c)
+            hex_bytes = bytearray.fromhex(_hex)
+            return {
+                'min': int(_min),
+                'max': int(_max),
+                'shown': int(cid) > 0,
+                'cid': abs(int(cid)) - 1,
+                'color': struct.unpack('BBB', hex_bytes)
+            }
 
-    Returns:
-        indices: size in channels, times, LOD, Z, Y, X
-        tile: image tile size in pixels: y, x
-        limit: max image pixel value
-    '''
-    config = {}
-    url = 'https://omero.hms.harvard.edu/webgateway/'
-    url += 'imgData/{}'.format(image_id)
+        def parse_region(r):
+            return list(map(float, r.split(',')))
 
-    req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req) as response:
-        config = json.loads(response.read())
+        print(url)
+        iid, z, t = url.split('?')[0].split('/')[:3]
+        query = url.split('?')[1]
+        parameters = {}
 
-    lod = config['levels']
-    dtype = config['meta']['pixelsType']
-    tw, th = map(config['tile_size'].get,
-                 ('width', 'height'))
-    w, h, c, t, z = map(config['size'].get,
-                        ('width', 'height', 'c', 't', 'z'))
-    y = int(np.ceil(h / th))
-    x = int(np.ceil(w / tw))
+        # Make parameters dicitonary
+        for param in query.split('&'):
+            key, value = param.split('=')
+            parameters[key] = value
 
-    return {
-        'limit': np.iinfo(getattr(np, dtype)).max,
-        'indices': [c, t, lod, y, x],
-        'tile': [th, tw],
-    }
+        max_size = parameters.get('max_size', 2000)
+        channels = parameters['c'].split(',')
+        region = parameters['region']
+
+        # Extract data from API
+        channels = list(map(parse_channel, channels))
+        x, y, width, height = parse_region(region)
+
+        # Reformat data from API
+        chans = [c for c in channels if c['shown']]
+        shape = np.array([width, height])
+        origin = np.array([x, y])
+
+        # Make API request to interpret url
+        meta = omero.index(iid)
+
+        def get_range(chan):
+            r = np.array([chan['min'], chan['max']])
+            return np.clip(r / meta['limit'], 0, 1)
+
+        def get_color(chan):
+            c = np.array(chan['color']) / 255
+            return np.clip(c, 0, 1)
+
+        return {
+            'ctxy': meta['ctxy'],
+            'limit': meta['limit'],
+            'levels': meta['levels'],
+            'tile_size': meta['tile_size'],
+            'r': np.array([get_range(c) for c in chans]),
+            'c': np.array([get_color(c) for c in chans]),
+            'chan': np.int64([c['cid'] for c in chans]),
+            'max_size': int(max_size),
+            'origin': origin,
+            'shape': shape,
+            'iid': int(iid),
+            't': int(t),
+            'z': int(z)
+        }
 
 
 def format_input(args):
     ''' Combine all parameters
     '''
-    image_, color_, range_ = args
-    if image_ is None:
-        return None
+    id_, color_, range_ = args
     return {
-        'image': image_,
+        'channel': id_,
         'color': color_,
         'min': range_[0],
         'max': range_[1],
     }
 
 
-def parse_api(url):
-    """ Just parse the rendered_scaled_region API
-    Arguments:
-        url: "<matching OMERO.figure API>"
+def do_crop(load_tile, channels, tile_size, origin, shape,
+            levels=1, max_size=2000, order='before'):
+    ''' Interface with minerva_lib.crop
 
-    Return Keywords:
-        iid: image id
-        t: integer timestep
-        z: integer z position in stack
-        max_size: maximum extent in x or y
-        origin:
-            integer [x, y]
-        shape:
-            [width, height]
-        chan: integer N channels by 1 index
-        r: float32 N channels by 2 min, max
-        c: float32 N channels by 3 r, g, b
-        indices: size in channels, times, LOD, Z, Y, X
-        tile: image tile size in pixels: y, x
-        limit: max image pixel value
-    """
+    Args:
+        load_tile: Function to supply 2D numpy array
+        channels: List of dicts of channel rendering settings
+        tile_size: The width, height of a single tile
+        origin: Request's full-resolution x, y origin
+        shape: Request's full-resolution width, height
+        levels: The number of levels of detail
+        max_size: The maximum response width or height
+        order: Composite 'before' or 'after' stitching
 
-    url_match = re.search('render_scaled_region', url)
-    url = url[(lambda x: x.end() if x else 0)(url_match):]
-    if url[0] == '/':
-        url = url[1:]
+    Returns:
+        2D numpy float array of with width, height given by
+        `shape` if `shape <= max_size` or width, height given by
+        `shape / 2 ** l <= max_size` for the lowest `l` meeting
+        `l < levels`. The array is a composite of all channels
+        for full or partial tiles within `shape` from `origin`.
+    '''
 
-    def parse_channel(c):
-        cid, _min, _max, _hex = re.split('[:|$]', c)
-        hex_bytes = bytearray.fromhex(_hex)
-        return {
-            'min': int(_min),
-            'max': int(_max),
-            'shown': int(cid) > 0,
-            'cid': abs(int(cid)) - 1,
-            'color': struct.unpack('BBB', hex_bytes)
-        }
+    # Compute parameters following figure API
+    k_lod = crop.get_lod(levels, max_size, *shape)
+    k_origin = crop.apply_lod(origin, k_lod)
+    k_shape = crop.apply_lod(shape, k_lod)
 
-    def parse_region(r):
-        return list(map(float, r.split(',')))
+    msg = '''Cropping 1/{0} scale:
+    {2} pixels starting at {1}
+    '''.format(2**k_lod, k_origin, k_shape)
+    print(msg)
 
-    print(url)
-    iid, z, t = url.split('?')[0].split('/')[:3]
-    query = url.split('?')[1]
-    parameters = {}
+    # Minerva reads tile
+    def store_tile(tile):
+        c = tile['channel']
+        i, j = tile['indices']
 
-    # Make parameters dicitonary
-    for param in query.split('&'):
-        key, value = param.split('=')
-        parameters[key] = value
+        # Disallow negative tiles
+        if i < 0 or j < 0:
+            return None
 
-    max_size = parameters.get('max_size', 2000)
-    channels = parameters['c'].split(',')
-    region = parameters['region']
+        image = load_tile(c, k_lod, i, j)
 
-    # Extract data from API
-    channels = list(map(parse_channel, channels))
-    x, y, width, height = parse_region(region)
+        # Disallow empty images
+        if image is None:
+            return None
 
-    # Reformat data from API
-    chans = [c for c in channels if c['shown']]
-    shape = np.array([width, height])
-    origin = np.array([x, y])
+        tile['image'] = image
+        return tile
 
-    # Make API request to interpret url
-    meta = omero_index(iid)
-
-    def get_range(chan):
-        r = np.array([chan['min'], chan['max']])
-        return np.clip(r / meta['limit'], 0, 1)
-
-    def get_color(chan):
-        c = np.array(chan['color']) / 255
-        return np.clip(c, 0, 1)
-
-    return {
-        'tile': meta['tile'],
-        'limit': meta['limit'],
-        'indices': meta['indices'],
-        'r': np.array([get_range(c) for c in chans]),
-        'c': np.array([get_color(c) for c in chans]),
-        'chan': np.int64([c['cid'] for c in chans]),
-        'max_size': int(max_size),
-        'origin': origin,
-        'shape': shape,
-        'iid': int(iid),
-        't': int(t),
-        'z': int(z)
-    }
+    # Load and stitch all tiles
+    tiles = crop.iterate_tiles(channels, tile_size,
+                               k_origin, k_shape)
+    return crop.stitch_tiles(map(store_tile, tiles),
+                             tile_size, k_shape, order)
 
 
 def main(args):
-    ''' Crop a region
-    '''
-
-    # API for rendering channels 0 and 2
-    URL = '/render_scaled_region/548111/0/0/'
-    URL += '?c=1|0:65535$FF0000,3|0:65535$0000FF'
-    URL += '&region=-100,-100,1300,1300'
-
+    """ Crop a region
+    """
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(
-        description='Crop a region'
+        description="Crop a region"
+    )
+
+    default_url = '/548111/0/0/?c=1|0:65535$FF0000,3|0:65535$0000FF'
+    default_url += '&region=-100,-100,1300,1300'
+    cmd.add_argument(
+        'url', nargs='?', default=default_url,
+        help='OMERO.figure render_scaled_region url'
     )
     cmd.add_argument(
-        'url', nargs='?', default=URL,
-        help='OMERO.figure render_scaled_region url'
+        '--after', action='store_true',
+        help='composite after stitching'
     )
     cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
@@ -493,59 +683,25 @@ def main(args):
     )
 
     parsed = cmd.parse_args(args)
-
-    # Read parameters from url in request
-    terms = parse_api(parsed.url)
-
-    # Full path format of output files
     out_file = str(pathlib.Path(parsed.o, 'out.png'))
+    order = ['before', 'after'][parsed.after]
 
-    # Parameters from config url
-    all_ranges = terms['r']
-    all_colors = terms['c']
-    channel_order = terms['chan']
-    max_size = terms['max_size']
-    k_w, k_h = terms['shape']
-    image_id = terms['iid']
-    k_time = terms['t']
-    k_z = terms['z']
-    # Parameters from API request
-    n_levels = terms['indices'][2]
-    tile_shape = terms['tile']
-    px_limit = terms['limit']
+    # Read parameters from URL and API
+    keys = api.scaled_region(parsed.url)
 
-    # Compute parameters following figure API
-    k_detail = get_lod(n_levels, max_size, k_w, k_h)
-    k_origin = apply_lod(terms['origin'], k_detail)
-    k_shape = apply_lod(terms['shape'], k_detail)
+    # Make array of channel parameters
+    inputs = zip(keys['chan'], keys['c'], keys['r'])
+    channels = map(format_input, inputs)
 
-    # Create variables for cropping
-    out = (221 / 255) * np.ones(tuple(k_shape) + (3,))
-    args = tile_shape, k_origin, k_shape
+    # OMERO loads the tiles
+    def ask_omero(c, l, i, j):
+        return omero.image(c, keys['limit'], keys['iid'],
+                           keys['z'], keys['t'], l, i, j)
 
-    # stitch tiles for all tile indices
-    for indices in select_tiles(*args):
-
-        x, y = indices
-
-        # Skip if indices below zero
-        if x < 0 or y < 0:
-            continue
-
-        # from disk, load all channels for tile
-        all_buffer = omero_tile(k_time, k_detail, k_z, y, x,
-                                channel_order, image_id, px_limit)
-        all_in = zip(all_buffer, all_colors, all_ranges)
-        channels = [c for c in map(format_input, all_in) if c]
-
-        # Skip if no channels
-        if not channels:
-            continue
-
-        # Calculate bounds for given indices
-        tile_bounds = get_tile_bounds(indices, *args)
-        out_bounds = get_out_bounds(indices, *args)
-        stitch_channels(out, tile_bounds, out_bounds, channels)
+    # Minerva does the cropping
+    out = do_crop(ask_omero, channels, keys['tile_size'],
+                  keys['origin'], keys['shape'], keys['levels'],
+                  keys['max_size'], order)
 
     # Write the image buffer to a file
     try:
@@ -554,5 +710,5 @@ def main(args):
         print(o_e)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])

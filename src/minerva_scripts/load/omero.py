@@ -33,7 +33,7 @@ def image(c, limit, *args):
         return ','.join(filler) + selected
 
     url = 'https://omero.hms.harvard.edu/webgateway/render_image_region/'
-    url += '{}/{}/{}/?m=g&format={}&tile={},{},{}'.format(*args)
+    url += '{}/{}/{}/?m=g&format=tif&tile={},{},{}'.format(*args)
     url += '&c=' + format_channel(c)
     print(url)
 
@@ -47,28 +47,6 @@ def image(c, limit, *args):
         return None
 
     return None
-
-
-def tile(t, l, z, y, x, c_order, image_id,
-         limit=65535, img_fmt='tif'):
-    '''Load all channels for a given tile
-    Arguments:
-        t: integer time step
-        l: interger level of detail (powers of 2)
-        z: tile offset in depth
-        y: vertical tile offset
-        x: horizontal tile offset
-        c_order: list of channels to load
-        image_id: the id of image in omero
-        limit: max pixel value
-        img_fmt: image encoding
-
-    Returns:
-        list of numpy image channels for a tile
-    '''
-    # Load all channels
-    const = limit, image_id, z, t, img_fmt, l, x, y
-    return [image(c, *const) for c in c_order]
 
 
 def index(image_id):
@@ -91,7 +69,6 @@ def index(image_id):
     with urllib.request.urlopen(req) as response:
         config = json.loads(response.read())
 
-    lod = config['levels']
     dtype = config['meta']['pixelsType']
     tw, th = map(config['tile_size'].get,
                  ('width', 'height'))
@@ -102,6 +79,7 @@ def index(image_id):
 
     return {
         'limit': np.iinfo(getattr(np, dtype)).max,
-        'indices': [c, t, lod, y, x],
-        'tile': [th, tw],
+        'levels': config['levels'],
+        'tile_size': [th, tw],
+        'ctxy': [c, t, x, y],
     }
