@@ -1,0 +1,1 @@
+{"channels": [{"label": "Channel:0:0", "window": {"min": 0, "start": 0, "end": 65536, "max": 65536}, "emissionWave": 590.0, "reverseIntensity": false, "inverted": false, "coefficient": 1, "family": "linear", "color": "FFFFFF", "active": true}]}

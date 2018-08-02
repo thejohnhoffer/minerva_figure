@@ -1,0 +1,537 @@
+init_zoom: 0
+tiles: true
+perms:
+  canAnnotate: true
+  canEdit: false
+  canDelete: false
+  canLink: false
+rdefs:
+  defaultT: 0
+  model: color
+  invertAxis: false
+  projection: normal
+  defaultZ: 0
+zoomLevelScaling:
+  '0': 1
+  '1': 0.5
+  '2': 0.25
+  '3': 0.125
+  '4': 0.0625
+  '5': 0.03125
+pixel_range:
+- 0
+- 65535
+interpolate: true
+channels:
+- coefficient: 1
+  active: true
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: true
+  window:
+    max: 65535
+    end: 26634
+    start: 4788
+    min: 0
+  family: linear
+  color: 00FFFF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: PAX8
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 53266
+    start: 38603
+    min: 0
+  family: linear
+  color: FFFFFF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: 53BP1
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: GATA4
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 11969
+    start: 2394
+    min: 0
+  family: linear
+  color: 00FF00
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD4
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 7183
+    start: 3292
+    min: 0
+  family: linear
+  color: F0F0F0
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD3d
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD45
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: true
+  window:
+    max: 65535
+    end: 5088
+    start: 1794
+    min: 0
+  family: linear
+  color: 00FF00
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: pTBK1
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 6584
+    start: 1497
+    min: 0
+  family: linear
+  color: FCFCFC
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: pSTAT1
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD8
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 25736
+    start: 3291
+    min: 0
+  family: linear
+  color: FAFFFA
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: STING
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 6883
+    start: 2693
+    min: 0
+  family: linear
+  color: F2F2FA
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD57
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 8379
+    start: 2095
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD20
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 00FF00
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CycD1
+- coefficient: 1
+  active: true
+  window:
+    max: 65535
+    end: 5386
+    start: 599
+    min: 0
+  family: linear
+  color: FAF7F7
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: yH2AX
+- coefficient: 1
+  active: true
+  window:
+    max: 65535
+    end: 2995
+    start: 302
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: pATM
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 11371
+    start: 4788
+    min: 0
+  family: linear
+  color: 00FF00
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: PCNA
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 8678
+    start: 2992
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CD68
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 18254
+    start: 7780
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: Ki67
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 9576
+    start: 2693
+    min: 0
+  family: linear
+  color: FF00FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: P21
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 41894
+    start: 4788
+    min: 0
+  family: linear
+  color: F7F7FC
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: CK7
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 4299
+    start: 2695
+    min: 0
+  family: linear
+  color: FEFCFC
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: cPARP
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 16459
+    start: 2095
+    min: 0
+  family: linear
+  color: FF00FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: E-Cadherin
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 7781
+    start: 1496
+    min: 0
+  family: linear
+  color: FCF7F7
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: Vimentin
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 8977
+    start: 4788
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: SMA
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: 0000FF
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HOECHST
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 9875
+    start: 3291
+    min: 0
+  family: linear
+  color: 00FF00
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: HES1
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 2395
+    start: 599
+    min: 0
+  family: linear
+  color: F7FAF7
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: pERK1/2
+- coefficient: 1
+  active: false
+  window:
+    max: 65535
+    end: 65535
+    start: 0
+    min: 0
+  family: linear
+  color: FF0000
+  inverted: false
+  reverseIntensity: false
+  emissionWave: 
+  label: BCL2
+meta:
+  projectName: Ovarian Cancer
+  imageId: 548111
+  imageAuthor: Anniina Farkkila
+  imageTimestamp: 1529012815
+  pixelsType: uint16
+  datasetId: 3926
+  projectDescription: ''
+  datasetName: ANNIINA
+  wellSampleId: ''
+  projectId: 2568
+  imageDescription: ''
+  wellId: ''
+  imageName: OVCAPOST.ome.tif
+  datasetDescription: ''
+id: 548111
+pixel_size:
+  y: 
+  x: 
+  z: 
+size:
+  width: 32640
+  c: 36
+  z: 1
+  t: 1
+  height: 16128
+deltaT: []
+split_channel:
+  c:
+    width: 228496
+    gridy: 6
+    border: 2
+    gridx: 7
+    height: 96782
+  g:
+    width: 195854
+    gridy: 6
+    border: 2
+    gridx: 6
+    height: 96782
+levels: 6
+tile_size:
+  width: 1024
+  height: 1024
