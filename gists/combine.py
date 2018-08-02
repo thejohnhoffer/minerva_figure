@@ -753,50 +753,40 @@ def main():
 
     out = './output'
     os.makedirs(out)
-    # Full path format of input files
-    in_path_format = '/home/j/data/2018/07/grid/'
-    in_path_format += 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
     out_path_format = out + '/T{0:}-Z{2:}-L{1:}-Y{3:}-X{4:}.png'
 
     # Important parameters
-    channel_order = [0]
-    all_ranges = np.array([
+    channels = [0]
+    ranges = np.array([
       [0.01068132, 0.0717174]
     ])
-    all_colors = np.array([
+    colors = np.array([
       [0, 1, 0]
     ])
-    k_time = 0
-    k_detail = 0
+    x = 0
+    y = 0
+    z = 0
+    t = 0
+    level = 0
 
-    # Find range of image tiles
-    ctlzyx_shape, tile_shape = disk.index(in_path_format)
-    zyx_shape = ctlzyx_shape[-3::]
+    # Full path format of input files
+    in_path_format = '/home/j/data/2018/07/grid/'
+    in_path_format += 'C{0:}-T{1:}-Z{3:}-L{2:}-Y{4:}-X{5:}.png'
 
-    # Process all z, y, x tiles
-    for i in range(np.prod(zyx_shape)):
-        z, y, x = np.unravel_index(i, zyx_shape)
+    # from disk, load all channels for tile
+    images = disk.tile(t, level, z, y, x,
+                           channels, in_path_format)
 
-        # from disk, load all channels for tile
-        all_buffer = disk.tile(k_time, k_detail, z, y, x,
-                               channel_order, in_path_format)
+    all_in = zip(images, colors, ranges)
+    inputs = list(map(format_input, all_in))
+    img_buffer = 255*composite_channels(inputs)
 
-        # Continue if no channel buffers for given tile
-        all_buffer = [b for b in all_buffer if b is not None]
-        if not all_buffer:
-            continue
-
-        # from memory, blend all channels loaded
-        all_in = zip(all_buffer, all_colors, all_ranges)
-
-        inputs = list(map(format_input, all_in))
-        img_buffer = 255*composite_channels(inputs)
-        # Write the image buffer to a file
-        out_file = out_path_format.format(k_time, k_detail, z, y, x)
-        try:
-            cv2.imwrite(out_file, img_buffer)
-        except OSError as o_e:
-            print(o_e)
+    # Write the image buffer to a file
+    out_file = out_path_format.format(t, level, z, y, x)
+    try:
+        cv2.imwrite(out_file, img_buffer)
+    except OSError as o_e:
+        print(o_e)
 
 
 if __name__ == "__main__":
