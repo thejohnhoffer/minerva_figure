@@ -72,14 +72,12 @@ class crop():
 
     @staticmethod
     def get_lod(lods, max_size, width, height):
-        ''' Calculate the level of detail
-
+        ''' Calculate the level of detail below a maximum
         Arguments:
             lods: Number of available levels of detail
-            max_size: Maximum image extent in x or y
-            width: Extent of image in x
-            height: Extent of image in y
-
+            max_size: Maximum output image extent in x or y
+            width: Full-resolution extent of image in x
+            height: Full-resolution Extent of image in y
         Returns:
             Integer power of 2 level of detail
         '''
@@ -87,6 +85,36 @@ class crop():
         longest_side = max(width, height)
         lod = np.ceil(np.log2(longest_side / max_size))
         return int(np.clip(lod, 0, lods - 1))
+
+    @staticmethod
+    def get_lod_1tile(lods, tile_size, width, height):
+        ''' Calculate the level of detail to request one tile
+
+        Arguments:
+            lods: Number of available levels of detail
+            tile_size: width, height of one tile
+            width: Full-resolution extent of image in x
+            height: Full-resolution Extent of image in y
+
+        Returns:
+            Integer power of 2 level of detail
+        '''
+        return crop.get_lod(lods, min(*tile_size), width, height)
+
+    @staticmethod
+    def get_lod_4tiles(lods, tile_size, width, height):
+        ''' Calculate the level of detail for at most four tiles
+
+        Arguments:
+            lods: Number of available levels of detail
+            tile_size: width, height of one tile
+            width: Full-resolution extent of image in x
+            height: Full-resolution Extent of image in y
+
+        Returns:
+            Integer power of 2 level of detail
+        '''
+        return crop.get_lod(lods, 2 * min(*tile_size), width, height)
 
     @staticmethod
     def apply_lod(coordinates, lod):
@@ -309,6 +337,39 @@ class crop():
         return skimage.exposure.adjust_gamma(out, 1 / 2.2)
 
     @staticmethod
+    def stitch_tiles_at_level(channels, tile_size, full_size,
+                              level, order='before'):
+        ''' Position all image tiles for all channels
+
+        Args:
+            tiles: Iterator of tiles to blend. Each dict in the
+                list must have the following rendering settings:
+                {
+                    channel: Integer channel index
+                    indices: Integer i, j tile indices
+                    image: Numpy 2D image data of any type
+                    color: Color as r, g, b float array within 0, 1
+                    min: Threshhold range minimum, float within 0, 1
+                    max: Threshhold range maximum, float within 0, 1
+                    subregion: The start uv, end uv relative to tile
+                    position: The xy position relative to origin
+                }
+            tile_size: width, height of one tile
+            full_size: full-resolution width, height to select
+            level: integer level of detail
+            order: Composite `'before'` or `'after'` stitching
+
+        Returns:
+            For a given `shape` of `(width, height)`,
+            returns a float32 RGB color image with shape
+            `(height, width, 3)` and values in the range 0 to 1
+        '''
+
+        crop_size = crop.apply_lod(full_size, level)
+
+        return crop.stitch_tiles(channels, tile_size, crop_size, order)
+
+    @staticmethod
     def iterate_tiles(channels, tile_size, origin, crop_size):
         ''' Return crop settings for channel tiles
 
@@ -337,9 +398,10 @@ class crop():
             }
         '''
 
-        for cid, channel in enumerate(channels):
+        for channel in channels:
 
             (r, g, b) = channel['color']
+            _id = channel['channel']
             _min = channel['min']
             _max = channel['max']
 
@@ -351,7 +413,7 @@ class crop():
                                                         origin, crop_size)
 
                 yield {
-                    'channel': cid,
+                    'channel': _id,
                     'indices': (i, j),
                     'position': (x0, y0),
                     'subregion': ((u0, v0), (u1, v1)),
@@ -359,6 +421,45 @@ class crop():
                     'min': _min,
                     'max': _max,
                 }
+
+    @staticmethod
+    def list_tiles_at_level(channels, tile_size,
+                            full_origin, full_size, level):
+        ''' Return crop settings all tiles at given level
+
+        Args:
+            channels: An iterator of dicts for channels to blend. Each
+                dict in the list must have the following settings:
+                {
+                    channel: Integer channel index
+                    color: Color as r, g, b float array within 0, 1
+                    min: Threshhold range minimum, float within 0, 1
+                    max: Threshhold range maximum, float within 0, 1
+                }
+            tile_size: width, height of one tile
+            full_origin: full-resolution x, y coordinates to begin subregion
+            full_size: full-resolution width, height to select
+            level: integer level of detail
+
+        Returns:
+            An iterator of tiles to render for the given region.
+            Each dict in the list has the following settings:
+            {
+                level: given level of detail
+                channel: Integer channel index
+                indices: Integer i, j tile indices
+                color: Color as r, g, b float array within 0, 1
+                min: Threshhold range minimum, float within 0, 1
+                max: Threshhold range maximum, float within 0, 1
+            }
+        '''
+
+        origin = crop.apply_lod(full_origin, level)
+        crop_size = crop.apply_lod(full_size, level)
+
+        tiles = crop.iterate_tiles(channels, tile_size, origin, crop_size)
+
+        return [{**t, 'level': level} for t in tiles]
 
 
 ######
