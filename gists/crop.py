@@ -1,9 +1,5 @@
 ''' Test to crop all tiles in a region
 '''
-from functools import reduce
-import numpy as np
-import skimage.exposure
-import skimage.io
 import argparse
 import pathlib
 import urllib
@@ -15,452 +11,10 @@ import re
 import os
 import io
 
-######
-# blend.py
-#
-# from Minerva Library version 0.0.1
-# https://github.com/sorgerlab/minerva-lib-python/
-###
-
-
-def composite_channel(target, image, color, range_min, range_max, out=None):
-    ''' Render _image_ in pseudocolor and composite into _target_
-
-    By default, a new output array will be allocated to hold
-    the result of the composition operation. To update _target_
-    in place instead, specify the same array for _target_ and _out_.
-
-    Args:
-        target: Numpy array containing composition target image
-        image: Numpy array of image to render and composite
-        color: Color as r, g, b float array within 0, 1
-        range_min: Threshhold range minimum, float within 0, 1
-        range_max: Threshhold range maximum, float within 0, 1
-        out: Optional output numpy array in which to place the result.
-
-    Returns:
-        A numpy array with the same shape as the composited image.
-        If an output array is specified, a reference to _out_ is returned.
-    '''
-
-    if out is None:
-        out = target.copy()
-
-    # Rescale the new channel to a float64 between 0 and 1
-    f64_range = (range_min, range_max)
-    f64_image = skimage.img_as_float(image)
-    f64_image = skimage.exposure.rescale_intensity(f64_image, f64_range)
-
-    # Colorize and add the new channel to composite image
-    for i, component in enumerate(color):
-        out[:, :, i] += f64_image * component
-
-    return out
-
-
-######
-# crop.py
-#
-# Minerva Library PR #21
-# https://github.com/sorgerlab/minerva-lib-python/pull/21/files
-#
-# Pip requirement
-# git+https://github.com/thejohnhoffer/minerva-lib-python@crop#minerva-lib
-###
-
-class crop():
-
-    @staticmethod
-    def get_lod(lods, max_size, width, height):
-        ''' Calculate the level of detail below a maximum
-        Arguments:
-            lods: Number of available levels of detail
-            max_size: Maximum output image extent in x or y
-            width: Full-resolution extent of image in x
-            height: Full-resolution Extent of image in y
-        Returns:
-            Integer power of 2 level of detail
-        '''
-
-        longest_side = max(width, height)
-        lod = np.ceil(np.log2(longest_side / max_size))
-        return int(np.clip(lod, 0, lods - 1))
-
-    @staticmethod
-    def get_lod_1tile(lods, tile_size, width, height):
-        ''' Calculate the level of detail to request one tile
-
-        Arguments:
-            lods: Number of available levels of detail
-            tile_size: width, height of one tile
-            width: Full-resolution extent of image in x
-            height: Full-resolution Extent of image in y
-
-        Returns:
-            Integer power of 2 level of detail
-        '''
-        return crop.get_lod(lods, min(*tile_size), width, height)
-
-    @staticmethod
-    def get_lod_4tiles(lods, tile_size, width, height):
-        ''' Calculate the level of detail for at most four tiles
-
-        Arguments:
-            lods: Number of available levels of detail
-            tile_size: width, height of one tile
-            width: Full-resolution extent of image in x
-            height: Full-resolution Extent of image in y
-
-        Returns:
-            Integer power of 2 level of detail
-        '''
-        return crop.get_lod(lods, 2 * min(*tile_size), width, height)
-
-    @staticmethod
-    def apply_lod(coordinates, lod):
-        ''' Apply the level of detail to coordinates
-
-        Arguments:
-            coordinates: Coordinates to downscale by _lod_
-            lod: Integer power of 2 level of detail
-
-        Returns:
-            downscaled integer coordinates
-        '''
-
-        scaled_coords = np.array(coordinates) / (2 ** lod)
-        return np.int64(np.floor(scaled_coords))
-
-    @staticmethod
-    def select_tiles(tile_size, origin, crop_size):
-        ''' Select tile coordinates covering crop region
-
-        Args:
-            tile_size: width, height of one tile
-            origin: x, y coordinates to begin subregion
-            crop_size: width, height to select
-
-        Returns:
-            List of integer i, j tile indices
-        '''
-        start = np.array(origin)
-        end = start + crop_size
-        fractional_start = start / tile_size
-        fractional_end = end / tile_size
-
-        # Round to get indices containing subregion
-        first_index = np.int64(np.floor(fractional_start))
-        last_index = np.int64(np.ceil(fractional_end))
-
-        # Calculate all indices between first and last
-        index_shape = last_index - first_index
-        offsets = np.argwhere(np.ones(index_shape))
-        indices = first_index + offsets
-
-        return indices.tolist()
-
-    @staticmethod
-    def get_subregion(indices, tile_size, origin, crop_size):
-        ''' Define subregion to select from within tile
-
-        Args:
-            indices: integer i, j tile indices
-            tile_size: width, height of one tile
-            origin: x, y coordinates to begin subregion
-            crop_size: width, height to select
-
-        Returns:
-            start uv, end uv relative to tile
-        '''
-
-        crop_end = np.int64(origin) + crop_size
-        tile_start = np.int64(indices) * tile_size
-        tile_end = tile_start + tile_size
-
-        return [
-            np.maximum(origin, tile_start) - tile_start,
-            np.minimum(tile_end, crop_end) - tile_start
-        ]
-
-    @staticmethod
-    def get_position(indices, tile_size, origin):
-        ''' Define position of cropped tile relative to origin
-
-        Args:
-            indices: integer i, j tile indices
-            tile_size: width, height of one tile
-            origin: x, y coordinates to begin subregion
-
-        Returns:
-            The xy position relative to origin
-        '''
-
-        tile_start = np.int64(indices) * tile_size
-
-        return np.maximum(origin, tile_start) - origin
-
-    @staticmethod
-    def stitch_tile(out, subregion, position, tile):
-        ''' Position image tile into output array
-
-        Args:
-            out: 2D RGB numpy array to contain stitched channels
-            subregion: Start uv, end uv to get from tile
-            position: Origin of tile when composited in _out_
-            tile: 2D numpy array to stitch within _out_
-
-        Returns:
-            A reference to _out_
-        '''
-
-        # Take subregion from tile
-        [u0, v0], [u1, v1] = subregion
-        subtile = tile[v0:v1, u0:u1]
-        shape = np.int64(subtile.shape)
-
-        # Define boundary
-        x0, y0 = position
-        y1, x1 = [y0, x0] + shape[:2]
-
-        # Assign subregion within boundary
-        out[y0:y1, x0:x1] += subtile
-
-        return out
-
-    @staticmethod
-    def stitch_tiles(tiles, tile_size, crop_size, order='before'):
-        ''' Position all image tiles for all channels
-
-        Args:
-            tiles: Iterator of tiles to blend. Each dict in the
-                list must have the following rendering settings:
-                {
-                    channel: Integer channel index
-                    indices: Integer i, j tile indices
-                    image: Numpy 2D image data of any type
-                    color: Color as r, g, b float array within 0, 1
-                    min: Threshhold range minimum, float within 0, 1
-                    max: Threshhold range maximum, float within 0, 1
-                    subregion: The start uv, end uv relative to tile
-                    position: The xy position relative to origin
-                }
-            tile_size: width, height of one tile
-            crop_size: The width, height of output image
-            order: Composite `'before'` or `'after'` stitching
-
-        Returns:
-            For a given `shape` of `(width, height)`,
-            returns a float32 RGB color image with shape
-            `(height, width, 3)` and values in the range 0 to 1
-        '''
-        def stitch(a, t):
-            return crop.stitch_tile(a, t['subregion'],
-                                    t['position'], t['image'])
-
-        def composite(a, t):
-            h, w = t['image'].shape
-            return composite_channel(a[:h, :w], t['image'], t['color'],
-                                     t['min'], t['max'], a[:h, :w])
-
-        class Group():
-
-            composite_keys = {'color', 'min', 'max'}
-            stitch_keys = {'position', 'subregion'}
-
-            if order == 'before':
-                size = tuple(tile_size) + (3,)
-                dtype = staticmethod(lambda t: np.float32)
-                index = staticmethod(lambda t: tuple(t['indices']))
-                first_call = staticmethod(composite)
-                second_call = staticmethod(stitch)
-                in_keys = composite_keys
-                out_keys = stitch_keys
-
-            if order == 'after':
-                size = tuple(crop_size)
-                dtype = staticmethod(lambda t: t['image'].dtype)
-                index = staticmethod(lambda t: t['channel'])
-                first_call = staticmethod(stitch)
-                second_call = staticmethod(composite)
-                in_keys = stitch_keys
-                out_keys = composite_keys
-
-            def __init__(self, t):
-                d = self.dtype(t)
-                self.buffer = {k: t[k] for k in self.out_keys}
-                self.buffer['image'] = np.zeros(self.size, dtype=d)
-                self.inputs = []
-                self += t
-
-            def __iadd__(self, t):
-                self.inputs += [
-                    {k: t[k] for k in self.in_keys | {'image'}}
-                ]
-                return self
-
-        def hash_groups(groups, tile):
-            '''
-            If before: group channels by tile
-            If after: group tiles by channel
-            '''
-
-            idx = Group.index(tile)
-
-            if idx not in groups:
-                groups[idx] = Group(tile)
-            else:
-                groups[idx] += tile
-
-            return groups
-
-        def combine_groups(out, group):
-            '''
-            If before: Composite to RGBA float tile then stitch
-            If after: Stitch to gray integer image then composite
-            '''
-            for t in group.inputs:
-                group.first_call(group.buffer['image'], t)
-            group.second_call(out, group.buffer)
-
-            return out
-
-        inputs = [t for t in tiles if t]
-        out = np.zeros(tuple(crop_size) + (3,))
-
-        # Make groups by channel or by tile
-        groups = reduce(hash_groups, inputs, {}).values()
-        # Stitch and Composite in either order
-        out = reduce(combine_groups, groups, out)
-
-        # Return gamma correct image within 0, 1
-        np.clip(out, 0, 1, out=out)
-        return skimage.exposure.adjust_gamma(out, 1 / 2.2)
-
-    @staticmethod
-    def stitch_tiles_at_level(channels, tile_size, full_size,
-                              level, order='before'):
-        ''' Position all image tiles for all channels
-
-        Args:
-            tiles: Iterator of tiles to blend. Each dict in the
-                list must have the following rendering settings:
-                {
-                    channel: Integer channel index
-                    indices: Integer i, j tile indices
-                    image: Numpy 2D image data of any type
-                    color: Color as r, g, b float array within 0, 1
-                    min: Threshhold range minimum, float within 0, 1
-                    max: Threshhold range maximum, float within 0, 1
-                    subregion: The start uv, end uv relative to tile
-                    position: The xy position relative to origin
-                }
-            tile_size: width, height of one tile
-            full_size: full-resolution width, height to select
-            level: integer level of detail
-            order: Composite `'before'` or `'after'` stitching
-
-        Returns:
-            For a given `shape` of `(width, height)`,
-            returns a float32 RGB color image with shape
-            `(height, width, 3)` and values in the range 0 to 1
-        '''
-
-        crop_size = crop.apply_lod(full_size, level)
-
-        return crop.stitch_tiles(channels, tile_size, crop_size, order)
-
-    @staticmethod
-    def iterate_tiles(channels, tile_size, origin, crop_size):
-        ''' Return crop settings for channel tiles
-
-        Args:
-            channels: An iterator of dicts for channels to blend. Each
-                dict in the list must have the following settings:
-                {
-                    channel: Integer channel index
-                    color: Color as r, g, b float array within 0, 1
-                    min: Threshhold range minimum, float within 0, 1
-                    max: Threshhold range maximum, float within 0, 1
-                }
-            tile_size: width, height of one tile
-            origin: x, y coordinates to begin subregion
-            crop_size: width, height to select
-
-        Returns:
-            An iterator of tiles to render for the given region.
-            Each dict in the list has the following settings:
-            {
-                channel: Integer channel index
-                indices: Integer i, j tile indices
-                color: Color as r, g, b float array within 0, 1
-                min: Threshhold range minimum, float within 0, 1
-                max: Threshhold range maximum, float within 0, 1
-            }
-        '''
-
-        for channel in channels:
-
-            (r, g, b) = channel['color']
-            _id = channel['channel']
-            _min = channel['min']
-            _max = channel['max']
-
-            for indices in crop.select_tiles(tile_size, origin, crop_size):
-
-                (i, j) = indices
-                (x0, y0) = crop.get_position(indices, tile_size, origin)
-                (u0, v0), (u1, v1) = crop.get_subregion(indices, tile_size,
-                                                        origin, crop_size)
-
-                yield {
-                    'channel': _id,
-                    'indices': (i, j),
-                    'position': (x0, y0),
-                    'subregion': ((u0, v0), (u1, v1)),
-                    'color': (r, g, b),
-                    'min': _min,
-                    'max': _max,
-                }
-
-    @staticmethod
-    def list_tiles_at_level(channels, tile_size,
-                            full_origin, full_size, level):
-        ''' Return crop settings all tiles at given level
-
-        Args:
-            channels: An iterator of dicts for channels to blend. Each
-                dict in the list must have the following settings:
-                {
-                    channel: Integer channel index
-                    color: Color as r, g, b float array within 0, 1
-                    min: Threshhold range minimum, float within 0, 1
-                    max: Threshhold range maximum, float within 0, 1
-                }
-            tile_size: width, height of one tile
-            full_origin: full-resolution x, y coordinates to begin subregion
-            full_size: full-resolution width, height to select
-            level: integer level of detail
-
-        Returns:
-            An iterator of tiles to render for the given region.
-            Each dict in the list has the following settings:
-            {
-                level: given level of detail
-                channel: Integer channel index
-                indices: Integer i, j tile indices
-                color: Color as r, g, b float array within 0, 1
-                min: Threshhold range minimum, float within 0, 1
-                max: Threshhold range maximum, float within 0, 1
-            }
-        '''
-
-        origin = crop.apply_lod(full_origin, level)
-        crop_size = crop.apply_lod(full_size, level)
-
-        tiles = crop.iterate_tiles(channels, tile_size, origin, crop_size)
-
-        return [{**t, 'level': level} for t in tiles]
-
+import skimage.io
+import skimage.exposure
+import numpy as np
+from minerva_lib import crop
 
 ######
 # Omero API
@@ -680,17 +234,10 @@ def do_crop(load_tile, channels, tile_size, origin, shape,
         for full or partial tiles within `shape` from `origin`.
     '''
 
-    # Compute parameters following figure API
-    k_lod = crop.get_lod(levels, max_size, *shape)
-    k_origin = crop.apply_lod(origin, k_lod)
-    k_shape = crop.apply_lod(shape, k_lod)
+    level = crop.get_lod(levels, max_size, *shape)
+    print(f'Cropping 1/{level} scale')
 
-    msg = '''Cropping 1/{0} scale:
-    {2} pixels starting at {1}
-    '''.format(2**k_lod, k_origin, k_shape)
-    print(msg)
-
-    def store_tile(tile):
+    def assign_image(tile):
         ''' Load an 'image' for the tile
 
         Args:
@@ -700,6 +247,7 @@ def do_crop(load_tile, channels, tile_size, origin, shape,
             A tile dict for `stitch_tiles`
         '''
 
+        lod = tile['level']
         c = tile['channel']
         i, j = tile['indices']
 
@@ -708,7 +256,7 @@ def do_crop(load_tile, channels, tile_size, origin, shape,
             return None
 
         # Load image from Omero
-        image = load_tile(c, k_lod, i, j)
+        image = load_tile(c, lod, i, j)
 
         # Disallow empty images
         if image is None:
@@ -719,10 +267,11 @@ def do_crop(load_tile, channels, tile_size, origin, shape,
         return tile
 
     # Load and stitch all tiles
-    tiles = crop.iterate_tiles(channels, tile_size,
-                               k_origin, k_shape)
-    return crop.stitch_tiles(map(store_tile, tiles),
-                             tile_size, k_shape, order)
+    tiles = crop.list_tiles_at_level(channels, tile_size,
+                                     origin, shape, level)
+    image_tiles = map(assign_image, tiles)
+    return crop.stitch_tiles_at_level(image_tiles, tile_size,
+                                      shape, level, order)
 
 
 ######
