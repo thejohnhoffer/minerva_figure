@@ -120,7 +120,7 @@ class api():
                 [width, height]
             chan: integer N channels by 1 index
             r: float32 N channels by 2 min, max
-            c: float32 N channels by 3 r, g, b
+            c: float32 N channels by 3 red, green, blue
             indices: size in channels, times, LOD, Z, Y, X
             tile: image tile size in pixels: y, x
             limit: max image pixel value
@@ -212,66 +212,67 @@ def format_input(args):
     }
 
 
-def do_crop(load_tile, channels, tile_size, origin, shape,
-            levels=1, max_size=2000, order='before'):
+def do_crop(load_tile, channels, tile_size, full_origin, full_size,
+            levels=1, max_size=2000):
     ''' Interface with minerva_lib.crop
 
     Args:
         load_tile: Function to supply 2D numpy array
         channels: List of dicts of channel rendering settings
         tile_size: The width, height of a single tile
-        origin: Request's full-resolution x, y origin
-        shape: Request's full-resolution width, height
-        levels: The number of levels of detail
+        full_origin: Request's full-resolution x, y origin
+        full_size: Request's full-resolution width, height
+        levels: The number of pyramid levels
         max_size: The maximum response width or height
-        order: Composite 'before' or 'after' stitching
 
     Returns:
         2D numpy float array of with width, height given by
-        `shape` if `shape <= max_size` or width, height given by
-        `shape / 2 ** l <= max_size` for the lowest `l` meeting
+        `full_size` if `full_size <= max_size` or width, height given by
+        `full_size / 2 ** l <= max_size` for the lowest `l` meeting
         `l < levels`. The array is a composite of all channels
-        for full or partial tiles within `shape` from `origin`.
+        for full or partial tiles within `full_size` from `full_origin`.
     '''
 
-    level = crop.get_lod(levels, max_size, *shape)
+    level = crop.get_optimum_pyramid_level(full_size, levels, max_size)
+    crop_origin = crop.scale_by_pyramid_level(full_origin, level)
+    crop_size = crop.scale_by_pyramid_level(full_size, level)
     print(f'Cropping 1/{level} scale')
 
-    def assign_image(tile):
-        ''' Load an 'image' for the tile
+    image_tiles = []
 
-        Args:
-            A tile dict from `iterate_tiles`
+    for channel in channels:
 
-        Returns:
-            A tile dict for `stitch_tiles`
-        '''
+        (red, green, blue) = channel['color']
+        _id = channel['channel']
+        _min = channel['min']
+        _max = channel['max']
 
-        lod = tile['level']
-        c = tile['channel']
-        i, j = tile['indices']
+        for indices in crop.select_tiles(tile_size, crop_origin, crop_size):
 
-        # Disallow negative tiles
-        if i < 0 or j < 0:
-            return None
+            (i, j) = indices
 
-        # Load image from Omero
-        image = load_tile(c, lod, i, j)
+            # Disallow negative tiles
+            if i < 0 or j < 0:
+                continue
 
-        # Disallow empty images
-        if image is None:
-            return None
+            # Load image from Omero
+            image = load_tile(_id, level, i, j)
 
-        # Return image to Minerva
-        tile['image'] = image
-        return tile
+            # Disallow empty images
+            if image is None:
+                continue
 
-    # Load and stitch all tiles
-    tiles = crop.list_tiles_at_level(channels, tile_size,
-                                     origin, shape, level)
-    image_tiles = map(assign_image, tiles)
-    return crop.stitch_tiles_at_level(image_tiles, tile_size,
-                                      shape, level, order)
+            # Add to list of tiles
+            image_tiles.append({
+                'min': _min,
+                'max': _max,
+                'channel': _id,
+                'image': image,
+                'indices': (i, j),
+                'color': (red, green, blue),
+            })
+
+    return crop.stitch_tiles(image_tiles, tile_size, crop_origin, crop_size)
 
 
 ######
@@ -293,17 +294,12 @@ def main(args):
         help='OMERO.figure render_scaled_region url'
     )
     cmd.add_argument(
-        '--after', action='store_true',
-        help='composite after stitching'
-    )
-    cmd.add_argument(
         '-o', default=str(pathlib.Path.cwd()),
         help='output directory'
     )
 
     parsed = cmd.parse_args(args)
     out_file = str(pathlib.Path(parsed.o, 'out.png'))
-    order = ['before', 'after'][parsed.after]
 
     # Read parameters from URL and API
     keys = api.scaled_region(parsed.url)
@@ -320,7 +316,7 @@ def main(args):
     # Minerva does the cropping
     out = do_crop(ask_omero, channels, keys['tile_size'],
                   keys['origin'], keys['shape'], keys['levels'],
-                  keys['max_size'], order)
+                  keys['max_size'])
 
     # Write the image buffer to a file
     try:
