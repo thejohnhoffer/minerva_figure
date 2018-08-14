@@ -102,7 +102,7 @@ def make_meta(props):
         'projectId': '',
         'datasetId': '',
         'wellId': '',
-    },
+    }
 
 
 def make_image(image, props, channels, keys):
