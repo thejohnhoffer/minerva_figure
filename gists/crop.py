@@ -287,7 +287,7 @@ def main(args):
     )
 
     default_url = '/548111/0/0/?c=1|0:65535$FF0000,3|0:65535$0000FF'
-    default_url += '&region=-100,-100,1300,1300'
+    default_url += '&region=-8160,-16416,48960,48960'
     cmd.add_argument(
         'url', nargs='?', default=default_url,
         help='OMERO.figure render_scaled_region url'
