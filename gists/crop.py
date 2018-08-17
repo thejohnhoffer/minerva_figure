@@ -266,7 +266,6 @@ def do_crop(load_tile, channels, tile_size, full_origin, full_size,
             image_tiles.append({
                 'min': _min,
                 'max': _max,
-                'channel': _id,
                 'image': image,
                 'indices': (i, j),
                 'color': (red, green, blue),
