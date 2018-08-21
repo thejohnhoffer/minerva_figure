@@ -4,86 +4,117 @@ import argparse
 import pathlib
 import urllib
 import struct
+import botocore
+import boto3
 import json
 import sys
 import ssl
 import re
 import os
-import io
 
 import skimage.io
 import skimage.exposure
 import numpy as np
+
 from minerva_lib import crop
 
-######
-# Omero API
-###
+import metadata as metadata_xml
+import xml.etree.ElementTree as ET
+from aws_srp import AWSSRP
 
-HEADERS = {
-    'Cookie': os.environ['OME_COOKIE'],
-}
+
+s3 = boto3.resource('s3')
+
+######
+# Minerva API
+###
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-class omero():
+class minerva():
 
     @staticmethod
-    def image(c, limit, *args):
+    def image(uuid, token, c, limit, **kwargs):
         ''' Load a single channel by pattern
 
         Args:
+            uuid: Minerva image identifier
+            token: AWS Cognito Id Token
             c: zero-based channel index
             limit: max image pixel value
-            args: tuple completing pattern
+            args: dict with following keys
+                {x, y, z, t, level}
 
         Returns:
             numpy array loaded from file
         '''
 
         def format_channel(c):
-            api_c = c + 1
-            selected = '{}|0:{}$000000'.format(api_c, limit)
-            filler = [str(-i) for i in range(1, api_c)] + ['']
-            return ','.join(filler) + selected
+            return f'{c},FFFFFF,0,1'
 
-        url = 'https://omero.hms.harvard.edu/webgateway/render_image_region/'
-        url += '{}/{}/{}/?m=g&format=tif&tile={},{},{}'.format(*args)
-        url += '&c=' + format_channel(c)
+        url = 'https://ba7xgutvbc.execute-api.'
+        url += 'us-east-1.amazonaws.com/dev/image/'
+        url += '{0}/render-tile/{x}/{y}/{z}/{t}/{l}/'.format(uuid,
+                                                             **kwargs)
+        url += format_channel(c)
         print(url)
 
-        req = urllib.request.Request(url, headers=HEADERS)
+        req = urllib.request.Request(url, headers={
+            'Authorization': token,
+            'Accept': 'image/png'
+        })
         try:
-            with urllib.request.urlopen(req) as response:
-                f = io.BytesIO(response.read())
+            with urllib.request.urlopen(req) as f:
                 return skimage.io.imread(f)[:, :, 0]
         except urllib.error.HTTPError as e:
-            print(e)
+            print(e, file=sys.stderr)
             return None
 
         return None
 
     @staticmethod
-    def index(image_id):
+    def index(uuid, token):
         '''Find all the file paths in a range
 
         Args:
-            image_id: the id of image in omero
+            image_id: the id of image in minerva
+            token: AWS Cognito Id Token
 
         Returns:
             indices: size in channels, times, LOD, Z, Y, X
             tile: image tile size in pixels: y, x
             limit: max image pixel value
         '''
-        config = {}
-        url = 'https://omero.hms.harvard.edu/webgateway/'
-        url += 'imgData/{}'.format(image_id)
+        metadata_file = 'metadata.xml'
+        bucket = 'minerva-test-cf-common-tilebucket-yhuku9umej1s'
+
+        url = 'https://ba7xgutvbc.execute-api.'
+        url += f'us-east-1.amazonaws.com/dev/image/{uuid}'
         print(url)
 
-        req = urllib.request.Request(url, headers=HEADERS)
-        with urllib.request.urlopen(req) as response:
-            config = json.loads(response.read())
+        req = urllib.request.Request(url, headers={
+            'Authorization': token
+        })
+        try:
+            with urllib.request.urlopen(req) as f:
+                result = json.loads(f.read())
+                prefix = result['data']['bfu_uuid']
+
+        except urllib.error.HTTPError as e:
+            print(e, file=sys.stderr)
+            return
+
+        try:
+            print(bucket, prefix, metadata_file)
+            obj = s3.Object(bucket, f'{prefix}/{metadata_file}')
+            root_xml = obj.get()['Body'].read().decode('utf-8')
+            root = ET.fromstring(root_xml)
+            config = metadata_xml.parse_image(root, uuid)
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "404":
+                print("The object does not exist.", file=sys.stderr)
+            return
 
         dtype = config['meta']['pixelsType']
         tw, th = map(config['tile_size'].get,
@@ -104,10 +135,12 @@ class omero():
 class api():
 
     @staticmethod
-    def scaled_region(url):
+    def scaled_region(url, uuid, token):
         """ Just parse the rendered_scaled_region API
         Arguments:
             url: "<matching OMERO.figure API>"
+            uuid: Minerva image identifier
+            token: AWS Cognito Id Token
 
         Return Keywords:
             iid: image id
@@ -169,7 +202,7 @@ class api():
         origin = np.array([x, y])
 
         # Make API request to interpret url
-        meta = omero.index(iid)
+        meta = minerva.index(uuid, token)
 
         def get_range(chan):
             r = np.array([chan['min'], chan['max']])
@@ -255,7 +288,7 @@ def do_crop(load_tile, channels, tile_size, full_origin, full_size,
             if i < 0 or j < 0:
                 continue
 
-            # Load image from Omero
+            # Load image from Minerva
             image = load_tile(_id, level, i, j)
 
             # Disallow empty images
@@ -286,8 +319,8 @@ def main(args):
         description="Crop a region"
     )
 
-    default_url = '/548111/0/0/?c=1|0:65535$FF0000,3|0:65535$0000FF'
-    default_url += '&region=-8160,-16416,48960,48960'
+    default_url = '/548111/0/0/?c=1|0:65535$FF0000'
+    default_url += '&region=0,0,1024,1024'
     cmd.add_argument(
         'url', nargs='?', default=default_url,
         help='OMERO.figure render_scaled_region url'
@@ -300,20 +333,48 @@ def main(args):
     parsed = cmd.parse_args(args)
     out_file = str(pathlib.Path(parsed.o, 'out.png'))
 
+    # Set up AWS Authentication
+    try:
+        username = os.environ['MINERVA_USERNAME']
+    except KeyError:
+        print('must have MINERVA_USERNAME in environ', file=sys.stderr)
+        return
+
+    try:
+        password = os.environ['MINERVA_PASSWORD']
+    except KeyError:
+        print('must have MINERVA_PASSWORD in environ', file=sys.stderr)
+        return
+
+    minerva_pool = 'us-east-1_ecLW78ap5'
+    minerva_client = '7gv29ie4pak64c63frt93mv8lq'
+    uuid = '769cfb14-f583-4f22-9f48-94a24e09fd7f'
+
+    srp = AWSSRP(username, password, minerva_pool, minerva_client)
+    result = srp.authenticate_user()
+    token = result['AuthenticationResult']['IdToken']
+
     # Read parameters from URL and API
-    keys = api.scaled_region(parsed.url)
+    keys = api.scaled_region(parsed.url, uuid, token)
 
     # Make array of channel parameters
     inputs = zip(keys['chan'], keys['c'], keys['r'])
     channels = map(format_input, inputs)
 
     # OMERO loads the tiles
-    def ask_omero(c, l, i, j):
-        return omero.image(c, keys['limit'], keys['iid'],
-                           keys['z'], keys['t'], l, i, j)
+    def ask_minerva(c, l, i, j):
+        keywords = {
+            't': 0,
+            'z': 0,
+            'l': l,
+            'x': i,
+            'y': j
+        }
+        limit = keys['limit']
+        return minerva.image(uuid, token, c, limit, **keywords)
 
     # Minerva does the cropping
-    out = do_crop(ask_omero, channels, keys['tile_size'],
+    out = do_crop(ask_minerva, channels, keys['tile_size'],
                   keys['origin'], keys['shape'], keys['levels'],
                   keys['max_size'])
 
