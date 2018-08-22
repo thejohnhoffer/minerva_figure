@@ -1,29 +1,30 @@
 ''' Test to crop all tiles in a region
 '''
+import xml.etree.ElementTree as ET
 import argparse
 import pathlib
 import urllib
 import struct
-import botocore
-import boto3
 import json
 import sys
 import ssl
 import re
 import os
+import numpy as np
+import botocore
+import boto3
 
 import skimage.io
 import skimage.exposure
-import numpy as np
 
 from minerva_lib import crop
 
-import metadata as metadata_xml
-import xml.etree.ElementTree as ET
-from aws_srp import AWSSRP
-
-
-s3 = boto3.resource('s3')
+if __name__ == "__main__":
+    from metadata_xml import parse_image
+    from aws_srp import AWSSRP
+else:
+    from .metadata_xml import parse_image
+    from .aws_srp import AWSSRP
 
 ######
 # Minerva API
@@ -86,6 +87,8 @@ class minerva():
             tile: image tile size in pixels: y, x
             limit: max image pixel value
         '''
+        aws_s3 = boto3.resource('s3')
+
         metadata_file = 'metadata.xml'
         bucket = 'minerva-test-cf-common-tilebucket-yhuku9umej1s'
 
@@ -107,10 +110,10 @@ class minerva():
 
         try:
             print(bucket, prefix, metadata_file)
-            obj = s3.Object(bucket, f'{prefix}/{metadata_file}')
+            obj = aws_s3.Object(bucket, f'{prefix}/{metadata_file}')
             root_xml = obj.get()['Body'].read().decode('utf-8')
             root = ET.fromstring(root_xml)
-            config = metadata_xml.parse_image(root, uuid)
+            config = parse_image(root, uuid)
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("The object does not exist.", file=sys.stderr)

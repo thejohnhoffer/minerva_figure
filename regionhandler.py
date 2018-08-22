@@ -7,7 +7,7 @@ from tornado import web, gen
 from mimetypes import types_map
 from concurrent.futures import ThreadPoolExecutor
 
-import gists.metadata as metadata_xml
+from gists import metadata_xml
 import xml.etree.ElementTree as ET
 
 

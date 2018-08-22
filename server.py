@@ -1,3 +1,5 @@
+''' A simple static filie and API server
+'''
 import sys
 import os
 import argparse
@@ -22,13 +24,13 @@ class Webserver(object):
             username = os.environ['MINERVA_USERNAME']
         except KeyError:
             print('must have MINERVA_USERNAME in environ', file=sys.stderr)
-            return
+            raise
 
         try:
             password = os.environ['MINERVA_PASSWORD']
         except KeyError:
             print('must have MINERVA_PASSWORD in environ', file=sys.stderr)
-            return
+            raise
 
         minerva_pool = 'us-east-1_ecLW78ap5'
         minerva_client = '7gv29ie4pak64c63frt93mv8lq'
@@ -37,26 +39,23 @@ class Webserver(object):
         result = srp.authenticate_user()
         token = result['AuthenticationResult']['IdToken']
 
-        # Arguments for data and info requests
         app_in = {
             'token': token
         }
-        # Arguments for static requests
         stat_in = {
             '_root': __name__
-        }
-        # Set for entire webapp
-        app_set = {
-            'autoreload': True
         }
         # Create the webapp with both access layers
         self._webapp = Application([
             (r'/render_scaled_region/(.*)', RegionHandler, app_in),
             (r'/imgData/(.*)', MetaHandler, app_in),
             # A file requested from root of static
-            (r'/([^/]*\..*)?', StaticHandler, stat_in),
+            (r'/()', StaticHandler, stat_in),
             (r'/(omero_figure/.*)', StaticHandler, stat_in),
-        ], **app_set)
+        ], autoreload=True)
+
+        self._port = None
+        self._server = None
 
     def start(self, _port):
         ''' Starts the webapp on the given port
@@ -118,14 +117,16 @@ def parse_argv(argv):
 
 
 if __name__ == "__main__":
-    args = parse_argv(sys.argv)
-    port = args['port']
+    ARGS = parse_argv(sys.argv)
+    PORT = ARGS['port']
 
     # Start a webserver on given port
-    server = Webserver()
-    # Try to start the server
     try:
-        ioloop = server.start(port)
-        ioloop.start()
+        SERVER = Webserver()
+    except KeyError:
+        sys.exit()
+    try:
+        IOLOOP = SERVER.start(PORT)
+        IOLOOP.start()
     except KeyboardInterrupt:
-        server.stop()
+        SERVER.stop()
