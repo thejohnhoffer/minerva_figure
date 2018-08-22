@@ -19,7 +19,7 @@ import skimage.exposure
 
 from minerva_lib import crop
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     from metadata_xml import parse_image
     from aws_srp import AWSSRP
 else:
@@ -115,8 +115,8 @@ class minerva():
             root = ET.fromstring(root_xml)
             config = parse_image(root, uuid)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "404":
-                print("The object does not exist.", file=sys.stderr)
+            if e.response['Error']['Code'] == '404':
+                print('The object does not exist.', file=sys.stderr)
             return
 
         dtype = config['meta']['pixelsType']
@@ -139,9 +139,9 @@ class api():
 
     @staticmethod
     def scaled_region(url, uuid, token):
-        """ Just parse the rendered_scaled_region API
+        ''' Just parse the rendered_scaled_region API
         Arguments:
-            url: "<matching OMERO.figure API>"
+            url: <matching OMERO.figure API>
             uuid: Minerva image identifier
             token: AWS Cognito Id Token
 
@@ -160,7 +160,7 @@ class api():
             indices: size in channels, times, LOD, Z, Y, X
             tile: image tile size in pixels: y, x
             limit: max image pixel value
-        """
+        '''
 
         url_match = re.search('render_scaled_region', url)
         url = url[(lambda x: x.end() if x else 0)(url_match):]
@@ -315,11 +315,11 @@ def do_crop(load_tile, channels, tile_size, full_origin, full_size,
 ###
 
 def main(args):
-    """ Crop a region
-    """
+    ''' Crop a region
+    '''
     # Read from a configuration file at a default location
     cmd = argparse.ArgumentParser(
-        description="Crop a region"
+        description='Crop a region'
     )
 
     default_url = '/548111/0/0/?c=1|0:65535$FF0000'
@@ -349,8 +349,8 @@ def main(args):
         print('must have MINERVA_PASSWORD in environ', file=sys.stderr)
         return
 
-    minerva_pool = 'us-east-1_ecLW78ap5'
-    minerva_client = '7gv29ie4pak64c63frt93mv8lq'
+    minerva_pool = 'us-east-1_YuTF9ST4J'
+    minerva_client = ''
     uuid = '769cfb14-f583-4f22-9f48-94a24e09fd7f'
 
     srp = AWSSRP(username, password, minerva_pool, minerva_client)
@@ -364,7 +364,7 @@ def main(args):
     inputs = zip(keys['chan'], keys['c'], keys['r'])
     channels = map(format_input, inputs)
 
-    # OMERO loads the tiles
+    # Minerva loads the tiles
     def ask_minerva(c, l, i, j):
         keywords = {
             't': 0,
@@ -388,5 +388,5 @@ def main(args):
         print(o_e)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main(sys.argv[1:])

@@ -32,7 +32,7 @@ class Webserver(object):
             print('must have MINERVA_PASSWORD in environ', file=sys.stderr)
             raise
 
-        minerva_pool = 'us-east-1_ecLW78ap5'
+        minerva_pool = 'us-east-1_YuTF9ST4J'
         minerva_client = '7gv29ie4pak64c63frt93mv8lq'
 
         srp = AWSSRP(username, password, minerva_pool, minerva_client)

@@ -1,14 +1,12 @@
-import sys
-import json
+import io
+import numpy as np
+import skimage
 import boto3
-import urllib
-import botocore
 from tornado import web, gen
 from mimetypes import types_map
 from concurrent.futures import ThreadPoolExecutor
 
-from gists import metadata_xml
-import xml.etree.ElementTree as ET
+import gists.crop as crop
 
 
 s3 = boto3.resource('s3')
@@ -45,51 +43,52 @@ class RegionHandler(web.RequestHandler):
         ''' Serves a path in the root directory
 
         Arguments:
-            data: the imgdata dictionary
+            data: RGB image array
         '''
         # Get the mimetype from the requested extension
-        mime_type = types_map.get('json', self._basic_mime)
+        mime_type = types_map.get('png', self._basic_mime)
         self.set_header('Content-Type', mime_type)
 
-        self.write(json.dumps(data))
+        out_file = io.StringIO()
+        skimage.io.imsave(out_file, data)
+        self.write(out_file.read())
 
-    def parse(self, uuid):
-        ''' Get image data for uuid
+    def parse(self, path):
+        ''' Get image for uuid
 
         Arguments:
-            uuid: Minerva image identifier
+            path:: render_scaled_region api
 
         Returns:
-            the imagedata dictionary
+            the image
         '''
+        split_path = path.split('/')
+        url = ''.join(split_path[1:])
+        uuid = split_path[0]
+        token = self.token
 
-        metadata_file = 'metadata.xml'
-        bucket = 'minerva-test-cf-common-tilebucket-yhuku9umej1s'
+        # Read parameters from URL and API
+        keys = crop.api.scaled_region(url, uuid, token)
 
-        url = 'https://ba7xgutvbc.execute-api.'
-        url += f'us-east-1.amazonaws.com/dev/image/{uuid}'
+        # Make array of channel parameters
+        inputs = zip(keys['chan'], keys['c'], keys['r'])
+        channels = map(crop.format_input, inputs)
 
-        req = urllib.request.Request(url, headers={
-            'Authorization': self.token
-        })
-        try:
-            with urllib.request.urlopen(req) as f:
-                result = json.loads(f.read())
-                prefix = result['data']['bfu_uuid']
+        # OMERO loads the tiles
+        def ask_minerva(c, l, i, j):
+            keywords = {
+                't': 0,
+                'z': 0,
+                'l': l,
+                'x': i,
+                'y': j
+            }
+            limit = keys['limit']
+            return crop.minerva.image(uuid, token, c, limit, **keywords)
 
-        except urllib.error.HTTPError as e:
-            print(e, file=sys.stderr)
-            return {}
+        # Minerva does the cropping
+        out = crop.do_crop(ask_minerva, channels, keys['tile_size'],
+                           keys['origin'], keys['shape'], keys['levels'],
+                           keys['max_size'])
 
-        try:
-            print(bucket, prefix, metadata_file)
-            obj = s3.Object(bucket, f'{prefix}/{metadata_file}')
-            root_xml = obj.get()['Body'].read().decode('utf-8')
-            root = ET.fromstring(root_xml)
-            config = metadata_xml.parse_image(root, uuid)
-        except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "404":
-                print("The object does not exist.", file=sys.stderr)
-            return {}
-
-        return config
+        return np.uint8(255 * out)
