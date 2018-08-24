@@ -1,5 +1,5 @@
-git+git://github.com/thejohnhoffer/minerva-lib-python@e7d8edffa86f0925c6bf164e373072aaaac239d5#egg=minerva-lib
-scikit-image>=0.13.1
-tornado>=4.4.2
+git+git://github.com/thejohnhoffer/minerva-lib-python@86eddd453fd3d06c9a54ce43753620c820137a9b#egg=minerva-lib
+tornado>=5.1
+pypng>=0.0.18
 numpy>=1.14.3
 boto>=2.48.0

@@ -44,7 +44,13 @@ class StaticHandler(web.RequestHandler):
         mime_type = types_map.get(extension, self._basic_mime)
         self.set_header('Content-Type', mime_type)
 
-        data = resource_string(self._root, filepath)
+        try:
+            data = resource_string(self._root, filepath)
+        except FileNotFoundError:
+            self.set_status(404)
+            self.write('404')
+            return
+
         self.write(data)
 
     def parse(self, path):

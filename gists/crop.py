@@ -33,7 +33,28 @@ else:
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-class minerva():
+class minerva_api():
+
+    @staticmethod
+    def format_input(args):
+        ''' Combine all parameters
+
+        Args:
+            id_: integer channel id
+            color_: 3 r,g,b floats from 0,1
+            range_: 2 min,max floats from 0,1
+
+        Returns:
+            Dictionary for minerva channel
+        '''
+        id_, color_, range_ = args
+
+        return {
+            'channel': id_,
+            'color': color_,
+            'min': range_[0],
+            'max': range_[1],
+        }
 
     @staticmethod
     def image(uuid, token, c, limit, **kwargs):
@@ -54,7 +75,7 @@ class minerva():
         def format_channel(c):
             return f'{c},FFFFFF,0,1'
 
-        url = 'https://ba7xgutvbc.execute-api.'
+        url = 'https://lze4t3ladb.execute-api.'
         url += 'us-east-1.amazonaws.com/dev/image/'
         url += '{0}/render-tile/{x}/{y}/{z}/{t}/{l}/'.format(uuid,
                                                              **kwargs)
@@ -90,9 +111,9 @@ class minerva():
         aws_s3 = boto3.resource('s3')
 
         metadata_file = 'metadata.xml'
-        bucket = 'minerva-test-cf-common-tilebucket-yhuku9umej1s'
+        bucket = 'minerva-test-cf-common-tilebucket-1su418jflefem'
 
-        url = 'https://ba7xgutvbc.execute-api.'
+        url = 'https://lze4t3ladb.execute-api.'
         url += f'us-east-1.amazonaws.com/dev/image/{uuid}'
         print(url)
 
@@ -102,7 +123,7 @@ class minerva():
         try:
             with urllib.request.urlopen(req) as f:
                 result = json.loads(f.read())
-                prefix = result['data']['bfu_uuid']
+                prefix = result['data']['fileset_uuid']
 
         except urllib.error.HTTPError as e:
             print(e, file=sys.stderr)
@@ -130,23 +151,49 @@ class minerva():
         return {
             'limit': np.iinfo(getattr(np, dtype)).max,
             'levels': config['levels'],
+            'image_size': [w, h],
             'tile_size': [th, tw],
             'ctxy': [c, t, x, y],
         }
 
 
-class api():
+class omero_api():
 
     @staticmethod
-    def scaled_region(url, uuid, token):
+    def read_url(url):
+
+        def api_index(uri):
+            pattern = '(render_image|render_scaled_region)'
+            match = re.search(pattern, uri)
+            return match.end() if match else 0
+
+        url = url[api_index(url):]
+        if url[0] == '/':
+            url = url[1:]
+
+        split_url = url.split('?')[0].split('/')
+        query = url.split('?')[1]
+        query_dict = {}
+
+        for param in query.split('&'):
+            key, value = param.split('=')
+            query_dict[key] = value
+
+        return split_url, query_dict
+
+    @staticmethod
+    def scaled_region(split_url, query_dict, token):
         ''' Just parse the rendered_scaled_region API
         Arguments:
-            url: <matching OMERO.figure API>
-            uuid: Minerva image identifier
+            split_url: uuid, z, t
+            query_dict: {
+                c: comma seperated 'index|min:max$RRGGBB'
+                maps: '[{"reverse":{"enabled":false}}]'
+                m: c
+            }
             token: AWS Cognito Id Token
 
         Return Keywords:
-            iid: image id
             t: integer timestep
             z: integer z position in stack
             max_size: maximum extent in x or y
@@ -162,11 +209,6 @@ class api():
             limit: max image pixel value
         '''
 
-        url_match = re.search('render_scaled_region', url)
-        url = url[(lambda x: x.end() if x else 0)(url_match):]
-        if url[0] == '/':
-            url = url[1:]
-
         def parse_channel(c):
             cid, _min, _max, _hex = re.split('[:|$]', c)
             hex_bytes = bytearray.fromhex(_hex)
@@ -181,31 +223,25 @@ class api():
         def parse_region(r):
             return list(map(float, r.split(',')))
 
-        print(url)
-        iid, z, t = url.split('?')[0].split('/')[:3]
-        query = url.split('?')[1]
-        parameters = {}
+        uuid, z, t = split_url[:3]
+        max_size = query_dict.get('max_size', 2000)
+        region = query_dict.get('region', None)
+        channels = query_dict['c'].split(',')
 
-        # Make parameters dicitonary
-        for param in query.split('&'):
-            key, value = param.split('=')
-            parameters[key] = value
-
-        max_size = parameters.get('max_size', 2000)
-        channels = parameters['c'].split(',')
-        region = parameters['region']
-
-        # Extract data from API
+        # Extract channel ids from channels
         channels = list(map(parse_channel, channels))
-        x, y, width, height = parse_region(region)
-
-        # Reformat data from API
         chans = [c for c in channels if c['shown']]
-        shape = np.array([width, height])
-        origin = np.array([x, y])
 
         # Make API request to interpret url
-        meta = minerva.index(uuid, token)
+        meta = minerva_api.index(uuid, token)
+
+        if region is not None:
+            x, y, width, height = parse_region(region)
+            shape = np.array([width, height])
+            origin = np.array([x, y])
+        else:
+            shape = np.array(meta['image_size'])
+            origin = np.array([0, 0])
 
         def get_range(chan):
             r = np.array([chan['min'], chan['max']])
@@ -220,13 +256,13 @@ class api():
             'limit': meta['limit'],
             'levels': meta['levels'],
             'tile_size': meta['tile_size'],
+            'image_size': meta['image_size'],
             'r': np.array([get_range(c) for c in chans]),
             'c': np.array([get_color(c) for c in chans]),
             'chan': np.int64([c['cid'] for c in chans]),
             'max_size': int(max_size),
             'origin': origin,
             'shape': shape,
-            'iid': int(iid),
             't': int(t),
             'z': int(z)
         }
@@ -235,18 +271,6 @@ class api():
 ######
 # Minerva API
 ###
-
-def format_input(args):
-    ''' Combine all parameters
-    '''
-    id_, color_, range_ = args
-    return {
-        'channel': id_,
-        'color': color_,
-        'min': range_[0],
-        'max': range_[1],
-    }
-
 
 def do_crop(load_tile, channels, tile_size, full_origin, full_size,
             levels=1, max_size=2000):
@@ -322,7 +346,7 @@ def main(args):
         description='Crop a region'
     )
 
-    default_url = '/548111/0/0/?c=1|0:65535$FF0000'
+    default_url = '/0/0/?c=1|0:65535$FF0000'
     default_url += '&region=0,0,1024,1024'
     cmd.add_argument(
         'url', nargs='?', default=default_url,
@@ -350,7 +374,7 @@ def main(args):
         return
 
     minerva_pool = 'us-east-1_YuTF9ST4J'
-    minerva_client = ''
+    minerva_client = '6ctsnjjglmtna2q5fgtrjug47k'
     uuid = '769cfb14-f583-4f22-9f48-94a24e09fd7f'
 
     srp = AWSSRP(username, password, minerva_pool, minerva_client)
@@ -358,11 +382,12 @@ def main(args):
     token = result['AuthenticationResult']['IdToken']
 
     # Read parameters from URL and API
-    keys = api.scaled_region(parsed.url, uuid, token)
+    split_url, query_dict = omero_api.read_url(uuid + parsed.url)
+    keys = omero_api.scaled_region(split_url, query_dict, token)
 
     # Make array of channel parameters
     inputs = zip(keys['chan'], keys['c'], keys['r'])
-    channels = map(format_input, inputs)
+    channels = map(minerva_api.format_input, inputs)
 
     # Minerva loads the tiles
     def ask_minerva(c, l, i, j):
@@ -374,7 +399,7 @@ def main(args):
             'y': j
         }
         limit = keys['limit']
-        return minerva.image(uuid, token, c, limit, **keywords)
+        return minerva_api.image(uuid, token, c, limit, **keywords)
 
     # Minerva does the cropping
     out = do_crop(ask_minerva, channels, keys['tile_size'],

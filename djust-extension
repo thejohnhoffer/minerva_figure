@@ -1,0 +1,1540 @@
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/figure/
+Resolving omero.hms.harvard.edu (omero.hms.harvard.edu)... 134.174.149.200
+Connecting to omero.hms.harvard.edu (omero.hms.harvard.edu)|134.174.149.200|:443... connected.
+WARNING: cannot verify omero.hms.harvard.edu's certificate, issued by ‘CN=InCommon RSA Server CA,OU=InCommon,O=Internet2,L=Ann Arbor,ST=MI,C=US’:
+  Unable to locally verify the issuer's authority.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘omero.hms.harvard.edu/figure/index.html’
+
+     0K .......... .......... .......... .......... .......... 27.2M
+    50K                                                        1743G=0.002s
+
+2018-08-24 13:59:33 (27.7 MB/s) - ‘omero.hms.harvard.edu/figure/index.html’ saved [52136]
+
+Loading robots.txt; please ignore errors.
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/robots.txt
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:33 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/css/bootstrap.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 119892 (117K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/css/bootstrap.css’
+
+     0K .......... .......... .......... .......... .......... 42% 39.9M 0s
+    50K .......... .......... .......... .......... .......... 85% 43.8M 0s
+   100K .......... .......                                    100% 75.5M=0.003s
+
+2018-08-24 13:59:33 (44.7 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/css/bootstrap.css’ saved [119892/119892]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3487 (3.4K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css’
+
+     0K ...                                                   100%  644M=0s
+
+2018-08-24 13:59:33 (644 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css’ saved [3487/3487]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/css/figure.css?version=4.0.0
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 22020 (22K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/figure/css/figure.css?version=4.0.0’
+
+     0K .......... .......... .                               100% 85.4M=0s
+
+2018-08-24 13:59:33 (85.4 MB/s) - ‘omero.hms.harvard.edu/static/figure/css/figure.css?version=4.0.0’ saved [22020/22020]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-1.11.1.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 282766 (276K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-1.11.1.js’
+
+     0K .......... .......... .......... .......... .......... 18% 42.8M 0s
+    50K .......... .......... .......... .......... .......... 36% 41.7M 0s
+   100K .......... .......... .......... .......... .......... 54% 54.6M 0s
+   150K .......... .......... .......... .......... .......... 72% 50.2M 0s
+   200K .......... .......... .......... .......... .......... 90% 49.0M 0s
+   250K .......... .......... ......                          100% 72.7M=0.006s
+
+2018-08-24 13:59:33 (48.8 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-1.11.1.js’ saved [282766/282766]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/js/ome.csrf.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3570 (3.5K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.csrf.js?_5.4.7.25-gs-ice36’
+
+     0K ...                                                   100%  680M=0s
+
+2018-08-24 13:59:33 (680 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.csrf.js?_5.4.7.25-gs-ice36’ saved [3570/3570]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.base.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 779 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.base.css’
+
+     0K                                                       100%  153M=0s
+
+2018-08-24 13:59:33 (153 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.base.css’ saved [779/779]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 436715 (426K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js’
+
+     0K .......... .......... .......... .......... .......... 11% 57.3M 0s
+    50K .......... .......... .......... .......... .......... 23% 63.0M 0s
+   100K .......... .......... .......... .......... .......... 35% 43.5M 0s
+   150K .......... .......... .......... .......... .......... 46% 54.1M 0s
+   200K .......... .......... .......... .......... .......... 58% 73.1M 0s
+   250K .......... .......... .......... .......... .......... 70% 60.6M 0s
+   300K .......... .......... .......... .......... .......... 82% 53.6M 0s
+   350K .......... .......... .......... .......... .......... 93% 44.6M 0s
+   400K .......... .......... ......                          100%  199M=0.007s
+
+2018-08-24 13:59:33 (57.3 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js’ saved [436715/436715]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/webclient/
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘omero.hms.harvard.edu/webclient/index.html’
+
+     0K .......... .......... .......... .......... .......... 49.9M
+    50K .......... .......... .......... .......... .......... 55.9M
+   100K .......... .......... .......... ..........            61.7M=0.002s
+
+2018-08-24 13:59:33 (55.0 MB/s) - ‘omero.hms.harvard.edu/webclient/index.html’ saved [143983]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/json2.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 17348 (17K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/json2.js’
+
+     0K .......... ......                                     100%  226M=0s
+
+2018-08-24 13:59:33 (226 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/json2.js’ saved [17348/17348]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/underscore-1.3.3.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 37390 (37K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/underscore-1.3.3.js’
+
+     0K .......... .......... .......... ......               100% 72.1M=0s
+
+2018-08-24 13:59:33 (72.1 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/underscore-1.3.3.js’ saved [37390/37390]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/backbone-1.0.0.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 59497 (58K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/backbone-1.0.0.js’
+
+     0K .......... .......... .......... .......... .......... 86% 44.0M 0s
+    50K ........                                              100%  188M=0.001s
+
+2018-08-24 13:59:33 (49.2 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/backbone-1.0.0.js’ saved [59497/59497]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/raphael-2.1.2/raphael-min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 91476 (89K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/raphael-2.1.2/raphael-min.js’
+
+     0K .......... .......... .......... .......... .......... 55% 81.7M 0s
+    50K .......... .......... .......... .........            100% 47.2M=0.001s
+
+2018-08-24 13:59:33 (61.8 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/raphael-2.1.2/raphael-min.js’ saved [91476/91476]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/mousetrap-1.5.3/mousetrap.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 4695 (4.6K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/mousetrap-1.5.3/mousetrap.min.js’
+
+     0K ....                                                  100%  808M=0s
+
+2018-08-24 13:59:33 (808 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/mousetrap-1.5.3/mousetrap.min.js’ saved [4695/4695]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/backbone.mousetrap/backbone.mousetrap.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2032 (2.0K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/backbone.mousetrap/backbone.mousetrap.js’
+
+     0K .                                                     100%  349M=0s
+
+2018-08-24 13:59:33 (349 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/backbone.mousetrap/backbone.mousetrap.js’ saved [2032/2032]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/js/bootstrap.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 58458 (57K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/js/bootstrap.js’
+
+     0K .......... .......... .......... .......... .......... 87% 91.8M 0s
+    50K .......                                               100%  228M=0.001s
+
+2018-08-24 13:59:33 (99.2 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/js/bootstrap.js’ saved [58458/58458]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 17189 (17K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js’
+
+     0K .......... ......                                     100%  286M=0s
+
+2018-08-24 13:59:33 (286 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js’ saved [17189/17189]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/markdown-browser-0.6.0-beta1/markdown.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 16798 (16K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/markdown-browser-0.6.0-beta1/markdown.min.js’
+
+     0K .......... ......                                     100%  299M=0s
+
+2018-08-24 13:59:33 (299 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/markdown-browser-0.6.0-beta1/markdown.min.js’ saved [16798/16798]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/shape-editor-4.0.0/shape-editor.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 74385 (73K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/shape-editor-4.0.0/shape-editor.js’
+
+     0K .......... .......... .......... .......... .......... 68% 82.6M 0s
+    50K .......... .......... ..                              100%  183M=0.001s
+
+2018-08-24 13:59:33 (99.6 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/shape-editor-4.0.0/shape-editor.js’ saved [74385/74385]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/templates.js?version=4.0.0
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 62619 (61K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/templates.js?version=4.0.0’
+
+     0K .......... .......... .......... .......... .......... 81% 97.5M 0s
+    50K .......... .                                          100%  302M=0.001s
+
+2018-08-24 13:59:33 (111 MB/s) - ‘omero.hms.harvard.edu/static/figure/templates.js?version=4.0.0’ saved [62619/62619]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/figure.js?version=4.0.0
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 328387 (321K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/figure/figure.js?version=4.0.0’
+
+     0K .......... .......... .......... .......... .......... 15% 76.8M 0s
+    50K .......... .......... .......... .......... .......... 31% 78.2M 0s
+   100K .......... .......... .......... .......... .......... 46% 86.5M 0s
+   150K .......... .......... .......... .......... .......... 62% 85.9M 0s
+   200K .......... .......... .......... .......... .......... 77% 67.6M 0s
+   250K .......... .......... .......... .......... .......... 93% 95.3M 0s
+   300K .......... ..........                                 100% 69.8M=0.004s
+
+2018-08-24 13:59:33 (79.9 MB/s) - ‘omero.hms.harvard.edu/static/figure/figure.js?version=4.0.0’ saved [328387/328387]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.eot
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 14079 (14K) [application/vnd.ms-fontobject]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.eot’
+
+     0K .......... ...                                        100%  454M=0s
+
+2018-08-24 13:59:33 (454 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.eot’ saved [14079/14079]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.eot?
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 14079 (14K) [application/vnd.ms-fontobject]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.eot?’
+
+     0K .......... ...                                        100%  428M=0s
+
+2018-08-24 13:59:33 (428 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.eot?’ saved [14079/14079]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.woff
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 16448 (16K) [application/font-woff]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.woff’
+
+     0K .......... ......                                     100%  295M=0s
+
+2018-08-24 13:59:33 (295 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.woff’ saved [16448/16448]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.ttf
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 29512 (29K) [application/octet-stream]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.ttf’
+
+     0K .......... .......... ........                        100%  251M=0s
+
+2018-08-24 13:59:33 (251 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.ttf’ saved [29512/29512]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.svg
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 63157 (62K) [image/svg+xml]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.svg’
+
+     0K .......... .......... .......... .......... .......... 81%  119M 0s
+    50K .......... .                                          100%  354M=0s
+
+2018-08-24 13:59:33 (136 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-3.0.0/fonts/glyphicons-halflings-regular.svg’ saved [63157/63157]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/saturation.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 8817 (8.6K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/saturation.png’
+
+     0K ........                                              100%  295M=0s
+
+2018-08-24 13:59:33 (295 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/saturation.png’ saved [8817/8817]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/hue.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2972 (2.9K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/hue.png’
+
+     0K ..                                                    100%  620M=0s
+
+2018-08-24 13:59:33 (620 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/hue.png’ saved [2972/2972]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/alpha.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3271 (3.2K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/alpha.png’
+
+     0K ...                                                   100%  693M=0s
+
+2018-08-24 13:59:33 (693 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/alpha.png’ saved [3271/3271]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/hue-horizontal.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2837 (2.8K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/hue-horizontal.png’
+
+     0K ..                                                    100%  599M=0s
+
+2018-08-24 13:59:33 (599 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/hue-horizontal.png’ saved [2837/2837]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3635 (3.5K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png’
+
+     0K ...                                                   100%  671M=0s
+
+2018-08-24 13:59:33 (671 MB/s) - ‘omero.hms.harvard.edu/static/figure/3rdparty/bootstrap-colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png’ saved [3635/3635]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/markdown_light32x20.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3089 (3.0K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/markdown_light32x20.png’
+
+     0K ...                                                   100%  581M=0s
+
+2018-08-24 13:59:33 (581 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/markdown_light32x20.png’ saved [3089/3089]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/markdown_dark32x20.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3116 (3.0K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/markdown_dark32x20.png’
+
+     0K ...                                                   100%  612M=0s
+
+2018-08-24 13:59:33 (612 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/markdown_dark32x20.png’ saved [3116/3116]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/button-down.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3624 (3.5K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/button-down.png’
+
+     0K ...                                                   100%  713M=0s
+
+2018-08-24 13:59:33 (713 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/button-down.png’ saved [3624/3624]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/button-up.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3468 (3.4K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/button-up.png’
+
+     0K ...                                                   100%  625M=0s
+
+2018-08-24 13:59:33 (625 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/button-up.png’ saved [3468/3468]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/button-flat.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2827 (2.8K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/button-flat.png’
+
+     0K ..                                                    100%  500M=0s
+
+2018-08-24 13:59:33 (500 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/button-flat.png’ saved [2827/2827]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/button-down-grey.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3274 (3.2K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/button-down-grey.png’
+
+     0K ...                                                   100%  672M=0s
+
+2018-08-24 13:59:33 (672 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/button-down-grey.png’ saved [3274/3274]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/projection20.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3585 (3.5K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/projection20.png’
+
+     0K ...                                                   100%  732M=0s
+
+2018-08-24 13:59:33 (732 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/projection20.png’ saved [3585/3585]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/crop20.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3022 (3.0K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/crop20.png’
+
+     0K ..                                                    100%  581M=0s
+
+2018-08-24 13:59:33 (581 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/crop20.png’ saved [3022/3022]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/gradient.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3405 (3.3K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/gradient.png’
+
+     0K ...                                                   100%  652M=0s
+
+2018-08-24 13:59:33 (652 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/gradient.png’ saved [3405/3405]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/luts_10.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 18556 (18K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/luts_10.png’
+
+     0K .......... ........                                   100%  264M=0s
+
+2018-08-24 13:59:33 (264 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/luts_10.png’ saved [18556/18556]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/cursor-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 245 [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/cursor-icon-16.png’
+
+     0K                                                       100% 57.6M=0s
+
+2018-08-24 13:59:33 (57.6 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/cursor-icon-16.png’ saved [245/245]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/square-outline-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 96 [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/square-outline-icon-16.png’
+
+     0K                                                       100% 19.2M=0s
+
+2018-08-24 13:59:33 (19.2 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/square-outline-icon-16.png’ saved [96/96]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/line-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2865 (2.8K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/line-icon-16.png’
+
+     0K ..                                                    100%  511M=0s
+
+2018-08-24 13:59:33 (511 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/line-icon-16.png’ saved [2865/2865]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/arrow-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2878 (2.8K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/arrow-icon-16.png’
+
+     0K ..                                                    100%  581M=0s
+
+2018-08-24 13:59:33 (581 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/arrow-icon-16.png’ saved [2878/2878]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/ellipse-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3020 (2.9K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/ellipse-icon-16.png’
+
+     0K ..                                                    100%  621M=0s
+
+2018-08-24 13:59:33 (621 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/ellipse-icon-16.png’ saved [3020/3020]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/polygon-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2880 (2.8K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/polygon-icon-16.png’
+
+     0K ..                                                    100%  622M=0s
+
+2018-08-24 13:59:33 (622 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/polygon-icon-16.png’ saved [2880/2880]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/figure/images/polyline-icon-16.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2874 (2.8K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/figure/images/polyline-icon-16.png’
+
+     0K ..                                                    100%  600M=0s
+
+2018-08-24 13:59:33 (600 MB/s) - ‘omero.hms.harvard.edu/static/figure/images/polyline-icon-16.png’ saved [2874/2874]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.core.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1472 (1.4K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.core.css’
+
+     0K .                                                     100%  302M=0s
+
+2018-08-24 13:59:33 (302 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.core.css’ saved [1472/1472]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.accordion.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 839 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.accordion.css’
+
+     0K                                                       100%  182M=0s
+
+2018-08-24 13:59:33 (182 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.accordion.css’ saved [839/839]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.autocomplete.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 321 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.autocomplete.css’
+
+     0K                                                       100% 69.7M=0s
+
+2018-08-24 13:59:33 (69.7 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.autocomplete.css’ saved [321/321]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.button.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2540 (2.5K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.button.css’
+
+     0K ..                                                    100%  442M=0s
+
+2018-08-24 13:59:33 (442 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.button.css’ saved [2540/2540]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.datepicker.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3636 (3.6K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.datepicker.css’
+
+     0K ...                                                   100%  628M=0s
+
+2018-08-24 13:59:33 (628 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.datepicker.css’ saved [3636/3636]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.dialog.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1322 (1.3K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.dialog.css’
+
+     0K .                                                     100%  257M=0s
+
+2018-08-24 13:59:33 (257 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.dialog.css’ saved [1322/1322]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.menu.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1453 (1.4K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.menu.css’
+
+     0K .                                                     100%  254M=0s
+
+2018-08-24 13:59:33 (254 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.menu.css’ saved [1453/1453]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.progressbar.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 617 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.progressbar.css’
+
+     0K                                                       100%  114M=0s
+
+2018-08-24 13:59:33 (114 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.progressbar.css’ saved [617/617]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.resizable.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1157 (1.1K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.resizable.css’
+
+     0K .                                                     100%  213M=0s
+
+2018-08-24 13:59:33 (213 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.resizable.css’ saved [1157/1157]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.selectable.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 277 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.selectable.css’
+
+     0K                                                       100% 58.9M=0s
+
+2018-08-24 13:59:33 (58.9 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.selectable.css’ saved [277/277]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.slider.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1313 (1.3K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.slider.css’
+
+     0K .                                                     100%  273M=0s
+
+2018-08-24 13:59:33 (273 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.slider.css’ saved [1313/1313]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.spinner.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1184 (1.2K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.spinner.css’
+
+     0K .                                                     100%  228M=0s
+
+2018-08-24 13:59:33 (228 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.spinner.css’ saved [1184/1184]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.tabs.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1222 (1.2K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.tabs.css’
+
+     0K .                                                     100%  240M=0s
+
+2018-08-24 13:59:33 (240 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.tabs.css’ saved [1222/1222]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.tooltip.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 422 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.tooltip.css’
+
+     0K                                                       100% 83.7M=0s
+
+2018-08-24 13:59:33 (83.7 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.tooltip.css’ saved [422/422]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/css/reset.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1137 (1.1K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/reset.css?_5.4.7.25-gs-ice36’
+
+     0K .                                                     100%  217M=0s
+
+2018-08-24 13:59:33 (217 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/reset.css?_5.4.7.25-gs-ice36’ saved [1137/1137]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/css/ome.body.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3038 (3.0K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.body.css?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  566M=0s
+
+2018-08-24 13:59:33 (566 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.body.css?_5.4.7.25-gs-ice36’ saved [3038/3038]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webclient/css/dusty.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 36527 (36K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/css/dusty.css?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... .......... .....                100%  114M=0s
+
+2018-08-24 13:59:33 (114 MB/s) - ‘omero.hms.harvard.edu/static/webclient/css/dusty.css?_5.4.7.25-gs-ice36’ saved [36527/36527]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/css/ome.header.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 30914 (30K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.header.css?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... ..........                      100%  284M=0s
+
+2018-08-24 13:59:33 (284 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.header.css?_5.4.7.25-gs-ice36’ saved [30914/30914]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webclient/css/layout.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 70778 (69K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/css/layout.css?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... .......... .......... .......... 72% 87.2M 0s
+    50K .......... .........                                  100% 70.1M=0.001s
+
+2018-08-24 13:59:33 (81.7 MB/s) - ‘omero.hms.harvard.edu/static/webclient/css/layout.css?_5.4.7.25-gs-ice36’ saved [70778/70778]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/css/ome.toolbar.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 5002 (4.9K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.toolbar.css?_5.4.7.25-gs-ice36’
+
+     0K ....                                                  100%  643M=0s
+
+2018-08-24 13:59:33 (643 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.toolbar.css?_5.4.7.25-gs-ice36’ saved [5002/5002]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery.chosen-1.2.0/chosen.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 12927 (13K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.chosen-1.2.0/chosen.css’
+
+     0K .......... ..                                         100%  286M=0s
+
+2018-08-24 13:59:33 (286 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.chosen-1.2.0/chosen.css’ saved [12927/12927]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/css/ome.jstree_theme.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 26091 (25K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.jstree_theme.css’
+
+     0K .......... .......... .....                           100%  171M=0s
+
+2018-08-24 13:59:33 (171 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.jstree_theme.css’ saved [26091/26091]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/js/ome.popup.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 35596 (35K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.popup.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... .......... ....                 100%  236M=0s
+
+2018-08-24 13:59:33 (236 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.popup.js?_5.4.7.25-gs-ice36’ saved [35596/35596]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/jquery.ui.touch-punch-0.2.3.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1291 (1.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.ui.touch-punch-0.2.3.min.js’
+
+     0K .                                                     100%  275M=0s
+
+2018-08-24 13:59:33 (275 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.ui.touch-punch-0.2.3.min.js’ saved [1291/1291]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webgateway/js/ome.nav.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 6306 (6.2K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.nav.js?_5.4.7.25-gs-ice36’
+
+     0K ......                                                100% 1.21G=0s
+
+2018-08-24 13:59:33 (1.21 GB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.nav.js?_5.4.7.25-gs-ice36’ saved [6306/6306]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.webclient.actions.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 42108 (41K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.webclient.actions.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... .......... .......... .         100%  214M=0s
+
+2018-08-24 13:59:33 (214 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.webclient.actions.js?_5.4.7.25-gs-ice36’ saved [42108/42108]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.infieldlabel-0.1.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3867 (3.8K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.infieldlabel-0.1.js’
+
+     0K ...                                                   100%  780M=0s
+
+2018-08-24 13:59:33 (780 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.infieldlabel-0.1.js’ saved [3867/3867]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/static/3rdparty/underscore/underscore-1.8.3-min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 16449 (16K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/underscore/underscore-1.8.3-min.js’
+
+     0K .......... ......                                     100%  260M=0s
+
+2018-08-24 13:59:33 (260 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/underscore/underscore-1.8.3-min.js’ saved [16449/16449]
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/webclient/%3C%25=%20webindex%20%25%3E%3C%25%20if(img.shareId)%20%7Bprint(%20img.shareId%20+%20'/')%7D%20%25%3Eimg_detail/%3C%25=%20img.id%20%25%3E/%3C%25%20if%20(dataset)%20print('?dataset='%20+%20dataset)%20%25%3E
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:33 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/webclient/%3C%25=%20staticUrl%20%25%3Eimage/rating0.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:33 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/webclient/?show=tag-%3C%25=%20tag.id%20%25%3E
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 302 FOUND
+Location: https://omero.hms.harvard.edu/webclient/usertags/?show=tag-%3C%=%20tag%20%%3E [following]
+--2018-08-24 13:59:33--  https://omero.hms.harvard.edu/webclient/usertags/?show=tag-%3C%25=%20tag%20%25%3E
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘omero.hms.harvard.edu/webclient/index.html?show=tag-%3C%25=%20tag.id%20%25%3E’
+
+     0K .......... .......... .......... .......... .......... 83.2M
+    50K .......... .......... .......... .......... .......... 57.6M
+   100K .......... .......... .......... ..........            99.3M=0.002s
+
+2018-08-24 13:59:34 (74.8 MB/s) - ‘omero.hms.harvard.edu/webclient/index.html?show=tag-%3C%25=%20tag.id%20%25%3E’ saved [143793]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/webclient/%3C%25%20if%20(ann.permissions.canDownload)%20%7B%20print(webindex%20+%20'annotation/'%20+%20ann.id)%7D%20else%20%7Bprint('
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:34 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/webclient/%3C%25=%20webindex%20%25%3Eaction/remove/file/%3C%25=%20ann.id%20%25%3E/
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:34 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/webclient/%3C%25=%20webindex%20%25%3Eaction/delete/file/%3C%25=%20ann.id%20%25%3E/
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:34 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/webclient/%3C%25=%20webindex%20%25%3Eavatar/%3C%25=%20ann.owner.id%20%25%3E/
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:34 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/webclient/%3C%25=%20static%20%25%3Eimage/icon_basic_delete.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2018-08-24 13:59:34 ERROR 404: NOT FOUND.
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/jquery.chosen-1.2.0/chosen.jquery.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 43067 (42K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.chosen-1.2.0/chosen.jquery.js’
+
+     0K .......... .......... .......... .......... ..        100%  208M=0s
+
+2018-08-24 13:59:34 (208 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.chosen-1.2.0/chosen.jquery.js’ saved [43067/43067]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/jquery.quicksearch-1.0.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 4179 (4.1K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.quicksearch-1.0.js’
+
+     0K ....                                                  100%  781M=0s
+
+2018-08-24 13:59:34 (781 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.quicksearch-1.0.js’ saved [4179/4179]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.editinplace-0.1.2.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 9498 (9.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.editinplace-0.1.2.js’
+
+     0K .........                                             100%  246M=0s
+
+2018-08-24 13:59:34 (246 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.editinplace-0.1.2.js’ saved [9498/9498]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.form-3.51.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 43891 (43K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.form-3.51.js’
+
+     0K .......... .......... .......... .......... ..        100%  204M=0s
+
+2018-08-24 13:59:34 (204 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.form-3.51.js’ saved [43891/43891]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.tagging_form.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 29218 (29K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.tagging_form.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... ........                        100%  240M=0s
+
+2018-08-24 13:59:34 (240 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.tagging_form.js?_5.4.7.25-gs-ice36’ saved [29218/29218]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_tags_pane.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 8126 (7.9K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_tags_pane.js?_5.4.7.25-gs-ice36’
+
+     0K .......                                               100% 1.36G=0s
+
+2018-08-24 13:59:34 (1.36 GB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_tags_pane.js?_5.4.7.25-gs-ice36’ saved [8126/8126]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_fileanns_pane.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 9170 (9.0K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_fileanns_pane.js?_5.4.7.25-gs-ice36’
+
+     0K ........                                              100%  237M=0s
+
+2018-08-24 13:59:34 (237 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_fileanns_pane.js?_5.4.7.25-gs-ice36’ saved [9170/9170]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_comments_pane.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 5456 (5.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_comments_pane.js?_5.4.7.25-gs-ice36’
+
+     0K .....                                                 100%  990M=0s
+
+2018-08-24 13:59:34 (990 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_comments_pane.js?_5.4.7.25-gs-ice36’ saved [5456/5456]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_customanns_pane.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 4821 (4.7K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_customanns_pane.js?_5.4.7.25-gs-ice36’
+
+     0K ....                                                  100%  852M=0s
+
+2018-08-24 13:59:34 (852 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_customanns_pane.js?_5.4.7.25-gs-ice36’ saved [4821/4821]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_ratings_pane.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 4482 (4.4K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_ratings_pane.js?_5.4.7.25-gs-ice36’
+
+     0K ....                                                  100%  836M=0s
+
+2018-08-24 13:59:34 (836 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_ratings_pane.js?_5.4.7.25-gs-ice36’ saved [4482/4482]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_mapanns_pane.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 6548 (6.4K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_mapanns_pane.js?_5.4.7.25-gs-ice36’
+
+     0K ......                                                100% 1.23G=0s
+
+2018-08-24 13:59:34 (1.23 GB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.right_panel_mapanns_pane.js?_5.4.7.25-gs-ice36’ saved [6548/6548]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/jquery.blockUI-2.66.0.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 19910 (19K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.blockUI-2.66.0.js’
+
+     0K .......... .........                                  100%  183M=0s
+
+2018-08-24 13:59:34 (183 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.blockUI-2.66.0.js’ saved [19910/19910]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.viewport.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 41559 (41K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.viewport.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... .......... ..........           100%  209M=0s
+
+2018-08-24 13:59:34 (209 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.viewport.js?_5.4.7.25-gs-ice36’ saved [41559/41559]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.viewportImage.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 24519 (24K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.viewportImage.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... ...                             100%  278M=0s
+
+2018-08-24 13:59:34 (278 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.viewportImage.js?_5.4.7.25-gs-ice36’ saved [24519/24519]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.gs_slider.js?_5.4.7.25-gs-ice36
+Connecting to omero.hms.harvard.edu (omero.hms.harvard.edu)|134.174.149.200|:443... connected.
+WARNING: cannot verify omero.hms.harvard.edu's certificate, issued by ‘CN=InCommon RSA Server CA,OU=InCommon,O=Internet2,L=Ann Arbor,ST=MI,C=US’:
+  Unable to locally verify the issuer's authority.
+HTTP request sent, awaiting response... 200 OK
+Length: 10509 (10K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.gs_slider.js?_5.4.7.25-gs-ice36’
+
+     0K ..........                                            100%  237M=0s
+
+2018-08-24 13:59:34 (237 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.gs_slider.js?_5.4.7.25-gs-ice36’ saved [10509/10509]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.gs_utils.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 11085 (11K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.gs_utils.js?_5.4.7.25-gs-ice36’
+
+     0K ..........                                            100%  289M=0s
+
+2018-08-24 13:59:34 (289 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.gs_utils.js?_5.4.7.25-gs-ice36’ saved [11085/11085]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.scalebardisplay.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2762 (2.7K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.scalebardisplay.js?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  568M=0s
+
+2018-08-24 13:59:34 (568 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.scalebardisplay.js?_5.4.7.25-gs-ice36’ saved [2762/2762]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2246 (2.2K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.css’
+
+     0K ..                                                    100%  383M=0s
+
+2018-08-24 13:59:34 (383 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.css’ saved [2246/2246]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/css/ome.colorbtn.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1123 (1.1K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.colorbtn.css?_5.4.7.25-gs-ice36’
+
+     0K .                                                     100%  219M=0s
+
+2018-08-24 13:59:34 (219 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.colorbtn.css?_5.4.7.25-gs-ice36’ saved [1123/1123]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/farbtastic-1.2/farbtastic.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 576 [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/farbtastic-1.2/farbtastic.css’
+
+     0K                                                       100%  113M=0s
+
+2018-08-24 13:59:34 (113 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/farbtastic-1.2/farbtastic.css’ saved [576/576]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/css/ome.postit.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2487 (2.4K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.postit.css?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  441M=0s
+
+2018-08-24 13:59:34 (441 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.postit.css?_5.4.7.25-gs-ice36’ saved [2487/2487]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 6607 (6.5K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.js’
+
+     0K ......                                                100% 1.12G=0s
+
+2018-08-24 13:59:34 (1.12 GB/s) - ‘omero.hms.harvard.edu/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.js’ saved [6607/6607]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.colorbtn.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 8494 (8.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.colorbtn.js?_5.4.7.25-gs-ice36’
+
+     0K ........                                              100%  255M=0s
+
+2018-08-24 13:59:34 (255 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.colorbtn.js?_5.4.7.25-gs-ice36’ saved [8494/8494]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/omero_image.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 24555 (24K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/omero_image.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... ...                             100%  153M=0s
+
+2018-08-24 13:59:34 (153 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/omero_image.js?_5.4.7.25-gs-ice36’ saved [24555/24555]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.smartdialog.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2848 (2.8K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.smartdialog.js?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  542M=0s
+
+2018-08-24 13:59:34 (542 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.smartdialog.js?_5.4.7.25-gs-ice36’ saved [2848/2848]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/aop-1.3.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 14808 (14K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/aop-1.3.js’
+
+     0K .......... ....                                       100%  364M=0s
+
+2018-08-24 13:59:34 (364 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/aop-1.3.js’ saved [14808/14808]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.postit.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3541 (3.5K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.postit.js?_5.4.7.25-gs-ice36’
+
+     0K ...                                                   100%  707M=0s
+
+2018-08-24 13:59:34 (707 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.postit.js?_5.4.7.25-gs-ice36’ saved [3541/3541]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/farbtastic-1.2/farbtastic.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 9220 (9.0K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/farbtastic-1.2/farbtastic.js’
+
+     0K .........                                             100%  261M=0s
+
+2018-08-24 13:59:34 (261 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/farbtastic-1.2/farbtastic.js’ saved [9220/9220]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/d3-3.5.17/d3.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 151725 (148K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/d3-3.5.17/d3.min.js’
+
+     0K .......... .......... .......... .......... .......... 33% 34.2M 0s
+    50K .......... .......... .......... .......... .......... 67% 34.7M 0s
+   100K .......... .......... .......... .......... ........  100% 51.8M=0.004s
+
+2018-08-24 13:59:34 (38.6 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/d3-3.5.17/d3.min.js’ saved [151725/151725]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.histogram.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 7987 (7.8K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.histogram.js?_5.4.7.25-gs-ice36’
+
+     0K .......                                               100% 1.42G=0s
+
+2018-08-24 13:59:34 (1.42 GB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.histogram.js?_5.4.7.25-gs-ice36’ saved [7987/7987]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/utils.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3334 (3.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/utils.js’
+
+     0K ...                                                   100%  637M=0s
+
+2018-08-24 13:59:34 (637 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/utils.js’ saved [3334/3334]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/PanoJS.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 45948 (45K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/PanoJS.js’
+
+     0K .......... .......... .......... .......... ....      100% 65.5M=0.001s
+
+2018-08-24 13:59:34 (65.5 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/PanoJS.js’ saved [45948/45948]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/controls.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 4662 (4.6K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/controls.js’
+
+     0K ....                                                  100%  970M=0s
+
+2018-08-24 13:59:34 (970 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/controls.js’ saved [4662/4662]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_Bisque.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3270 (3.2K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_Bisque.js’
+
+     0K ...                                                   100%  684M=0s
+
+2018-08-24 13:59:34 (684 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_Bisque.js’ saved [3270/3270]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_imgcnv.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3026 (3.0K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_imgcnv.js’
+
+     0K ..                                                    100%  642M=0s
+
+2018-08-24 13:59:34 (642 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_imgcnv.js’ saved [3026/3026]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_Zoomify.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2182 (2.1K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_Zoomify.js’
+
+     0K ..                                                    100%  481M=0s
+
+2018-08-24 13:59:34 (481 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/pyramid_Zoomify.js’ saved [2182/2182]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_thumbnail.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 12808 (13K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_thumbnail.js’
+
+     0K .......... ..                                         100%  294M=0s
+
+2018-08-24 13:59:34 (294 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_thumbnail.js’ saved [12808/12808]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_info.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2856 (2.8K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_info.js’
+
+     0K ..                                                    100%  602M=0s
+
+2018-08-24 13:59:34 (602 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_info.js’ saved [2856/2856]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_svg.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1340 (1.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_svg.js’
+
+     0K .                                                     100%  284M=0s
+
+2018-08-24 13:59:34 (284 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_svg.js’ saved [1340/1340]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_roi.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2163 (2.1K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_roi.js’
+
+     0K ..                                                    100%  464M=0s
+
+2018-08-24 13:59:34 (464 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_roi.js’ saved [2163/2163]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_scalebar.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1166 (1.1K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_scalebar.js’
+
+     0K .                                                     100%  182M=0s
+
+2018-08-24 13:59:34 (182 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/control_scalebar.js’ saved [1166/1166]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/jquery.mousewheel-3.0.6.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2396 (2.3K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.mousewheel-3.0.6.js’
+
+     0K ..                                                    100%  463M=0s
+
+2018-08-24 13:59:34 (463 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.mousewheel-3.0.6.js’ saved [2396/2396]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/hammer-2.0.2/hammer.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 17325 (17K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/hammer-2.0.2/hammer.min.js’
+
+     0K .......... ......                                     100%  254M=0s
+
+2018-08-24 13:59:34 (254 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/hammer-2.0.2/hammer.min.js’ saved [17325/17325]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/panojs.css
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2680 (2.6K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/panojs.css’
+
+     0K ..                                                    100%  564M=0s
+
+2018-08-24 13:59:34 (564 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/panojs-2.0.0/panojs.css’ saved [2680/2680]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/css/ome.gs_slider.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3361 (3.3K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.gs_slider.css?_5.4.7.25-gs-ice36’
+
+     0K ...                                                   100%  693M=0s
+
+2018-08-24 13:59:34 (693 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.gs_slider.css?_5.4.7.25-gs-ice36’ saved [3361/3361]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/css/ome.viewport.css?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 3477 (3.4K) [text/css]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/css/ome.viewport.css?_5.4.7.25-gs-ice36’
+
+     0K ...                                                   100%  669M=0s
+
+2018-08-24 13:59:34 (669 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/css/ome.viewport.css?_5.4.7.25-gs-ice36’ saved [3477/3477]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.plateview.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 8815 (8.6K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.plateview.js?_5.4.7.25-gs-ice36’
+
+     0K ........                                              100%  267M=0s
+
+2018-08-24 13:59:34 (267 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.plateview.js?_5.4.7.25-gs-ice36’ saved [8815/8815]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/js/ome.spwgridview.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 7111 (6.9K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/js/ome.spwgridview.js?_5.4.7.25-gs-ice36’
+
+     0K ......                                                100% 1.33G=0s
+
+2018-08-24 13:59:34 (1.33 GB/s) - ‘omero.hms.harvard.edu/static/webgateway/js/ome.spwgridview.js?_5.4.7.25-gs-ice36’ saved [7111/7111]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/img/spinner.gif
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 664 [image/gif]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/img/spinner.gif’
+
+     0K                                                       100%  116M=0s
+
+2018-08-24 13:59:34 (116 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/img/spinner.gif’ saved [664/664]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/3rdparty/jquery.jstree-3.0.8/jstree.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 251376 (245K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/3rdparty/jquery.jstree-3.0.8/jstree.js’
+
+     0K .......... .......... .......... .......... .......... 20% 55.8M 0s
+    50K .......... .......... .......... .......... .......... 40% 57.7M 0s
+   100K .......... .......... .......... .......... .......... 61% 52.4M 0s
+   150K .......... .......... .......... .......... .......... 81% 53.8M 0s
+   200K .......... .......... .......... .......... .....     100% 84.6M=0.004s
+
+2018-08-24 13:59:34 (58.7 MB/s) - ‘omero.hms.harvard.edu/static/3rdparty/jquery.jstree-3.0.8/jstree.js’ saved [251376/251376]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.locate_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 12875 (13K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.locate_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K .......... ..                                         100%  385M=0s
+
+2018-08-24 13:59:34 (385 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.locate_plugin.js?_5.4.7.25-gs-ice36’ saved [12875/12875]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.conditionalselect_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 696 [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.conditionalselect_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K                                                       100%  158M=0s
+
+2018-08-24 13:59:34 (158 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.conditionalselect_plugin.js?_5.4.7.25-gs-ice36’ saved [696/696]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.pagination_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2723 (2.7K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.pagination_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  594M=0s
+
+2018-08-24 13:59:34 (594 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.pagination_plugin.js?_5.4.7.25-gs-ice36’ saved [2723/2723]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.fields_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2689 (2.6K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.fields_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  568M=0s
+
+2018-08-24 13:59:34 (568 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.fields_plugin.js?_5.4.7.25-gs-ice36’ saved [2689/2689]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.omecut_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 11529 (11K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.omecut_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .                                          100%  339M=0s
+
+2018-08-24 13:59:34 (339 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.omecut_plugin.js?_5.4.7.25-gs-ice36’ saved [11529/11529]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.ometools_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 2210 (2.2K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.ometools_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K ..                                                    100%  454M=0s
+
+2018-08-24 13:59:34 (454 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.ometools_plugin.js?_5.4.7.25-gs-ice36’ saved [2210/2210]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.childcount_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1075 (1.0K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.childcount_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K .                                                     100%  221M=0s
+
+2018-08-24 13:59:34 (221 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.childcount_plugin.js?_5.4.7.25-gs-ice36’ saved [1075/1075]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.truncatetext_plugin.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1762 (1.7K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.truncatetext_plugin.js?_5.4.7.25-gs-ice36’
+
+     0K .                                                     100%  366M=0s
+
+2018-08-24 13:59:34 (366 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/jquery.jstree.truncatetext_plugin.js?_5.4.7.25-gs-ice36’ saved [1762/1762]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.chgrp.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 19005 (19K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.chgrp.js?_5.4.7.25-gs-ice36’
+
+     0K .......... ........                                   100%  260M=0s
+
+2018-08-24 13:59:34 (260 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.chgrp.js?_5.4.7.25-gs-ice36’ saved [19005/19005]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webclient/javascript/ome.tree.js?_5.4.7.25-gs-ice36
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 60815 (59K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/webclient/javascript/ome.tree.js?_5.4.7.25-gs-ice36’
+
+     0K .......... .......... .......... .......... .......... 84% 65.7M 0s
+    50K .........                                             100%  284M=0.001s
+
+2018-08-24 13:59:34 (74.8 MB/s) - ‘omero.hms.harvard.edu/static/webclient/javascript/ome.tree.js?_5.4.7.25-gs-ice36’ saved [60815/60815]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/img/spinner_big.gif
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 18566 (18K) [image/gif]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/img/spinner_big.gif’
+
+     0K .......... ........                                   100%  282M=0s
+
+2018-08-24 13:59:34 (282 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/img/spinner_big.gif’ saved [18566/18566]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/omero_webtagging_autotag/js/bundle.min.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 605090 (591K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/omero_webtagging_autotag/js/bundle.min.js’
+
+     0K .......... .......... .......... .......... ..........  8% 60.3M 0s
+    50K .......... .......... .......... .......... .......... 16% 70.1M 0s
+   100K .......... .......... .......... .......... .......... 25% 68.4M 0s
+   150K .......... .......... .......... .......... .......... 33% 56.2M 0s
+   200K .......... .......... .......... .......... .......... 42% 75.7M 0s
+   250K .......... .......... .......... .......... .......... 50% 63.3M 0s
+   300K .......... .......... .......... .......... .......... 59% 58.4M 0s
+   350K .......... .......... .......... .......... .......... 67% 64.9M 0s
+   400K .......... .......... .......... .......... .......... 76% 53.6M 0s
+   450K .......... .......... .......... .......... .......... 84% 65.1M 0s
+   500K .......... .......... .......... .......... .......... 93%  130M 0s
+   550K .......... .......... .......... ..........           100% 78.8M=0.009s
+
+2018-08-24 13:59:34 (66.8 MB/s) - ‘omero.hms.harvard.edu/static/omero_webtagging_autotag/js/bundle.min.js’ saved [605090/605090]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/forms/js/bundle.js
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 587358 (574K) [application/javascript]
+Saving to: ‘omero.hms.harvard.edu/static/forms/js/bundle.js’
+
+     0K .......... .......... .......... .......... ..........  8%  103M 0s
+    50K .......... .......... .......... .......... .......... 17% 83.3M 0s
+   100K .......... .......... .......... .......... .......... 26% 76.8M 0s
+   150K .......... .......... .......... .......... .......... 34% 55.1M 0s
+   200K .......... .......... .......... .......... .......... 43% 85.4M 0s
+   250K .......... .......... .......... .......... .......... 52% 91.1M 0s
+   300K .......... .......... .......... .......... .......... 61% 95.3M 0s
+   350K .......... .......... .......... .......... .......... 69% 54.0M 0s
+   400K .......... .......... .......... .......... .......... 78%  113M 0s
+   450K .......... .......... .......... .......... .......... 87%  110M 0s
+   500K .......... .......... .......... .......... .......... 95% 61.9M 0s
+   550K .......... .......... ...                             100% 99.5M=0.007s
+
+2018-08-24 13:59:34 (80.0 MB/s) - ‘omero.hms.harvard.edu/static/forms/js/bundle.js’ saved [587358/587358]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/img/ome.ico
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 1150 (1.1K) [image/x-icon]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/img/ome.ico’
+
+     0K .                                                     100%  247M=0s
+
+2018-08-24 13:59:34 (247 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/img/ome.ico’ saved [1150/1150]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/static/webgateway/img/logo2.png
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 4273 (4.2K) [image/png]
+Saving to: ‘omero.hms.harvard.edu/static/webgateway/img/logo2.png’
+
+     0K ....                                                  100%  765M=0s
+
+2018-08-24 13:59:34 (765 MB/s) - ‘omero.hms.harvard.edu/static/webgateway/img/logo2.png’ saved [4273/4273]
+
+--2018-08-24 13:59:34--  https://omero.hms.harvard.edu/webclient/history/
+Reusing existing connection to omero.hms.harvard.edu:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘omero.hms.harvard.edu/webclient/history/index.html’
+
+     0K .......... .......... .......... .......... .......... 94.9M
+    50K ........

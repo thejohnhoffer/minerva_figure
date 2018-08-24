@@ -33,7 +33,7 @@ class Webserver(object):
             raise
 
         minerva_pool = 'us-east-1_YuTF9ST4J'
-        minerva_client = '7gv29ie4pak64c63frt93mv8lq'
+        minerva_client = '6ctsnjjglmtna2q5fgtrjug47k'
 
         srp = AWSSRP(username, password, minerva_pool, minerva_client)
         result = srp.authenticate_user()
@@ -45,13 +45,11 @@ class Webserver(object):
         stat_in = {
             '_root': __name__
         }
-        # Create the webapp with both access layers
         self._webapp = Application([
-            (r'/render_scaled_region/(.*)', RegionHandler, app_in),
-            (r'/imgData/(.*)', MetaHandler, app_in),
-            # A file requested from root of static
-            (r'/()', StaticHandler, stat_in),
-            (r'/(omero_figure/.*)', StaticHandler, stat_in),
+            (r'/webgateway/render_scaled_region/(.*)', RegionHandler, app_in),
+            (r'/webgateway/render_image/(.*)', RegionHandler, app_in),
+            (r'/figure/imgData/(.*)/', MetaHandler, app_in),
+            (r'/(.*)', StaticHandler, stat_in),
         ], autoreload=True)
 
         self._port = None
@@ -112,21 +110,25 @@ def parse_argv(argv):
     parser.add_argument('port', type=int, nargs='?',
                         default=8000, help='a port')
 
-    parsed = parser.parse_args(argv[1:])
+    parsed = parser.parse_args(argv)
     return vars(parsed)
 
 
-if __name__ == "__main__":
-    ARGS = parse_argv(sys.argv)
-    PORT = ARGS['port']
+def main(*argv):
+    args = parse_argv(argv)
+    port = args['port']
 
     # Start a webserver on given port
     try:
-        SERVER = Webserver()
+        server = Webserver()
     except KeyError:
         sys.exit()
     try:
-        IOLOOP = SERVER.start(PORT)
-        IOLOOP.start()
+        ioloop = server.start(port)
+        ioloop.start()
     except KeyboardInterrupt:
-        SERVER.stop()
+        server.stop()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

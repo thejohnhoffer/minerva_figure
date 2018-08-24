@@ -1,12 +1,15 @@
-import io
+import png
 import numpy as np
-import skimage
+import io
 import boto3
 from tornado import web, gen
 from mimetypes import types_map
 from concurrent.futures import ThreadPoolExecutor
 
-import gists.crop as crop
+from minerva_lib import crop
+from gists.crop import do_crop
+from gists.crop import omero_api
+from gists.crop import minerva_api
 
 
 s3 = boto3.resource('s3')
@@ -49,9 +52,12 @@ class RegionHandler(web.RequestHandler):
         mime_type = types_map.get('png', self._basic_mime)
         self.set_header('Content-Type', mime_type)
 
-        out_file = io.StringIO()
-        skimage.io.imsave(out_file, data)
-        self.write(out_file.read())
+        out_file = open('tmp.png', 'wb')
+        print(np.max(data), data.shape)
+        png.from_array(data, mode='RGB').save(out_file)
+        test_bytes = open('tmp.png', 'rb').read()
+        print(len(test_bytes))
+        self.write(test_bytes)
 
     def parse(self, path):
         ''' Get image for uuid
@@ -63,16 +69,18 @@ class RegionHandler(web.RequestHandler):
             the image
         '''
         split_path = path.split('/')
-        url = ''.join(split_path[1:])
         uuid = split_path[0]
         token = self.token
 
+        query_args = self.request.arguments
+        query_dict = {k: v[0].decode("utf-8") for k, v in query_args.items()}
+
         # Read parameters from URL and API
-        keys = crop.api.scaled_region(url, uuid, token)
+        keys = omero_api.scaled_region(split_path, query_dict, token)
 
         # Make array of channel parameters
         inputs = zip(keys['chan'], keys['c'], keys['r'])
-        channels = map(crop.format_input, inputs)
+        channels = map(minerva_api.format_input, inputs)
 
         # OMERO loads the tiles
         def ask_minerva(c, l, i, j):
@@ -84,11 +92,40 @@ class RegionHandler(web.RequestHandler):
                 'y': j
             }
             limit = keys['limit']
-            return crop.minerva.image(uuid, token, c, limit, **keywords)
+            return minerva_api.image(uuid, token, c, limit, **keywords)
+
+        # Region with margins
+        outer_origin = keys['origin']
+        outer_shape = keys['shape']
+        outer_end = np.array(outer_origin) + outer_shape
+
+        # Actual image content
+        image_shape = keys['image_size']
+        request_origin = np.maximum(outer_origin, 0)
+        request_end = np.minimum(outer_end, image_shape)
+        request_shape = request_end - request_origin
+
+        # Return nothing for an ivalid request
+        valid = crop.validate_region_bounds(request_origin, request_shape,
+                                            image_shape)
+        if not valid:
+            return np.array([])
 
         # Minerva does the cropping
-        out = crop.do_crop(ask_minerva, channels, keys['tile_size'],
-                           keys['origin'], keys['shape'], keys['levels'],
-                           keys['max_size'])
+        image = do_crop(ask_minerva, channels, keys['tile_size'],
+                        request_origin, request_shape, keys['levels'],
+                        keys['max_size'])
+
+        # Use y, x, color output shape
+        out_w, out_h = outer_shape
+        out = np.ones((out_h, out_w, 3)) * 127
+
+        # Position cropped region within margins
+        position = request_origin - outer_origin
+        subregion = [
+            [0, 0],
+            request_shape
+        ]
+        out = crop.stitch_tile(out, subregion, position, image)
 
         return np.uint8(255 * out)

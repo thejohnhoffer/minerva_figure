@@ -53,20 +53,25 @@ class MetaHandler(web.RequestHandler):
 
         self.write(json.dumps(data))
 
-    def parse(self, uuid):
+    def parse(self, uuid_index):
         ''' Get image data for uuid
 
         Arguments:
-            uuid: Minerva image identifier
+            uuid_index: Minerva image identifier index
 
         Returns:
             the imagedata dictionary
         '''
 
-        metadata_file = 'metadata.xml'
-        bucket = 'minerva-test-cf-common-tilebucket-yhuku9umej1s'
+        uuids = [
+            '0af50f96-3b0f-467d-aa29-ecbe1935f1bf'
+        ]
+        uuid = uuids[int(uuid_index) % len(uuids)]
 
-        url = 'https://ba7xgutvbc.execute-api.'
+        metadata_file = 'metadata.xml'
+        bucket = 'minerva-test-cf-common-tilebucket-1su418jflefem'
+
+        url = 'https://lze4t3ladb.execute-api.'
         url += f'us-east-1.amazonaws.com/dev/image/{uuid}'
 
         req = urllib.request.Request(url, headers={
@@ -75,14 +80,13 @@ class MetaHandler(web.RequestHandler):
         try:
             with urllib.request.urlopen(req) as f:
                 result = json.loads(f.read())
-                prefix = result['data']['bfu_uuid']
+                prefix = result['data']['fileset_uuid']
 
         except urllib.error.HTTPError as e:
             print(e, file=sys.stderr)
             return {}
 
         try:
-            print(bucket, prefix, metadata_file)
             obj = s3.Object(bucket, f'{prefix}/{metadata_file}')
             root_xml = obj.get()['Body'].read().decode('utf-8')
             root = ET.fromstring(root_xml)
