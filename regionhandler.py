@@ -52,12 +52,11 @@ class RegionHandler(web.RequestHandler):
         mime_type = types_map.get('png', self._basic_mime)
         self.set_header('Content-Type', mime_type)
 
-        out_file = open('tmp.png', 'wb')
-        print(np.max(data), data.shape)
-        png.from_array(data, mode='RGB').save(out_file)
-        test_bytes = open('tmp.png', 'rb').read()
-        print(len(test_bytes))
-        self.write(test_bytes)
+        with io.BytesIO() as out_file:
+            png.from_array(data, mode='RGB').save(out_file)
+            out_file.seek(0)
+            test_bytes = out_file.read()
+            self.write(test_bytes)
 
     def parse(self, path):
         ''' Get image for uuid
