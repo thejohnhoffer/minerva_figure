@@ -117,7 +117,7 @@ class RegionHandler(web.RequestHandler):
 
         # Use y, x, color output shape
         out_w, out_h = outer_shape
-        out = np.ones((out_h, out_w, 3)) * 127
+        out = np.ones((out_h, out_w, 3)) * 0.5
 
         # Position cropped region within margins
         position = request_origin - outer_origin
@@ -125,6 +125,7 @@ class RegionHandler(web.RequestHandler):
             [0, 0],
             request_shape
         ]
+
         out = crop.stitch_tile(out, subregion, position, image)
 
         return np.uint8(255 * out)
