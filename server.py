@@ -42,14 +42,20 @@ class Webserver(object):
         app_in = {
             'token': token
         }
-        stat_in = {
-            '_root': __name__
-        }
         self._webapp = Application([
             (r'/webgateway/render_scaled_region/(.*)', RegionHandler, app_in),
             (r'/webgateway/render_image/(.*)', RegionHandler, app_in),
             (r'/figure/imgData/(.*)/', MetaHandler, app_in),
-            (r'/(.*)', StaticHandler, stat_in),
+            (r'/webgateway/open_with/(.*)', StaticHandler, {
+                'root': __name__,
+                'index': 'index.json',
+                'subfolder': 'open_with'
+            }),
+            (r'/(.*)', StaticHandler, {
+                'root': __name__,
+                'index': 'index.html',
+                'subfolder': 'static'
+            }),
         ], autoreload=True)
 
         self._port = None
