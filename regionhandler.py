@@ -116,15 +116,15 @@ class RegionHandler(web.RequestHandler):
                         keys['max_size'])
 
         # Use y, x, color output shape
-        out_w, out_h = outer_shape
+        out_w, out_h = outer_shape.astype(np.int64)
         out = np.ones((out_h, out_w, 3)) * 0.5
 
         # Position cropped region within margins
-        position = request_origin - outer_origin
-        subregion = [
+        position = (request_origin - outer_origin).astype(np.int64)
+        subregion = np.array([
             [0, 0],
             request_shape
-        ]
+        ], dtype=np.int64)
 
         out = crop.stitch_tile(out, subregion, position, image)
 
