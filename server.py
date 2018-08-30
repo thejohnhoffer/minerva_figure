@@ -1,7 +1,6 @@
 ''' A simple static filie and API server
 '''
 import sys
-import os
 import argparse
 
 from tornado.ioloop import IOLoop
@@ -10,8 +9,6 @@ from statichandler import StaticHandler
 from regionhandler import RegionHandler
 from metahandler import MetaHandler
 
-from gists.aws_srp import AWSSRP
-
 
 class Webserver(object):
     ''' A simple tornado webserver
@@ -19,33 +16,16 @@ class Webserver(object):
 
     def __init__(self):
 
-        # Set up AWS Authentication
-        try:
-            username = os.environ['MINERVA_USERNAME']
-        except KeyError:
-            print('must have MINERVA_USERNAME in environ', file=sys.stderr)
-            raise
+        minerva_bucket = 'minerva-test-cf-common-tilebucket-1su418jflefem'
+        minerva_domain = 'lze4t3ladb.execute-api.us-east-1.amazonaws.com/dev'
 
-        try:
-            password = os.environ['MINERVA_PASSWORD']
-        except KeyError:
-            print('must have MINERVA_PASSWORD in environ', file=sys.stderr)
-            raise
-
-        minerva_pool = 'us-east-1_YuTF9ST4J'
-        minerva_client = '6ctsnjjglmtna2q5fgtrjug47k'
-
-        srp = AWSSRP(username, password, minerva_pool, minerva_client)
-        result = srp.authenticate_user()
-        token = result['AuthenticationResult']['IdToken']
-
-        app_in = {
-            'token': token
-        }
         self._webapp = Application([
-            (r'/webgateway/render_scaled_region/(.*)', RegionHandler, app_in),
-            (r'/webgateway/render_image/(.*)', RegionHandler, app_in),
-            (r'/figure/imgData/(.*)/', MetaHandler, app_in),
+            (r'/webgateway/render_scaled_region/(.*)', RegionHandler, {}),
+            (r'/webgateway/render_image/(.*)', RegionHandler, {}),
+            (r'/figure/imgData/(.*)/', MetaHandler, {
+                'bucket': minerva_bucket,
+                'domain': minerva_domain
+            }),
             (r'/webgateway/open_with/(.*)', StaticHandler, {
                 'root': __name__,
                 'index': 'index.json',

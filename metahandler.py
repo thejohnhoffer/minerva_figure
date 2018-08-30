@@ -19,14 +19,16 @@ class MetaHandler(web.RequestHandler):
     '''
     _basic_mime = 'text/plain'
 
-    def initialize(self, token):
-        ''' Create new handler for static data
+    def initialize(self, bucket, domain):
+        ''' Create new handler for metadata
 
         Arguments:
-            token: AWS Cognito Id Token
-
+            bucket: s3 tile bucket name
+            domain: *.*.*.amazonaws.com/*
         '''
-        self.token = token
+        self.bucket = bucket
+        self.domain = domain
+
         self._ex = ThreadPoolExecutor(max_workers=10)
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET')
@@ -53,29 +55,30 @@ class MetaHandler(web.RequestHandler):
 
         self.write(json.dumps(data))
 
-    def parse(self, uuid_index):
+    def parse(self, path):
         ''' Get image data for uuid
 
         Arguments:
-            uuid_index: Minerva image identifier index
+            uuid_index: token/uuid_index
 
         Returns:
             the imagedata dictionary
         '''
 
+        token, uuid_index = path.split('/')
         uuids = [
             '0af50f96-3b0f-467d-aa29-ecbe1935f1bf'
         ]
         uuid = uuids[int(uuid_index) % len(uuids)]
 
         metadata_file = 'metadata.xml'
-        bucket = 'minerva-test-cf-common-tilebucket-1su418jflefem'
+        bucket = self.bucket
+        domain = self.domain
 
-        url = 'https://lze4t3ladb.execute-api.'
-        url += f'us-east-1.amazonaws.com/dev/image/{uuid}'
+        url = f'https://{domain}/image/{uuid}'
 
         req = urllib.request.Request(url, headers={
-            'Authorization': self.token
+            'Authorization': token
         })
         try:
             with urllib.request.urlopen(req) as f:

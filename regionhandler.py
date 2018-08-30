@@ -20,14 +20,9 @@ class RegionHandler(web.RequestHandler):
     '''
     _basic_mime = 'text/plain'
 
-    def initialize(self, token):
-        ''' Create new handler for static data
-
-        Arguments:
-            token: AWS Cognito Id Token
-
+    def initialize(self):
+        ''' Create new handler for image requests
         '''
-        self.token = token
         self._ex = ThreadPoolExecutor(max_workers=10)
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET')
@@ -68,14 +63,14 @@ class RegionHandler(web.RequestHandler):
             the image
         '''
         split_path = path.split('/')
-        uuid = split_path[0]
-        token = self.token
+        token = split_path[0]
+        uuid = split_path[1]
 
         query_args = self.request.arguments
         query_dict = {k: v[0].decode("utf-8") for k, v in query_args.items()}
 
         # Read parameters from URL and API
-        keys = omero_api.scaled_region(split_path, query_dict, token)
+        keys = omero_api.scaled_region(split_path[1:], query_dict, token)
 
         # Make array of channel parameters
         inputs = zip(keys['chan'], keys['c'], keys['r'])
