@@ -1,7 +1,6 @@
 ''' A simple static filie and API server
 '''
 import sys
-import argparse
 
 from tornado.ioloop import IOLoop
 from tornado.web import Application
@@ -9,10 +8,16 @@ from statichandler import StaticHandler
 from regionhandler import RegionHandler
 from metahandler import MetaHandler
 
+import asyncio
+from tornado.platform.asyncio import AnyThreadEventLoopPolicy
+asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
+
 
 class Webserver(object):
     ''' A simple tornado webserver
     '''
+
+    _port = 8080
 
     def __init__(self):
 
@@ -38,12 +43,9 @@ class Webserver(object):
                 'index': 'index.html',
                 'subfolder': 'static'
             }),
-        ], autoreload=True)
+        ], autoreload=False)
 
-        self._port = None
-        self._server = None
-
-    def start(self, _port):
+    def start(self):
         ''' Starts the webapp on the given port
 
         Arguments:
@@ -53,26 +55,23 @@ class Webserver(object):
             tornado.IOLoop needed to stop the app
 
         '''
-        self._port = _port
         # Begin to serve the web application
-        self._webapp.listen(_port)
-        self._server = IOLoop.instance()
+        self._webapp.listen(self._port)
         # Send the logging message
         msg = '''
 *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
  Start server on port {0}.
 _______________________________
         '''
-        print(msg.format(_port))
-        # Return the webserver
-        return self._server
+        print(msg.format(self._port))
+        return IOLoop.current()
 
     def stop(self):
         ''' Stops the server
         '''
 
         # Ask tornado to stop
-        ioloop = self._server
+        ioloop = IOLoop.current()
         ioloop.add_callback(ioloop.stop)
         # Send the stop message
         msg = '''
@@ -83,40 +82,17 @@ _______________________________
         print(msg.format(self._port))
 
 
-def parse_argv(argv):
-    ''' Parses command line arguments
-
-    Arguments:
-        argv: array of space-separated strings entered into shell
-
-    Returns:
-        Dictionary containing port
-    '''
-
-    parser = argparse.ArgumentParser(prog='server',
-                                     description='a server')
-    parser.add_argument('port', type=int, nargs='?',
-                        default=8000, help='a port')
-
-    parsed = parser.parse_args(argv)
-    return vars(parsed)
-
-
-def main(*argv):
-    args = parse_argv(argv)
-    port = args['port']
-
-    # Start a webserver on given port
+def main():
     try:
         server = Webserver()
     except KeyError:
         sys.exit()
     try:
-        ioloop = server.start(port)
+        ioloop = server.start()
         ioloop.start()
     except KeyboardInterrupt:
         server.stop()
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()

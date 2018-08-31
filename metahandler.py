@@ -1,9 +1,9 @@
 import json
 from mimetypes import types_map
 from concurrent.futures import ThreadPoolExecutor
-from tornado import web, gen
+from tornado import web
 
-from gists.minervaapi import MinervaApi
+from minerva_scripts.minervaapi import MinervaApi
 
 
 class MetaHandler(web.RequestHandler):
@@ -25,22 +25,14 @@ class MetaHandler(web.RequestHandler):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
-    @gen.coroutine
     def get(self, path):
-        ''' Asynchronously call handle
+        ''' Get image data
 
         Arguments:
-            path: the static path requested in the URL
+            path: the imgData request
         '''
-        filepath = self.parse(path)
-        yield self._ex.submit(self.handle, filepath)
+        data = self.parse(path)
 
-    def handle(self, data):
-        ''' Serves a path in the root directory
-
-        Arguments:
-            data: the imgdata dictionary
-        '''
         # Get the mimetype from the requested extension
         mime_type = types_map.get('json', self._basic_mime)
         self.set_header('Content-Type', mime_type)

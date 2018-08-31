@@ -1,14 +1,14 @@
 import png
 import numpy as np
 import io
-from tornado import web, gen
+from tornado import web
 from mimetypes import types_map
 from concurrent.futures import ThreadPoolExecutor
 
 from minerva_lib import crop
-from gists.crop import do_crop
-from gists.omeroapi import OmeroApi
-from gists.minervaapi import MinervaApi
+from minerva_scripts.crop import do_crop
+from minerva_scripts.omeroapi import OmeroApi
+from minerva_scripts.minervaapi import MinervaApi
 
 
 class RegionHandler(web.RequestHandler):
@@ -30,22 +30,14 @@ class RegionHandler(web.RequestHandler):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
-    @gen.coroutine
     def get(self, path):
-        ''' Asynchronously call handle
+        ''' Get image
 
         Arguments:
-            path: the static path requested in the URL
+            path: the render_scaled_region or render_image request
         '''
-        filepath = self.parse(path)
-        yield self._ex.submit(self.handle, filepath)
+        data = self.parse(path)
 
-    def handle(self, data):
-        ''' Serves a path in the root directory
-
-        Arguments:
-            data: RGB image array
-        '''
         if data is None:
             self.set_header('Content-Type', self._basic_mime)
             self.set_status(403)

@@ -1,6 +1,6 @@
 import os
 import posixpath
-from tornado import web, gen
+from tornado import web
 from mimetypes import types_map
 from pkg_resources import resource_string
 from concurrent.futures import ThreadPoolExecutor
@@ -27,22 +27,14 @@ class StaticHandler(web.RequestHandler):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
-    @gen.coroutine
     def get(self, path):
-        ''' Asynchronously call handle
+        ''' Serves a path in the root directory
 
         Arguments:
             path: the static path requested in the URL
         '''
         filepath = self.parse(path)
-        yield self._ex.submit(self.handle, filepath)
 
-    def handle(self, filepath):
-        ''' Serves a path in the root directory
-
-        Arguments:
-            path: the actual path to a file on the server
-        '''
         extension = os.path.splitext(filepath)[1]
         # Get the mimetype from the requested extension
         mime_type = types_map.get(extension, self._basic_mime)
