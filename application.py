@@ -2,6 +2,10 @@ import tornado.web
 import tornado.wsgi
 import tornado.ioloop
 
+import asyncio
+from tornado.platform.asyncio import AnyThreadEventLoopPolicy
+asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
+
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):

@@ -1,1 +1,5 @@
+git+git://github.com/thejohnhoffer/minerva-lib-python@3cfba513cf326c8e6c4ece252c7142ed04dafd58#egg=minerva-lib
 tornado>=5.1
+pypng>=0.0.18
+numpy>=1.14.3
+boto>=2.48.0

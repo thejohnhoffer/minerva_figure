@@ -1,5 +1,15 @@
-
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+.env
+*tmp*
+
+#vi
+.*.sw*
+
+#py
+*.pyc
+*.egg-info
+.pytest_cache
