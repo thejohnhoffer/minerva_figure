@@ -161,31 +161,40 @@ minerva_authenticate = function(username, password) {
  * Main login script
  */
 
-const use_token = function(token) {
+const use_token = function(token, importImage, get_img_src) {
 
     // Overwrite importImage function
-    (function(importImage) {
-        FigureModel.prototype.importImage = function(imgDataUrl) {
-            var urlList = imgDataUrl.split('/');
-            urlList.splice(3, 0, token);
-            arguments[0] = urlList.join('/');
-            return importImage.apply(this, arguments);
-        };
-    })(FigureModel.prototype.importImage);
+    FigureModel.prototype.importImage = function(imgDataUrl) {
+        var urlList = imgDataUrl.split('/');
+        urlList.splice(3, 0, token);
+        arguments[0] = urlList.join('/');
+        return importImage.apply(this, arguments);
+    };
 
     // Overwrite get_img_src function
-    (function(get_img_src) {
-        Panel.prototype.get_img_src = function() {
-            var img_src = get_img_src.apply(this, arguments);
-            var src_list = img_src.split('/');
-            src_list.splice(3, 0, token);
-            return src_list.join('/');
-        };
-    })(Panel.prototype.get_img_src);
+    Panel.prototype.get_img_src = function() {
+        var img_src = get_img_src.apply(this, arguments);
+        var src_list = img_src.split('/');
+        src_list.splice(3, 0, token);
+        return src_list.join('/');
+    };
 };
 
 const login_form = $('#addImagesModal').find('form');
 const form_group = $(login_form).find('.form-group');
+
+const login_button = $(login_form).find('button:submit');
+$(login_button).removeAttr('disabled');
+
+// Hidden unused fake id just to pass integer regex
+const enter_fake_id = $(login_form).find('.imgIds');
+$(enter_fake_id).val('0');
+$(enter_fake_id).hide();
+
+const enter_uuids = document.createElement('input');
+enter_uuids.placeholder = 'Minerva Image UUID';
+enter_uuids.id = 'enter_uuids';
+enter_uuids.type = 'text';
 
 const enter_username = document.createElement('input');
 enter_username.placeholder = 'Minerva Username';
@@ -197,23 +206,67 @@ enter_password.placeholder = 'Minerva Password';
 enter_password.id = 'enter_password';
 enter_password.type = 'password';
 
+$(enter_uuids).addClass('form-control');
 $(enter_username).addClass('form-control');
 $(enter_password).addClass('form-control');
+form_group.append(enter_uuids);
 form_group.append(enter_username);
 form_group.append(enter_password);
 
+// Completely new function to add images
+const newAddImages = function(iIds) {
+   this.clearSelected();
+
+   // approx work out number of columns to layout new panels
+   var paper_width = this.get('paper_width'),
+       paper_height = this.get('paper_height'),
+       colCount = Math.ceil(Math.sqrt(iIds.length)),
+       rowCount = Math.ceil(iIds.length/colCount),
+       centre = {x: paper_width/2, y: paper_height/2},
+       px, py, spacer, scale,
+       coords = {'px': px,
+                 'py': py,
+                 'c': centre,
+                 'spacer': spacer,
+                 'colCount': colCount,
+                 'rowCount': rowCount,
+                 'paper_width': paper_width};
+
+   var invalidIds = [];
+   for (var i=0; i<iIds.length; i++) {
+       var imgId = iIds[i],
+           re = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/;
+       if (!re.test(imgId)) {
+           invalidIds.push(imgId);
+       } else {
+           imgDataUrl = BASE_WEBFIGURE_URL + 'imgData/' + imgId + '/';
+           this.importImage(imgDataUrl, coords, undefined, i);
+       }
+   }
+   if (invalidIds.length > 0) {
+       var plural = invalidIds.length > 1 ? "s" : "";
+       alert("Could not add image with invalid ID" + plural + ": " + invalidIds.join(", "));
+   }
+}
+
 // Overwrite AddImagesModalView submit event
-(function(addImages) {
+(function(addImages, importImage, get_img_src) {
     FigureModel.prototype.addImages = function() {
+        const uuids = $(enter_uuids).val();
         const username = $(enter_username).val();
         const password = $(enter_password).val();
 
         const THIS = this;
-        const ARGS = arguments;
 
         minerva_authenticate(username, password).then(function(token) {
-            use_token(token);
-            addImages.apply(THIS, ARGS);
+            use_token(token, importImage, get_img_src);
+            $(enter_fake_id).val('0');
+            $(login_button).removeAttr('disabled');
+            addImages.call(THIS, uuids.split(','));
         });
     };
-})(FigureModel.prototype.addImages);
+})(
+    newAddImages,
+    FigureModel.prototype.importImage,
+    Panel.prototype.get_img_src
+);

@@ -59,17 +59,13 @@ class MetaHandler(web.RequestHandler):
         ''' Get image data for uuid
 
         Arguments:
-            uuid_index: token/uuid_index
+            path: 'token/uuid'
 
         Returns:
             the imagedata dictionary
         '''
 
-        token, uuid_index = path.split('/')
-        uuids = [
-            '0af50f96-3b0f-467d-aa29-ecbe1935f1bf'
-        ]
-        uuid = uuids[int(uuid_index) % len(uuids)]
+        token, uuid = path.split('/')[:2]
 
         metadata_file = 'metadata.xml'
         bucket = self.bucket
