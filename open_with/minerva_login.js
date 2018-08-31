@@ -188,8 +188,13 @@ $(login_button).removeAttr('disabled');
 
 // Hidden unused fake id just to pass integer regex
 const enter_fake_id = $(login_form).find('.imgIds');
-$(enter_fake_id).val('0');
-$(enter_fake_id).hide();
+// This allows fake field to pass old integer regex for ids
+const fake_id_regex = function() {
+    $(login_button).removeAttr('disabled');
+    $(enter_fake_id).val('0');
+    $(enter_fake_id).hide();
+};
+fake_id_regex();
 
 const enter_uuids = document.createElement('input');
 enter_uuids.placeholder = 'Minerva Image UUID';
@@ -247,7 +252,7 @@ const newAddImages = function(iIds) {
        var plural = invalidIds.length > 1 ? "s" : "";
        alert("Could not add image with invalid ID" + plural + ": " + invalidIds.join(", "));
    }
-}
+};
 
 // Overwrite AddImagesModalView submit event
 (function(addImages, importImage, get_img_src) {
@@ -260,9 +265,11 @@ const newAddImages = function(iIds) {
 
         minerva_authenticate(username, password).then(function(token) {
             use_token(token, importImage, get_img_src);
-            $(enter_fake_id).val('0');
-            $(login_button).removeAttr('disabled');
+            fake_id_regex();
             addImages.call(THIS, uuids.split(','));
+        }).catch(function(e) {
+            alert('Invalid Minerva Username or Password');
+            fake_id_regex();
         });
     };
 })(
