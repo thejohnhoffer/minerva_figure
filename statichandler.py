@@ -51,6 +51,7 @@ class StaticHandler(web.RequestHandler):
         try:
             data = resource_string(self.root, filepath)
         except FileNotFoundError:
+            self.set_header('Content-Type', self._basic_mime)
             self.set_status(404)
             self.write('404')
             return

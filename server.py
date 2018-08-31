@@ -19,13 +19,15 @@ class Webserver(object):
         minerva_bucket = 'minerva-test-cf-common-tilebucket-1su418jflefem'
         minerva_domain = 'lze4t3ladb.execute-api.us-east-1.amazonaws.com/dev'
 
+        keys = {
+            'bucket': minerva_bucket,
+            'domain': minerva_domain
+        }
+
         self._webapp = Application([
-            (r'/webgateway/render_scaled_region/(.*)', RegionHandler, {}),
-            (r'/webgateway/render_image/(.*)', RegionHandler, {}),
-            (r'/figure/imgData/(.*)/', MetaHandler, {
-                'bucket': minerva_bucket,
-                'domain': minerva_domain
-            }),
+            (r'/webgateway/render_scaled_region/(.*)', RegionHandler, keys),
+            (r'/webgateway/render_image/(.*)', RegionHandler, keys),
+            (r'/figure/imgData/(.*)/', MetaHandler, keys),
             (r'/webgateway/open_with/(.*)', StaticHandler, {
                 'root': __name__,
                 'index': 'index.json',

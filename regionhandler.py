@@ -1,18 +1,14 @@
 import png
 import numpy as np
 import io
-import boto3
 from tornado import web, gen
 from mimetypes import types_map
 from concurrent.futures import ThreadPoolExecutor
 
 from minerva_lib import crop
 from gists.crop import do_crop
-from gists.crop import omero_api
-from gists.crop import minerva_api
-
-
-s3 = boto3.resource('s3')
+from gists.omeroapi import OmeroApi
+from gists.minervaapi import MinervaApi
 
 
 class RegionHandler(web.RequestHandler):
@@ -20,9 +16,16 @@ class RegionHandler(web.RequestHandler):
     '''
     _basic_mime = 'text/plain'
 
-    def initialize(self):
+    def initialize(self, bucket, domain):
         ''' Create new handler for image requests
+
+        Arguments:
+            bucket: s3 tile bucket name
+            domain: *.*.*.amazonaws.com/*
         '''
+        self.bucket = bucket
+        self.domain = domain
+
         self._ex = ThreadPoolExecutor(max_workers=10)
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET')
@@ -43,6 +46,11 @@ class RegionHandler(web.RequestHandler):
         Arguments:
             data: RGB image array
         '''
+        if data is None:
+            self.set_header('Content-Type', self._basic_mime)
+            self.set_status(403)
+            self.write('403')
+
         # Get the mimetype from the requested extension
         mime_type = types_map.get('png', self._basic_mime)
         self.set_header('Content-Type', mime_type)
@@ -70,11 +78,15 @@ class RegionHandler(web.RequestHandler):
         query_dict = {k: v[0].decode("utf-8") for k, v in query_args.items()}
 
         # Read parameters from URL and API
-        keys = omero_api.scaled_region(split_path[1:], query_dict, token)
+        keys = OmeroApi.scaled_region(split_path[1:], query_dict, token,
+                                      self.bucket, self.domain)
+
+        if not keys:
+            return None
 
         # Make array of channel parameters
         inputs = zip(keys['chan'], keys['c'], keys['r'])
-        channels = map(minerva_api.format_input, inputs)
+        channels = map(MinervaApi.format_input, inputs)
 
         # OMERO loads the tiles
         def ask_minerva(c, l, i, j):
@@ -86,7 +98,7 @@ class RegionHandler(web.RequestHandler):
                 'y': j
             }
             limit = keys['limit']
-            return minerva_api.image(uuid, token, c, limit, **keywords)
+            return MinervaApi.image(uuid, token, c, limit, **keywords)
 
         # Region with margins
         outer_origin = keys['origin']
@@ -103,7 +115,7 @@ class RegionHandler(web.RequestHandler):
         valid = crop.validate_region_bounds(request_origin, request_shape,
                                             image_shape)
         if not valid:
-            return np.array([])
+            return None
 
         # Minerva does the cropping
         image = do_crop(ask_minerva, channels, keys['tile_size'],
