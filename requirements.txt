@@ -3,5 +3,5 @@ git+git://github.com/thejohnhoffer/minerva-lib-python@3cfba513cf326c8e6c4ece252c
 tornado>=5.1
 pypng>=0.0.18
 numpy>=1.14.3
-boto>=2.48.0
+boto3>=1.7.81
 botocore>=1.10.81
