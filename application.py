@@ -37,11 +37,16 @@ class Webserver(object):
                 'index': 'index.json',
                 'subfolder': 'open_with'
             }),
-            (r'/(.*)', StaticHandler, {
+            (r'/static/(.*)', StaticHandler, {
                 'root': __name__,
                 'index': 'index.html',
                 'subfolder': 'static'
             }),
+            (r'/(.*)', StaticHandler, {
+                'root': __name__,
+                'index': 'index.html',
+                'subfolder': 'static'
+            })
         ], autoreload=False)
 
 

@@ -25,27 +25,9 @@ OME_COOKIE=_ga=GA*.*.*********.**********; _gid=GA*.*.*********.**********; csrf
 
 wget -r -p -U Mozilla https://omero.hms.harvard.edu/figure/ --header="Cookie: $OME_COOKIE" --no-check-certificate --content-disposition
 
-mv omero.hms.harvard.edu static
+
+rm -rf static
+mv omero.hms.harvard.edu/static static
+mv omero.hms.harvard.edu/figure/* static/figure/
 for i in `find static -type f`; do mv $i `echo $i | cut -d? -f1`; done
-```
-
-
-
-
-### Testing Combine
-
-Combine all channels for all images of the format `C{CHANNEL}-T{TIME}-Z{SECTION}-L{RESOLUTION}-Y{VERTICAL_INDEX}-X{HORIZONTAL_INDEX}.png` into images of the format `T{TIME}-Z{SECTION}-L{RESOLUTION}-Y{VERTICAL_INDEX}-X{HORIZONTAL_INDEX}.png` with the following example:
-
-```bash
-combine examples/combine_ashlar_tiles.yaml -i input/folder -o output/folder
-```
-
-### Testing Crop
-
-Crop any region from any omero image id.
-Get the `Cookie` header to any valid omero request. Export value as `OME_COOKIE`
-
-```bash
-export OME_COOKIE="csrftoken=<TOKEN>; sessionid=<SESSION>"
-crop -y examples/crop_simple.yaml -o output/folder
 ```

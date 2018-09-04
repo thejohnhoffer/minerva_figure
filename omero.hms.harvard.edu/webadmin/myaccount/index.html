@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+    
+    
+    
+    
+    
+		<link rel="stylesheet" href="/static/webgateway/css/reset.css?_5.4.7.25-gs-ice36" type="text/css" />   
+		<link rel="stylesheet" href="/static/webgateway/css/ome.body.css?_5.4.7.25-gs-ice36" type="text/css" />
+		<link rel="stylesheet" href="/static/webclient/css/dusty.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+    
+    <link rel="stylesheet" href="/static/webgateway/css/ome.header.css?_5.4.7.25-gs-ice36" type="text/css" />
+    <link rel="stylesheet" href="/static/webclient/css/layout.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webgateway/css/ome.toolbar.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webadmin/css/dusty.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webgateway/css/ome.table.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/3rdparty/jquery.tablesorter-2.0.3/jquery.tablesorter.css" type="text/css" media="screen"/>
+    
+    <link rel="stylesheet" href="/static/3rdparty/jquery.chosen-1.2.0/chosen.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/webadmin/css/chosen.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/webadmin/css/drivespace.css?_5.4.7.25-gs-ice36" type="text/css"/>
+
+
+
+    <!-- extend here to add page title -->
+    <title>
+        My account
+    </title>
+
+    
+    
+    
+    
+    
+        <!-- block for javascript <script> -->
+    
+    
+
+<script type="text/javascript" src="/static/3rdparty/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="/static/webgateway/js/ome.csrf.js?_5.4.7.25-gs-ice36"></script>
+
+
+
+	<!--[if lte IE 8]>
+	<script>
+		$(function(){
+		   $(".header_toolbar li:last-child").addClass('last-child'),
+		   $("#activities_panel table tr:last-child").addClass('last-child'),
+		    $("#groupsUsersButton span:last-child").addClass('last-child')
+		   
+		})
+		</script>
+	<![endif]-->
+	
+
+    <!-- Include our current version of jQuery-UI and an ome utility script used by many pages -->
+    
+
+<link rel="stylesheet" href="/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.base.css" type="text/css" />
+<script type="text/javascript" src="/static/3rdparty/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js"></script>
+
+<!-- Disable JQuery UI Tabs Keyboard Navigation -->
+<script type="text/javascript">
+    $.widget("ui.tabs", $.ui.tabs, {
+        _tabKeydown: function (event) {
+            if (event.keyCode !== 37 &&
+                event.keyCode !== 38 &&
+                event.keyCode !== 39 &&
+                event.keyCode !== 40) {
+                this._super(event);
+            }
+        }
+    });
+</script>
+    
+
+<script type="text/javascript" src="/static/webgateway/js/ome.popup.js?_5.4.7.25-gs-ice36"></script>
+
+    <!-- Turn touch events into drag events for jquery-ui -->
+    <script type="text/javascript" src="/static/3rdparty/jquery.ui.touch-punch-0.2.3.min.js"></script>
+
+    <!-- Make the width fit the mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- Allow webclient to be 'added to home-screen' as a full-screen app on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+    <script src="/static/webclient/javascript/jquery.infieldlabel-0.1.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            // initially hidden
+            $("#user_dropdown ul").css('visibility', 'hidden');
+            // show on click
+            $("#show_user_dropdown").click(function(e) {
+                
+                $("ul", $(this).parent()).css('visibility', 'visible');
+                e.preventDefault();
+                return false;
+            });
+            // on hover-out, hide drop-down menus
+            $("#user_dropdown ul").hover(function(){}, function(){
+                $(this).css('visibility', 'hidden');
+            });
+            
+            $("#top_search_field label").inFieldLabels();
+        });
+    </script>
+
+    <!-- keep-alive ping so that OMERO session doesn't die -->
+    
+
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        
+        var ping_interval = 60000;
+        var i = setInterval(function (){
+            $.get("/webclient/keepalive_ping/");
+        }, ping_interval);
+    });
+</script>
+
+
+
+
+
+
+    <script type="text/javascript" src="/static/3rdparty/jquery.tablesorter-2.0.3/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/jquery.quicksearch-1.0.js"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/jquery.form-3.51.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/jquery.flot-0.7/jquery.flot.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/jquery.flot-0.7/jquery.flot.pie.js"></script>
+    
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/static/3rdparty/jquery.flot-0.7/excanvas.js"></script><![endif]-->
+    
+    <script type="text/javascript" src="/static/3rdparty/jquery.chosen-1.2.0/chosen.jquery.js"></script>
+    
+    <script type="text/javascript">
+    
+    $(document).ready(function () {
+        
+        $("#id_default_group").chosen({disable_search_threshold:5, placeholder_text:'Change your default group'});
+        
+        $("#groupTable").tablesorter( {
+            //sortList: [[1,0]]
+            headers: {0: { sorter: 'digit' } }
+            } );
+        $('input#id_search').quicksearch('table#groupTable tbody tr', {
+            'delay': 300,
+            'loader': 'span.loading'
+        });
+        
+        
+    }); 
+
+    </script>
+    
+    
+    <script>
+        // increase the default animation speed to exaggerate the effect
+        $.fx.speeds._default = 1000;
+        $(function() {
+            $( "#password_change_dialog" ).dialog({
+                autoOpen: false,
+                draggable: false,
+                resizable: false,
+                closeOnEscape: true,
+                modal: false,
+                dialogClass: 'reddit',
+                buttons: {
+                    "OK": function() {
+                        // simply submit the form (AJAX handling set-up above)
+                        $("#change_password_form").submit();
+                    },
+                    "Cancel": function() {
+                        $( this ).dialog( "close" );
+                    }
+                },
+                position: { 
+                    my: 'left center',
+                    at: 'right center',
+                    of: $('#change_password'),
+                    collision: "flip",
+                    offset: "10 0"
+                }
+            });
+            
+            $( "#change_password" ).click(function() {
+                // clear fields
+                var $pw_form = $("#change_password_form");
+                $("div.error", $pw_form).text("");
+                $("input[name='password']", $pw_form).val("");
+                $("input[name='confirmation']", $pw_form).val("");
+                $("input[name='old_password']", $pw_form).val("");
+                // show dialog
+                $( "#password_change_dialog" ).dialog( "open" );
+                return false;
+            });
+            $("#password_cancel").click(function() {
+                $( "#password_change_dialog" ).dialog( "close" );
+                return false;
+            });
+            
+            $("#password_change_message").hide();
+            $("#change_password_form").ajaxForm({
+                beforeSubmit: function(data) {
+                    // check that both new passwords match, fields aren't empty etc.
+                    var $pw_form = $("#change_password_form");
+                    var new_pw = $("input[name='password']", $pw_form).val();
+                    var conf_pw = $("input[name='confirmation']", $pw_form).val();
+                    var old_pw = $("input[name='old_password']", $pw_form).val();
+                    if ($.trim(new_pw).length==0 || $.trim(conf_pw).length==0 || $.trim(old_pw).length==0) {
+                        $("div.error", $pw_form).text("All fields must be filled in.");
+                        return false;
+                    }
+                    if (new_pw != conf_pw) {
+                        $("div.error", $pw_form).text("New passwords don't match.");
+                        return false;
+                    }
+                    if (new_pw == old_pw) {
+                        $("div.error", $pw_form).text("New password is the same as Old password");
+                        return false;
+                    }
+                    if ($.trim(new_pw).length<3 || $.trim(conf_pw).length<3 || $.trim(old_pw).length==0) {
+                        $("div.error", $pw_form).text("Passwords should be at least 3 characters long.");
+                        return false;
+                    }
+                    $( "#password_change_dialog" ).dialog( "close" );
+                },
+                success: function(html) {
+                    $("#password_change_message").html(html).show();
+                }
+            });
+
+        });
+    </script>
+    
+    <script type="text/javascript">
+
+        $(function() {
+
+            var FREE_SPACE = 95438647296;
+
+            $(".totalUsage").text('User');
+
+            
+            $("#free_space").text(FREE_SPACE.filesizeformat());
+
+            var progressbar = $( "#progressbar" ),
+                progressLabel = $( ".progress-label" );
+
+            progressbar.progressbar({
+              value: 1,
+              change: function() {
+                progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+              },
+            });
+
+            var fillTable = function(chart_data) {
+
+                var tableRows = [],
+                    rowData, rowId;
+                for(i=0; i<chart_data.length; i++) {
+                    rowData = chart_data[i];
+                    rowId = typeof rowData.userId != 'undefined' ? rowData.userId : rowData.groupId;
+                    tableRows.push('<tr><td class="link">' + rowData.label + '(id:'+ rowId +')</td>');
+                    tableRows.push('<td class="link">' + rowData.data.filesizeformat() + '</td></tr>');
+                }
+                
+                $('#drivespaceTable tbody').html(tableRows.join(""));
+                $('#drivespaceTable').show();
+            };
+
+            var plotJson = function(jsonUrl, options) {
+
+                // show 'loading...'
+                $("#status").html('loading...');
+                $("#progress").show();
+
+                $.getJSON(jsonUrl, function(data) {
+
+                    // hide 'loading...'
+                    $("#status").html('');
+                    $("#progress").hide();
+
+                    // save the data to use for chart click handling etc.
+                    $("#placeholder").data('chart_data', data);
+
+                    fillTable(data);
+
+                    // bin all data > 11 users/groups
+                    var total = 0,
+                        chart_data = [],
+                        MAX_SLICES = 10;
+
+                    for(i=0; i<data.length; i++) {
+                        var slice = data[i];
+                        if(i === MAX_SLICES){
+                            chart_data.push({label:'Others', data:slice.data});
+                        } else if (i > MAX_SLICES) {
+                            chart_data[MAX_SLICES].data = chart_data[MAX_SLICES].data + slice.data;
+                        } else {
+                            chart_data.push(slice);
+                        }
+                        total += slice.data;
+                    }
+
+                    $('#total').text(total.filesizeformat());
+                    var usagePercent = 100 * total/(total + FREE_SPACE);
+                    progressbar.progressbar( "value", parseInt(usagePercent, 10));
+
+                    $("#placeholder").css('width',700).css('height',300);
+                    $.plot($("#placeholder"), chart_data,
+                    {
+                        series: {
+                            pie: {
+                                show: true,
+                                radius: 1,
+                                label: {
+                                    show: true,
+                                    radius: 0.9,
+                                    formatter: function(label, series){
+                                        return '<div class="pieLabel">'+Math.round(series.percent)+'%</div>';
+                                    },
+                                    background: { opacity: 0 }
+                                }
+                            }
+                        },
+                        legend: {
+                            show: true
+                        },
+                        grid: {
+                            hoverable: true,
+                            clickable: true
+                        },
+                    });
+
+                    if (options && options.success) {
+                        options.success();
+                    }
+                });
+            };
+
+
+            var drivespace_loaded = false;
+            $( "#admin" ).tabs({
+                activate: function(event, ui) {
+                    if ( $(ui.newTab).find('a').attr('title') == "Drivespace" ){
+                        
+                        if (!drivespace_loaded) {
+                            drivespace_loaded = true;
+                            // on load, we show user's data in groups
+                            var url = "/webadmin/drivespace_json/user/2113/";
+                            plotJson(url);
+                        }
+                    }
+                }
+            });
+
+            $(".usageByGroup").click(function() {
+              $(".usageBy").removeClass('selected');
+              $(this).addClass('selected');
+              var gid = $(this).attr("data-groupid");
+              var url = "/webadmin/" + "drivespace_json/group/" + gid +"/";
+              // $("#filterBy").text("Group: " + i.label).show().addClass('selected');
+              plotJson(url, {
+                  success: function(){
+                      $(".totalUsage").text('Group');
+                  }
+              });
+            });
+            $("#myUsage").click(function() {
+              $(".usageBy").removeClass('selected');
+              $(this).addClass('selected');
+              var url = "/webadmin/drivespace_json/user/2113/";
+              plotJson(url, {
+                  success: function(){
+                      $(".totalUsage").text('My');
+                  }
+              });
+            });
+
+        });
+        
+    </script>
+    
+
+
+    
+        <!-- block for extra head elements (not css or javascript) E.g. icon, meta tags -->
+        
+
+<link rel="shortcut icon" href="/static/webgateway/img/ome.ico" type="image/x-icon" />
+
+
+    
+
+</head>
+<body>
+
+
+        
+        
+        <div id="middle_header">
+
+            <a id="logo">
+                <img src="/static/webgateway/img/logo2.png"/>
+            </a>
+
+            
+            <div id="middle_header_left">
+				
+				    
+
+
+<ul>
+    <!-- Handle links from settings -->
+    
+        <li class="menu_link">
+          <a href="/webclient/"
+            
+               title="Browse Data via Projects, Tags etc"
+            
+          >Data</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/webclient/history/"
+            
+               title="History"
+            
+          >History</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="http://help.openmicroscopy.org/"
+            
+               target="new" title="Open OMERO user guide in a new tab"
+            
+          >Help</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/figure/"
+            
+               target="_blank" title="Open Figure in new tab"
+            
+          >Figure</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/omero_webtagging_tagsearch/"
+            
+          >Tag Search</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/omero_forms/designer/"
+            
+               target="new" title="Open OMERO.Forms in a new tab"
+            
+          >Forms Designer</a>
+        </li>
+    
+
+    
+</ul>
+
+				
+            </div>
+			
+			
+            <div id="middle_header_right">
+				
+                <ul class="header_toolbar" id="script_notifications">
+                    
+
+
+    <li>
+        <!-- Script launcher -->
+        <span id="scriptButton" class="scriptButton toolbar_button" href="/webclient/list_scripts/" title="Run Script"></span>
+        <div id="scriptList" class="sub_menu info_panel" style="min-width: 200px !important">
+        <img id="scriptSpinner" style="display:none" src="/static/webgateway/img/spinner.gif" />
+            <!-- script list-items loaded here by AJAX -->
+        </div>
+    </li>
+
+
+                    
+
+
+
+
+
+<script>
+
+    if (typeof OME === "undefined"){ OME = {}}
+    OME.showActivities = function() {
+        $("#activities_panel").show();
+        OME.displayStatus(-1);  // reset new_results
+        OME.refreshActivities();
+    }
+
+    // this is called by the setInterval loop below
+    OME.activitiesUpdate = function(i) {
+        $.get("/webclient/activities/", function(data) {
+            $('#activities_spinner').hide();
+            var inprogress = $("#inprogress", data).text();
+            var new_results = $("#new_results", data).text();
+            var failure = $("#failure", data).text();
+            
+            // if we've got no jobs still running, stop checking
+            if ((typeof inprogress == 'undefined') || (inprogress.length == 0)) {
+                if (i) clearInterval(i);
+                showJobCount(0);
+                //return;
+            }
+            inprogress = parseInt( inprogress );
+            if (inprogress==0) {
+                if (i != undefined) clearInterval(i);
+            }
+            
+            // display what we recieved, bind events etc
+            $("#activities_content").empty();
+            $("#activities_content").append( $("#jobsTable", $(data)) );
+            $("#jobsTable").alternateRowColors();
+            
+            // bind events
+            $("#activities_content a").click(function() {
+                var href = $(this).attr('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+            // show chgrp errors in new window
+            $(".chgrp_error a").click(function(event) {
+                var error_msg = $(this).next().html();
+                var newWindow=window.open('','','height=500,width=500,scrollbars=yes, top=50, left=100');
+                newWindow.document.write(error_msg);
+                newWindow.document.close();
+                return false;
+            });
+
+            // If we've got new errors - show Activities
+            if ($("#new_errors", data).length > 0) {
+                $("#activities_panel").show();
+                new_results = -1;   // hide notification number
+            }
+            OME.displayStatus(new_results, inprogress);
+
+        }).error(function() {
+            // this requires jQuery 1.5 or later
+            clearInterval(i);
+        });
+    }
+
+    // Add new results to the count, unless we have the Activities panel open
+    OME.displayStatus = function(newresults, inprogress) {
+        // update inprogress 'spinner'
+        if (typeof inprogress != 'undefined') {
+            if ((inprogress == '0') || (inprogress == 0)) {
+                $("#runningStatus").hide();
+            } else {
+                $("#runningStatus").show();
+            }
+        }
+        
+        // update result count
+        var results_count = parseInt($('#jobstatus').text()) || 0;
+        if (typeof newresults != 'undefined') {
+            var new_results = parseInt(newresults);
+            if (new_results < 0) results_count = 0  // clear
+            else results_count += new_results
+        }
+        // only display if we're not showing activities
+        if ((results_count > 0) && !$("#activities_panel").is(":visible")) {
+            $('#jobstatus').show();
+        } else {
+            results_count = 0;
+            $('#jobstatus').hide()
+        }
+        $('#jobstatus').text(results_count + '');
+        
+        // if neither flag is showing, fade out the main icon
+        if ($('#jobstatus').is(":visible") || $('#runningStatus').is(":visible")) {
+            // turning off, see #9154 $("#launch_activities").css('opacity', 1.0);
+        } else {
+            // turning off, see #9154 $("#launch_activities").css('opacity', 0.5);
+        }
+    }
+
+    OME.refreshActivities = function() {
+        var i = setInterval(function (){
+                OME.activitiesUpdate(i);
+        }, 5000);
+        OME.activitiesUpdate(i);
+    }
+    $(document).ready(function() {
+        OME.displayStatus(-1);  // reset new_results
+        OME.refreshActivities();
+        $("#activities_panel").hide();
+        
+        // add click handler to entire body, to close the activities panel 
+        $('body').click(function(event) {
+            var id = event.target.id;
+            //$(".info_panel").hide();
+            if ((id == 'launch_activities') || (id == 'jobstatus') || (id == 'runningStatus')) {
+                OME.showActivities();
+            } else {
+                $("#activities_panel .new_result").removeClass('new_result');
+                $("#activities_panel").hide();
+            }
+
+        }); // BUT also stop any events bubbling up from panel itself
+        $("#activities_panel").click(function(event) {
+            return false;
+        });
+        
+        $("#clear_activities").click(function() {
+            $.post("/webclient/activities_update/clean/");
+            $("#jobsTable>tbody>tr").filter(":not(.in_progress)").remove();
+        });
+
+        // close panels on 'ESCAPE'
+        $("body").bind('keyup', function(event){
+            if (event.keyCode === $.ui.keyCode.ESCAPE) {
+                $(".info_panel").hide();
+            }
+        });
+
+        // If a chgrp fails due to filesets, we provide a 'move all' button:
+        $("#activities_content").on("click", ".chgrp_move_all", function(event){
+            var $this = $(this);
+            if ($this.prop('disabled')){
+                return false;
+            }
+            $this.prop('disabled', true);
+            $.get($this.attr('url'), function(){
+                OME.refreshActivities();
+            });
+            event.preventDefault();
+            return false;
+        });
+    });
+</script>
+
+
+        <li id="queue">
+			
+            <span class="toolbar_button" id="launch_activities" title="Activities">
+                <span id="jobstatus" class="notifier">0</span>
+                <span id="runningStatus" style="display:none;"></span>
+            </span>
+            
+            <div id="activities_panel" class="info_panel">
+
+			<div class="info_panel_title">
+			
+                <h3>
+                    Activities
+                    <img id='activities_spinner' src="/static/webgateway/img/spinner.gif"/>
+                    
+                </h3>
+             <button type="button" id="clear_activities">Clear List</button>
+			 </div>
+				
+                <div id="activities_content">
+                </div>
+                
+            </div>
+        </li>
+
+                </ul>
+				<!-- Global Search -->
+				
+
+
+<form id="search" action="/webclient/search/" title="Search OMERO">
+
+    <div id="top_search_field">
+        <label class="inline_label" for="id_search_query">Search:</label>
+        <input id="id_search_query" name="search_query" size="25" type="text" />
+        <input type="submit" value="Go" />
+    </div>
+    
+</form>
+						
+				<!-- User Dropdown -->
+				
+
+    <div id="user_dropdown">
+        <div id="show_user_dropdown">
+            <img src="/webadmin/myphoto/" />
+            <span>John Hoffer</span>
+        </div>
+        <ul class="dropdown">
+            
+              <li id="user_settings"><a href="/webadmin/myaccount/edit/" title="User settings">
+                User settings
+              </a></li>
+            
+			<!-- Help -->
+            <li id="send"><a href="#" onclick="return OME.openPopup('/feedback/comment/')">Send Feedback</a></li>
+			<li id="logout">
+
+
+<form action="/webclient/logout/" method="post"><input type='hidden' name='csrfmiddlewaretoken' value='xAcWApPkpUIGQGmAc41XMvwrbLHNmC79' />
+    <a href="javascript:;" onclick="parentNode.submit();">Logout</a>
+</form>
+</li>
+        </ul>
+    </div>
+
+			
+            </div>
+			
+	        <div class="clear"></div>
+	
+		</div>
+    	
+        
+        <div id="content">
+        
+    <div id="center_details">
+        
+        
+   
+<div id="admin">
+    
+    <ul id="settings_tabs">
+        <li id="personal_settings_tab"><a href="#personal_settings" title="User Settings">User</a></li>
+
+        
+
+        <li id="drivespace_settings_tab"><a href="#drivespace_settings" title="Drivespace">Statistics</a></li>
+    </ul>
+     
+     <!-- Personal Settings -->
+    <div id="personal_settings" class="settings_content">
+
+
+       <form class="standard_form settings_form" action="/webadmin/myaccount/save/" method="POST"><input type='hidden' name='csrfmiddlewaretoken' value='xAcWApPkpUIGQGmAc41XMvwrbLHNmC79' />
+
+           <p>Fields marked in red are mandatory.</p>
+           <br/>
+           
+           <div id="avatar">
+               <img src="/webadmin/myphoto/" class="imgzoom"/>                 
+               <a class="btn btn_text silver" href="/webadmin/change_avatar/2113/">
+                   <span>Change</span>
+               </a> 
+
+               
+            </div>
+
+
+
+           <div id="personal_details">
+
+               
+                   
+                   <span class="required"><label for="id_omename">Username:</label></span>
+                   <input autocomplete="off" id="id_omename" maxlength="50" name="omename" onfocus="this.blur()" size="30" type="text" value="jth30" />
+                   
+               
+                   
+                   <span class="required"><label for="id_first_name">First name:</label></span>
+                   <input autocomplete="off" id="id_first_name" maxlength="250" name="first_name" size="30" type="text" value="John" />
+                   
+               
+                   
+                   <label for="id_middle_name">Middle name:</label>
+                   <input autocomplete="off" id="id_middle_name" maxlength="250" name="middle_name" size="30" type="text" />
+                   
+               
+                   
+                   <span class="required"><label for="id_last_name">Last name:</label></span>
+                   <input autocomplete="off" id="id_last_name" maxlength="250" name="last_name" size="30" type="text" value="Hoffer" />
+                   
+               
+                   
+                   <label for="id_email">Email:</label>
+                   <input autocomplete="off" id="id_email" name="email" size="30" type="text" value="John_Hoffer@hms.harvard.edu" />
+                   
+               
+                   
+                   <label for="id_institution">Institution:</label>
+                   <input autocomplete="off" id="id_institution" maxlength="250" name="institution" size="30" type="text" value="HMS HiTS" />
+                   
+               
+                   
+                   <span class="required"><label for="id_default_group">Default group:</label></span>
+                   <select id="id_default_group" name="default_group">
+<option value="108" selected="selected">Laboratory for Systems Pharmacology (rwra--)</option>
+<option value="53">default (rw----)</option>
+<option value="1107">Peter Sorger Lab (rwra--)</option>
+</select>
+                   
+               
+
+               
+               <div id="password"><label>LDAP: </label>cn=John Thomas Hoffer,ou=HITS,ou=PEOPLE,dc=MED,dc=HARVARD,dc=EDU</div>
+               
+
+
+               <input type="submit" value="Save" />
+             </div>
+
+       </form>
+
+
+           <!-- hidden dialog for password change -->
+           <div id="password_change_dialog" title="Change Password">
+
+               <form id="change_password_form" action="/webadmin/change_password/2113/" method="POST"><input type='hidden' name='csrfmiddlewaretoken' value='xAcWApPkpUIGQGmAc41XMvwrbLHNmC79' />
+
+                   <table>
+                       <tbody>
+                           
+                           <tr>
+                               <td class="form"><label for="id_old_password">Current password:</label></td>
+                               <td class="input"><input autocomplete="off" id="id_old_password" maxlength="50" name="old_password" size="30" type="password" /></td>
+                               <td></td>
+                           </tr>
+                           
+                           <tr>
+                               <td class="form"><label for="id_password">New password:</label></td>
+                               <td class="input"><input autocomplete="off" id="id_password" maxlength="50" name="password" size="30" type="password" /></td>
+                               <td></td>
+                           </tr>
+                           
+                           <tr>
+                               <td class="form"><label for="id_confirmation">Confirm password:</label></td>
+                               <td class="input"><input autocomplete="off" id="id_confirmation" maxlength="50" name="confirmation" size="30" type="password" /></td>
+                               <td></td>
+                           </tr>
+                           
+
+                           <tr><td colspan="3">
+                               <div class="error"></div>
+                           </td></tr>
+                       </tbody>
+                   </table>
+               </form>
+           </div>
+        
+
+    </div>
+    
+
+    
+    
+    
+    <div id="drivespace_settings" class="settings_content" style="position:relative">
+
+        
+
+        
+
+
+
+            <div class="diskUsageStatus">
+                <img src="/static/webgateway/img/spinner_big.gif" id="progress" style="float:left"/>
+                <div id="status">loading...</div>
+            </div>
+
+
+            <div id="placeholder"></div>
+
+            <h2>Drive space usage:</h2>
+
+            <div id="progressbar"><div class="progress-label"></div></div>
+
+            <div class="summary">
+                <!-- show 'Total usage' or 'Group usage' or 'User usage' -->
+                <h3><span class="totalUsage">Total</span> usage: <span id="total"></span></h3>
+                <h3>Free space: <span id="free_space"></span></h3>
+            </div>
+
+            <table id="drivespaceTable" class="tablesorter" style="display: none;">
+                <thead>
+                    <tr><th>Group/User</th><th>Usage</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+    </div>
+
+</div>
+
+    </div>
+
+        </div>
+		
+		<!--
+        
+            <div id="footer">
+                
+                    <p>&copy; 2007-2011 University of Dundee &amp; Open Microscopy Environment</p>
+                
+            </div>
+        
+		-->
+
+
+
+
+    <!-- settings.BASE_INCLUDE_TEMPLATE included here -->
+    
+</body>
+</html>

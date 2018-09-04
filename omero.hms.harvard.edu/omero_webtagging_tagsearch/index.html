@@ -1,0 +1,1819 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+    
+    
+    
+    
+    
+    
+		<link rel="stylesheet" href="/static/webgateway/css/reset.css?_5.4.7.25-gs-ice36" type="text/css" />   
+		<link rel="stylesheet" href="/static/webgateway/css/ome.body.css?_5.4.7.25-gs-ice36" type="text/css" />
+		<link rel="stylesheet" href="/static/webclient/css/dusty.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+    
+    <link rel="stylesheet" href="/static/webgateway/css/ome.header.css?_5.4.7.25-gs-ice36" type="text/css" />
+    <link rel="stylesheet" href="/static/webclient/css/layout.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webgateway/css/ome.toolbar.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <style type="text/css">
+    body {
+        min-width: 1010px;
+        overflow: hidden;
+    }
+    </style>
+
+    <link rel="stylesheet" href="/static/3rdparty/jquery.chosen-1.2.0/chosen.css" type="text/css" media="screen"/>
+
+
+    <link rel="stylesheet" href="/static/webgateway/css/ome.table.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/3rdparty/jquery.tablesorter-2.0.3/jquery.tablesorter.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/tagsearch/3rd-party/chosen/chosen.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/tagsearch/css/webtagging_search.css" type="text/css" media="screen"/>
+
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" type="text/css" href="/webgateway/css/ome.table_ie.css" />
+  <![endif]-->
+
+
+
+
+
+    <!-- extend here to add page title -->
+    <title>
+        
+    Webclient
+
+    </title>
+
+    
+    
+
+    
+
+    
+    
+        <!-- block for javascript <script> -->
+    
+    
+
+<script type="text/javascript" src="/static/3rdparty/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="/static/webgateway/js/ome.csrf.js?_5.4.7.25-gs-ice36"></script>
+
+
+
+	<!--[if lte IE 8]>
+	<script>
+		$(function(){
+		   $(".header_toolbar li:last-child").addClass('last-child'),
+		   $("#activities_panel table tr:last-child").addClass('last-child'),
+		    $("#groupsUsersButton span:last-child").addClass('last-child')
+		   
+		})
+		</script>
+	<![endif]-->
+	
+
+    <!-- Include our current version of jQuery-UI and an ome utility script used by many pages -->
+    
+
+<link rel="stylesheet" href="/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.base.css" type="text/css" />
+<script type="text/javascript" src="/static/3rdparty/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js"></script>
+
+<!-- Disable JQuery UI Tabs Keyboard Navigation -->
+<script type="text/javascript">
+    $.widget("ui.tabs", $.ui.tabs, {
+        _tabKeydown: function (event) {
+            if (event.keyCode !== 37 &&
+                event.keyCode !== 38 &&
+                event.keyCode !== 39 &&
+                event.keyCode !== 40) {
+                this._super(event);
+            }
+        }
+    });
+</script>
+    
+
+<script type="text/javascript" src="/static/webgateway/js/ome.popup.js?_5.4.7.25-gs-ice36"></script>
+
+    <!-- Turn touch events into drag events for jquery-ui -->
+    <script type="text/javascript" src="/static/3rdparty/jquery.ui.touch-punch-0.2.3.min.js"></script>
+
+    <!-- Make the width fit the mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- Allow webclient to be 'added to home-screen' as a full-screen app on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+    <script type="text/javascript" src="/static/webgateway/js/ome.nav.js?_5.4.7.25-gs-ice36"></script> <!-- handles expand  / collapse columns -->
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+        });
+    </script>
+
+    <!-- required for the script_launch html below -->
+    
+
+<script type="text/javascript">
+
+
+    $(document).ready(function(){
+
+        $('body').click(function(event) {
+            if (!$(event.target).hasClass("scriptButton")) {
+                OME.hideScriptList();
+            }
+        });
+        // Loading Scripts with AJAX for drop-down menu, (only the first time we click)
+
+        // handles clicking on a script (if href is not '#')
+        $("#scriptList.sub_menu").on('click', 'a', OME.openScriptWindow);
+
+        $("#scriptList.sub_menu").on('click', 'a', function(event) {
+            var $a = $(event.target),
+                script_url = $a.attr('href');
+            if (script_url != "#") {
+                // Clicked on script - handled by OME.openScriptWindow above
+                $("#scriptList").hide();
+                return false;
+            }
+
+            // we have clicked on <a> within a <li>, with sibling <ul>
+            var $li = $a.parent(),
+                $ul = $li.children('ul');
+            if ($li.hasClass('menu_back')) {
+                $li.parent().parent().siblings().show();
+                $li.parent().hide();
+                $li.parent().siblings('a').show();
+            } else {
+                $ul.show();
+                $li.siblings().hide();
+                $a.hide();
+            }
+        });
+
+        $("#scriptButton").click(
+            {webindex: "/webclient/"},
+            OME.showScriptList
+        );
+    });
+
+</script>
+
+
+    <script type="text/javascript" src="/static/webclient/javascript/ome.webclient.actions.js?_5.4.7.25-gs-ice36"></script>
+    <script src="/static/webclient/javascript/jquery.infieldlabel-0.1.js" type="text/javascript"></script>
+
+    <!-- Centre panel templating -->
+    <script type="text/javascript" src="/static/3rdparty/underscore/underscore-1.8.3-min.js"></script>
+    <!-- Include the underscore html templates -->
+    <script id="icon_thumbnails_template" type="text/template">
+        
+
+<ul id="dataIcons" class="element_sorter <%= layout %>Layout">
+    <li class="thead"> 
+        <div></div> 
+        <!-- 'sort-init' will perform sort on this column when element_sorter plugin inits -->
+        <div class='sort-alpha sort-init'>Name</div>
+        <div class='sort-date'>Date</div> 
+        <div class='sort-numeric'>Size X</div> 
+        <div class='sort-numeric'>Size Y</div> 
+        <div class='sort-numeric'>Size Z</div>
+    </li>
+
+    <% _.each(images, function(img) { %>
+        <li class="row <% if(img.selected) {print ('ui-selected')} %>
+            <% if(img.fsSelected) {print ('fs-selected')} %> "
+            id="image_icon-<%= img.id %>"
+            data-fileset="<%= img.data.obj.filesetId %>"
+            data-type="image"
+            data-id="<%= img.id %>"
+            data-perms="<%= img.data.obj.permsCss %>"
+            tabindex="0"
+            <% if(img.shareId) { %> data-share="<%= img.shareId %>" <% }%>
+            data-owned="">
+
+            <div class="image">
+                <!-- we wrap img with <a> so you can right-click -> open link in new tab -->
+                <a href="<%= webindex %><% if(img.shareId) {print( img.shareId + '/')} %>img_detail/<%= img.id %>/<% if (dataset) print('?dataset=' + dataset) %>" >
+                    <img/>
+                </a>
+            </div>
+            <!-- NB: '#image_icon-123 div.desc' etc is used to update name when changed in right panel via "editinplace" -->
+            <div class="desc" valign="middle">
+                 <%= img.name %>
+                <span class="hidden_sort_text"> <%= img.name %> </span>
+            </div>
+            <div class="date" valign="middle"><%= img.date %></div>
+            <div class="sizeX" valign="middle"><%= img.data.obj.sizeX %></div>
+            <div class="sizeY" valign="middle"><%= img.data.obj.sizeY %></div>
+            <div class="sizeZ" valign="middle"><%= img.data.obj.sizeZ %></div>
+        </li>
+    <% }) %>
+</ul>
+
+<% if (paging) { %>
+<div class="clear"> </div>
+<div class="paging" id="page" data-page="<%= page %>">
+    <% if (page-1 > 0) { %>
+        <input data-page="<%= page-1 %>" class="button_pagination" type="button" value="Previous" alt="Previous"/>
+    <% } %>
+
+    <% for (var p=1; p<=pageCount; p++) { %>
+        <% if (page === p) { print (p) }
+            else { %>
+                <input data-page="<%= p %>" class="button_pagination" type="button" value="<%= p %>" alt="<%= p %>"/>
+            <% } %>
+    <% } %>
+
+    <% if (page < pageCount) { %>
+        <input data-page="<%= page+1 %>" class="button_pagination" type="button" value="Next" alt="Next"/>
+    <% } %>
+
+</div>
+<div class="clear"> </div>
+<% } %>
+    </script>
+    <script id="icon_header_template" type="text/template">
+        
+<div class="toolbar">
+    <div id="layout_chooser">
+        <button id="icon_layout" title="View as Thumbnails" class="<% if (layout === 'icon') print('checked') %>" /><button id="table_layout" title="View as List" class="<% if (layout === 'table') print('checked') %>" />
+    </div>
+    <div class="search filtersearch" id="filtersearch">
+        <select id="choosefilter">
+            <option value="addfilter">Add filter</option>
+            <option value="rating">By Rating</option>
+            <option value="unrated">Unrated</option>
+            <option value="name">Name</option>
+            <option value="tag">Tag</option>
+            <option disabled>──────────</option>
+            <option value="removeAll">Remove all filters</option>
+        </select>
+
+        <div id="filtersContainer" style="float:left">
+            <div id="filterrating" class="imagefilter">
+                <img title="Filter by rating (exact match)" src="<%= staticUrl %>image/rating0.png">
+                <span title="Clear filter" class="removefilter" style="vertical-align:top">X</span>
+            </div>
+
+            <div id="filterunrated" class="imagefilter">
+                <span style="font-size: 15px">Unrated</span>
+                <span title="Remove filter" class="removefilter" style="vertical-align:top">X</span>
+            </div>
+
+            <div id="filtername" class="imagefilter">
+                <label for="id_search"> Filter by name </label>
+                <input id="id_search" type="text" size="25">
+            </div>
+            <span class="loading" style="display: none;"></span>
+        </div>
+    </div>
+
+    <div id="filtertag" class="imagefilter filtersearch">
+        <select id="filter_by_tag">
+            <!-- Tags loaded here... -->
+        </select>
+        <span title="Remove all Tag filters" class="removefilter" style="float:left">X</span>
+        <div id="currentFilterTags">
+            <!-- Current tags here -->
+        </div>
+    </div>
+</div>
+<div id="icon_table"></div>
+<div style="height:25px" class="toolbar">
+    <div style="position: absolute; right: 10px; bottom: 0; width: 200px; height: 25px">
+        <span class="zoomLabel">Zoom:</span>
+        <div id="thumb_size_slider" class="thumb_size_slider" title="Zoom Thumbnails"></div>
+    </div>
+</div>
+    </script>
+    <script id="tags_template" type="text/template">
+        
+<% _.each(tags, function(tag) { %>
+<span class="tag_annotation_wrapper"
+    data-tag-id="<%= tag.id %>"
+    data-added-by="<% print (tag.addedBy.join(',')) %>">
+	
+    <div class="tag">
+        <a class='tooltip tag_inner' href="?show=tag-<%= tag.id %>" target="_top">
+            <%= tag.textValue %>
+        </a>
+
+        <% if (tag.canRemove) { %>
+        <span class='removeTag' title="Remove Tag" id="<%= tag.id %>-tag"
+                url='<%= webindex %>action/remove/tag/<%= tag.id %>/'>
+                -
+        </span>
+        <% } %>
+
+        <span class="tooltip_html" style='display:none'>
+        <!-- show different tooltip for batch_annotate panel -->
+        <% if (tag.links) { %>
+            Can remove Tag from <b><%= tag.canRemoveCount %> object<% if(tag.canRemoveCount !== 1) {print('s')} %></b>:<br/>
+            <% _.each(tag.links, function(link, idx) { %>
+                <div>
+                    <% if (idx < 20) { %>
+                        <b><%= link.parent.class %> <%= link.parent.id %></b>
+                        <% print(_.escape(link.parent.name).slice(0, 28)) %>
+                        <% if (link.owner.id !== userId){
+                            print("(" + link.owner.firstName.slice(0, 1) + " " + _.escape(link.owner.lastName) + ")")
+                        } %>
+                    <% } else if (idx === 20) { %>
+                        and <b><% print(tag.links.length - 20) %></b> other objects...
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <b>ID:</b> <%= tag.id %><br />
+            <b>Owner:</b> <%= tag.owner.firstName %> <%= tag.owner.lastName %><br />
+            <b>Linked by:</b> <%= tag.link.owner.firstName %> <%= tag.link.owner.lastName %><br />
+            <b>On:</b> <% print(OME.formatDate(tag.link.date)) %><br />
+            <b>Description:</b> <%= tag.description %>
+        <% } %>
+        </span>
+    </div>
+    
+</span>
+
+<% }) %>
+    </script>
+    <script id="fileanns_template" type="text/template">
+        
+<% _.each(anns, function(ann) { %>
+<li class="file_ann_wrapper"
+    id="file_ann-<%= ann.id %>"
+    data-added-by="<% print (ann.addedBy.join(',')) %>">
+
+    <a class='tooltip'
+        href="<% if (ann.permissions.canDownload) { print(webindex + 'annotation/' + ann.id)} else {print('#') } %>">
+        <%= ann.file.name %>
+        <% if (ann.file.size) { %>
+            <span>(<%= ann.file.size %>)</span>
+        <% } %>
+    </a>
+
+    <span class="tooltip_html" style='display:none'>
+        <!-- show different tooltip for batch_annotate panel -->
+        <% if (ann.links) { %>
+            Can remove File from <b><%= ann.canRemoveCount %>
+            object<% if(ann.canRemoveCount !== 1) {print('s')} %></b>:<br/>
+            <% _.each(ann.links, function(link, idx) { %>
+                <div>
+                    <% if (idx < 20) { %>
+                        <b><%= link.parent.class %> <%= link.parent.id %></b>
+                        <% print(_.escape(link.parent.name).slice(0, 28)) %>
+                        <% if (link.owner.id !== userId){
+                            print("(" + link.owner.firstName.slice(0, 1) + " " + _.escape(link.owner.lastName) + ")")
+                        } %>
+                    <% } else if (idx === 20) { %>
+                        and <b><% print(ann.links.length - 20) %></b> other objects...
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <b>Annotation ID:</b> <%= ann.id %><br />
+            <b>Owner:</b> <%= ann.owner.firstName %> <%= ann.owner.lastName %><br />
+            <b>Linked by:</b> <%= ann.link.owner.firstName %> <%= ann.link.owner.lastName %><br />
+            <b>On:</b> <% print(OME.formatDate(ann.link.date)) %> <br />
+            <b>Description:</b> <%= ann.description %>
+            <% if (ann.ns){ %>
+                <br/><b>Namespace:</b> <%= ann.ns %>
+            <% } %>
+            <br/><b>File ID:</b> <%= ann.file.id %>
+        <% } %>
+    </span>
+
+    <div class="attachment_actions">
+        <input type="checkbox" style="display:none;"/>
+        <% if (ann.link.permissions.canDelete) { %> <!-- and not ann.isOriginalMetadata -->
+            <a class='removeFile action' id="<%= ann.id %>-file" title="Remove File"
+            href='<%= webindex %>action/remove/file/<%= ann.id %>/'>&#8211</a>
+        <% } %>
+
+        <% if (ann.permissions.canDelete) { %> <!-- and not ann.isOriginalMetadata -->
+            <a id="<%= ann.id %>-file" type="image" class="deleteFile action" title="Delete File"
+                href="<%= webindex %>action/delete/file/<%= ann.id %>/"> &#215 </a>
+        <% } %>
+
+    </div>
+</li>
+
+<% }) %>
+    </script>
+    <script id="comments_template" type="text/template">
+        <% _.each(anns, function(ann) { %>
+<div class="ann_comment_wrapper" data-added-by="<% print (ann.addedBy.join(',')) %>">
+
+    <div class="avatar">
+        <img src="<%= webindex %>avatar/<%= ann.owner.id %>/"
+        alt="<%= ann.owner.firstName %> <%= ann.owner.lastName %>"
+        title="<%= ann.owner.firstName %> <%= ann.owner.lastName %>" />
+    </div>
+
+    <div class="ann_comment_text tooltip">
+        <div class="ann_comment_header">
+            <strong>
+                <%= ann.owner.firstName %> <%= ann.owner.lastName %>
+            </strong> 
+            at
+            <% print(OME.formatDate(ann.link.date)) %>
+        </div>
+    
+        <% if (ann.permissions.canDelete) { %>
+            <img class='removeComment' id="<%= ann.id %>-comment"
+                src="<%= static %>image/icon_basic_delete.png"
+                url='<%= webindex %>action/remove/comment/<%= ann.id %>/' 
+                title="Delete comment"/>
+        <% } %>
+
+        <div class='commentText'>
+            <%= ann.textValue %>
+        </div>
+    </div>
+
+    <% if (ann.ns || ann.description) { %>
+    <span class="tooltip_html" style='display:none'>
+        <b>ID:</b> <%= ann.id %><br />
+        <% if (ann.ns) { %><b>Namespace:</b> <%= ann.ns %><br /><% } %>
+        <% if (ann.description) { %><b>Description:</b> <%= ann.description %><br /><% } %>
+    </span>
+    <% } %>
+
+</div>
+<% }) %>
+
+    </script>
+    <script id="mapanns_template" type="text/template">
+        <% _.each(anns, function(ann) { %>
+
+<table <% if (ann.id && ann.addedBy) { %>
+            data-annId="<%= ann.id %>"
+            data-added-by="<% print (ann.addedBy.join(',')) %>"
+        <% } else { %>
+            data-added-by="<%= WEBCLIENT.USER.id %>"
+        <% } %>
+        class="keyValueTable
+            <% if (!ann.id || (ann.permissions.canEdit && clientMapAnn)){ %> editableKeyValueTable <% } %>
+            ">
+    <thead>
+      <% if (showNs && ann.ns) { %>
+      <tr title="<%= ann.ns %>">
+          <th colspan="2">
+              <%= ann.ns.slice(0, 50) %>
+          </th>
+      </tr>
+      <% } %>
+      <tr class="tooltip">
+          <th colspan="2">
+            <% if (ann.id) { %>
+                Added by: <%= ann.owner.firstName %> <%= ann.owner.lastName %>
+                <% if (showParent && ann.link.parent.name){ %>
+                  <br> To: <%= ann.link.parent.name %>
+                <% } %>
+
+                <span class="tooltip_html" style='display:none'>
+                    <b>ID:</b> <%= ann.id %><br />
+                    <% if (ann.owner) { %>
+                        <b>Owner:</b> <%= ann.owner.firstName %> <%= ann.owner.lastName %>
+                    <% } %>
+                    <% if (ann.link) { %>
+                        <br /><b>Linked by:</b> <%= ann.link.owner.firstName %> <%= ann.link.owner.lastName %>
+                        <% if (ann.link.date) { %>
+                            <br /><b>On:</b> <% print(OME.formatDate(ann.link.date)) %>
+                        <% } %>
+                    <% } %>
+                </span>
+            <% } %>
+          </th>
+    </tr>
+    <% if (showTableHead) { %>
+    <tr>
+        <th>Key</th>
+        <th>Value</th>
+    </tr>
+    <% } %>
+
+    </thead>
+
+    <!-- Last row always has empty key & value fields -->
+    <% if (ann.id) { %>
+      <% _.each(ann.values, function(row) { %>
+        <tr>
+            <td><% print(_.escape(row['0'])) %></td>
+            <td><% print(_.escape(row['1'])) %></td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr class="placeholder">
+          <td>Add Key</td>
+          <td>Add Value</td>
+      </tr>
+    <% } %>
+</table>
+
+<% }) %>
+
+    </script>
+    <script id="ratings_template" type="text/template">
+        <ul class="lnfiles">
+
+    <li class="rating myRating" style="position: relative">
+        <a><img
+        <% if (canAnnotate) { %>
+            title="Click to add rating"
+        <% } else { %>
+            title="You don't have permissions to add rating"
+        <% } %>
+        <% if (average) { %>
+            src="<%= static %>image/rating<%= average %>.png"
+        <% } else { %>
+            src="<%= static %>image/rating0.png"
+        <% } %>
+        />
+        </a>
+        <% if (canAnnotate) { %>
+        <a href="#" class="removeRating removeTag" title="Delete rating">X</a>
+        <% } %>
+    </li>
+</ul>
+<div id="ratingsSummary" <% if (!average) { %>style="display:none"<% } %> >
+    (avg:
+    <span id="ratingsAverage"><%= average %></span>
+    / <span id="ratingsCount"><%= count %></span>
+    votes)
+</div>
+    </script>
+    <script id="customanns_template" type="text/template">
+        
+<% _.each(anns, function(ann) { %>
+
+<tr data-added-by="<% print (ann.addedBy.join(',')) %>">
+    <th><%= ann.type %></th>
+    <td>
+        <div class="tooltip">
+        <% if (ann.type === 'Xml') { %>
+            <div><% print((ann.value + "").slice(0, 20)) %>...</div>
+            <div class="show_xml">Open in new window</div>
+            <div style="display: none"><%= ann.value %></div>
+        <% } else { %>
+            <div><%= ann.value %></div>
+        <% } %>
+        </div>
+        
+        <span class="tooltip_html" style='display:none'>
+            <b>ID:</b> <%= ann.id %><br />
+            <% if (ann.ns) { %><b>Namespace:</b> <%= ann.ns %><br /><% } %>
+            <% if (ann.description) { %><b>Description:</b> <%= ann.description %><br /><% } %>
+            <b>Owner:</b> <%= ann.owner.firstName %> <%= ann.owner.lastName %><br />
+            <b>Date:</b> <% print(OME.formatDate(ann.date)) %>
+
+            <% if (ann.parent) { %>
+            <br />
+            <b>Linked to:</b> <%= ann.parent.class %> <%= ann.parent.id %>
+            <% } %>
+        </span>
+    </td>
+</tr>
+<% }) %>
+    </script>
+
+    <!-- Toolbar -->
+    <script type="text/javascript" src="/static/3rdparty/jquery.chosen-1.2.0/chosen.jquery.js"></script>
+
+    <!-- The following are required by the right-hand panel, E.g. annotations/metadata_general.html -->
+    <script type="text/javascript" src="/static/3rdparty/jquery.quicksearch-1.0.js"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/jquery.editinplace-0.1.2.js"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/jquery.form-3.51.js"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.tagging_form.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.right_panel_tags_pane.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.right_panel_fileanns_pane.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.right_panel_comments_pane.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.right_panel_customanns_pane.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.right_panel_ratings_pane.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webclient/javascript/ome.right_panel_mapanns_pane.js?_5.4.7.25-gs-ice36"></script>
+
+
+    <!-- preview viewer... -->
+    <script type="text/javascript" src="/static/3rdparty/jquery.blockUI-2.66.0.js"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.viewport.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.viewportImage.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.gs_slider.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.gs_utils.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.scalebardisplay.js?_5.4.7.25-gs-ice36"></script>
+    <link rel="stylesheet" type="text/css" href="/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.css" />
+    <link rel="stylesheet" type="text/css" href="/static/webgateway/css/ome.colorbtn.css?_5.4.7.25-gs-ice36" />
+    <link rel="stylesheet" type="text/css" href="/static/3rdparty/farbtastic-1.2/farbtastic.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/static/webgateway/css/ome.postit.css?_5.4.7.25-gs-ice36" />
+    <script type="text/javascript" src="/static/3rdparty/JQuerySpinBtn-1.3a/JQuerySpinBtn.js"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.colorbtn.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/omero_image.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.smartdialog.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/3rdparty/aop-1.3.js"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.postit.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/3rdparty/farbtastic-1.2/farbtastic.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/d3-3.5.17/d3.min.js"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.histogram.js?_5.4.7.25-gs-ice36"></script>
+
+
+    <!-- ...including big images -->
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/utils.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/PanoJS.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/controls.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/pyramid_Bisque.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/pyramid_imgcnv.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/pyramid_Zoomify.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/control_thumbnail.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/control_info.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/control_svg.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/control_roi.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/panojs-2.0.0/control_scalebar.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/jquery.mousewheel-3.0.6.js"></script>
+
+    <!-- hammer.js for tablet gestures -->
+    <script type="text/javascript" src="/static/3rdparty/hammer-2.0.2/hammer.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/3rdparty/panojs-2.0.0/panojs.css" media="all" />
+    <link rel="stylesheet" href="/static/webgateway/css/ome.gs_slider.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/webgateway/css/ome.viewport.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <!-- scripts for SPW plate.html -->
+    <script type="text/javascript" src="/static/webgateway/js/ome.plateview.js?_5.4.7.25-gs-ice36"></script>
+    <script type="text/javascript" src="/static/webgateway/js/ome.spwgridview.js?_5.4.7.25-gs-ice36"></script>
+
+    <script>
+
+        // OMERO constants
+        if (OMERO === undefined) {var OMERO = {};}
+        OMERO['constants'] = {
+            'namespaces': {
+                'NSCOMPANIONFILE': "openmicroscopy.org/omero/import/companionFile"
+            },
+            'annotation': {
+                'file': {'ORIGINALMETADATA': "original_metadata.txt"}
+            },
+            'metadata': {
+                'NSCLIENTMAPANNOTATION': "openmicroscopy.org/omero/client/mapAnnotation"
+            }
+        };
+
+        // Variables used by static files, particularly ome.tree.js for jstree setup
+        // Also used by right panel annotation tabs
+        var WEBCLIENT = {};
+
+        WEBCLIENT.active_group_id = 108;
+        WEBCLIENT.USER = {'id': 2113, 'fullName': "John Hoffer"};
+        WEBCLIENT.active_user = {'id': 2113, 'fullName': "John Hoffer"};
+        WEBCLIENT.eventContext = {"userName": "jth30", "eventId": -1, "adminPrivileges": [], "sessionUuid": "ace9de1b-610d-4a44-8f50-b8ce2ee59eda", "groupPermissions": {"isUserWrite": true, "isWorldWrite": false, "canDelete": true, "isWorldRead": false, "perm": "rwra--", "canEdit": true, "canAnnotate": true, "isGroupAnnotate": true, "isGroupWrite": false, "canLink": true, "isUserRead": true, "@type": "TBD#Permissions", "isGroupRead": true}, "sudoerId": null, "memberOfGroups": [108, 1, 53, 1107], "userId": 2113, "isAdmin": false, "groupName": "Laboratory for Systems Pharmacology", "sessionId": 592143, "shareId": -1, "eventType": "User", "leaderOfGroups": [], "groupId": 108, "sudoerName": null};
+        WEBCLIENT.CAN_CREATE = true;
+
+        WEBCLIENT.URLS = {};
+        WEBCLIENT.URLS.webindex = "/webclient/";
+        WEBCLIENT.URLS.api_paths_to_object = "/webclient/api/paths_to_object/";
+        WEBCLIENT.URLS.api_containers = "/webclient/api/containers/";
+        WEBCLIENT.URLS.api_datasets = "/webclient/api/datasets/";
+        WEBCLIENT.URLS.api_images = "/webclient/api/images/";
+        WEBCLIENT.URLS.api_plates = "/webclient/api/plates/";
+        WEBCLIENT.URLS.api_plate_acquisitions = "/webclient/api/plate_acquisitions/";
+        WEBCLIENT.URLS.static_webclient = "/static/webclient/";
+        WEBCLIENT.URLS.static_webgateway = "/static/webgateway/";
+        WEBCLIENT.URLS.api_tags_and_tagged = "/webclient/api/tags/";
+        WEBCLIENT.URLS.fileset_check = "/webclient/fileset_check/delete/";
+        WEBCLIENT.URLS.deletemany = "/webclient/action/deletemany/";
+        WEBCLIENT.URLS.copy_image_rdef_json = "/webgateway/copyImgRDef/";
+        WEBCLIENT.URLS.reset_owners_rdef_json = "/webgateway/applyOwnersRDef/";
+        WEBCLIENT.URLS.reset_rdef_json = "/webgateway/resetRDef/";
+        // jsTree code in ome.tree.js and center panel code in center_plugin.thumbs.js.html uses initially_select
+        // instead of browser URL since URL may be /webclient/?path=plate.name-barcode|well.name-A1
+
+        WEBCLIENT.initially_select = "";
+        WEBCLIENT.initially_open = "";
+
+        
+            WEBCLIENT.URLS.tree_top_level = WEBCLIENT.URLS.api_containers;
+        
+
+        WEBCLIENT.URLS.api_experimenter = "/webclient/api/experimenters/2113/";
+
+        WEBCLIENT.UI = {};
+        WEBCLIENT.UI.TREE = {};
+        WEBCLIENT.UI.TREE.pagination_nodes = ["experimenter", "screen", "plate", "acquisition", "project", "tagset", "image"];
+        WEBCLIENT.UI.TREE.type_order = "tagset,tag,project,dataset,screen,plate,acquisition,image".toLowerCase().split(",").filter(function(e){return e});
+
+        
+
+        WEBCLIENT.HAS_RDEF = false;
+        $.getJSON("/webgateway/getImgRDef/", function(data){
+            WEBCLIENT.HAS_RDEF = !!(data && data.rdef);
+        });
+
+        // ** "Open With" config used by E.g. ome.tree.js **
+        // Loaded scripts can call OME.setOpenWithEnabledHandler and/or
+        // OME.setOpenWithActionHandler to override default behaviour
+        WEBCLIENT.OPEN_WITH = [];
+        $.getJSON("/webgateway/open_with/", function(data){
+            if (data && data.open_with_options) {
+                WEBCLIENT.OPEN_WITH = data.open_with_options;
+                // Try to load scripts if specified:
+                WEBCLIENT.OPEN_WITH.forEach(function(ow){
+                    if (ow.script_url) {
+                        $.getScript(ow.script_url);
+                    }
+                })
+            }
+        });
+
+        $(document).ready(function(){
+            // initially hidden
+            $("#user_dropdown ul").css('visibility', 'hidden');
+            // show on click
+            $("#show_user_dropdown").click(function(e) {
+                
+                $("ul", $(this).parent()).css('visibility', 'visible');
+                e.preventDefault();
+                return false;
+            });
+            // on hover-out, hide drop-down menus
+            $("#user_dropdown ul").hover(function(){}, function(){
+                $(this).css('visibility', 'hidden');
+            });
+
+            $("#top_search_field label").inFieldLabels();
+            
+            OME.setupAjaxError("/feedback/feedback/");      // AJAX 500 need feedback form url
+        });
+
+        // The shown user's ID. This is located here because static javascript files
+        // are not preprocessed by django
+        function activeUserId() {
+            return 2113;
+        };
+
+        // The currently logged in user ID
+        function currentUserId() {
+            
+                return 2113
+            
+        };
+
+    </script>
+
+    <!-- keep-alive ping so that OMERO session doesn't die -->
+    
+
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        
+        var ping_interval = 60000;
+        var i = setInterval(function (){
+            $.get("/webclient/keepalive_ping/");
+        }, ping_interval);
+    });
+</script>
+
+
+
+
+    <!-- toolbar helpers -->
+    
+
+
+
+
+
+<script type="text/javascript">
+if (typeof OME === "undefined") { OME={}; }
+
+    OME.createShare = function() {
+
+        var productListQuery = [];
+
+        // we do inst.get_selected() here, since we then get objects
+        // instead of ids for some reason?
+        var inst = $.jstree.reference('#dataTree');
+        data = inst.get_selected(true);
+        data.forEach(function(node){
+            productListQuery.push(node.type + "=" + node.data.id);
+        });
+
+        var query = '/webclient/action/add/share/' + "?"+productListQuery.join("&");
+        $("#create_share_form").dialog("open");
+        $("#create_share_form").attr("action", query)
+        $("#create_share_form").load(query);
+        return false;
+    }
+
+    $(document).ready(function(){
+
+        // AJAX handling of create-discussion form
+        $("#create_share_form").ajaxForm({
+            success: function(html) {
+                if (html.indexOf("shareId") > -1) {
+                    var shareId = html.replace("shareId:", "");
+                    $("#create_share_form").dialog( "close" );
+                    $("#shareCreatedId").text(shareId);
+                    $("#share_dialog_form").dialog("open").show();
+                } else {
+                    $("#create_share_form").html(html);
+                }
+            },
+        });
+
+        $("#share_dialog_form").dialog({
+            autoOpen: false,
+            resizable: true,
+            height: 150,
+            width:300,
+            modal: true,
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+
+        $("#create_share_form").dialog({
+            autoOpen: false,
+            resizable: true,
+            height: 600,
+            width:450,
+            modal: true,
+            buttons: {
+                "Accept": function() {
+                    // simply submit the form
+                    $("#create_share_form").submit();
+                },
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+
+
+    });
+</script>
+
+
+
+<!-- hidden form for creating share - shown in dialog & loaded by AJAX -->
+<form id="create_share_form" action="#" method="post" title="Create Share" class="standard_form"><input type='hidden' name='csrfmiddlewaretoken' value='xAcWApPkpUIGQGmAc41XMvwrbLHNmC79' />
+</form>
+
+<form id="share_dialog_form" action="#" title="Create Share" style="display:none">
+    <p style="font-size: 120%; font-weight: bold">
+        Share <span id="shareCreatedId"></span> was created successfully.
+    </p>
+</form>
+
+
+    <!-- set-up right panel tabs -->
+    
+
+
+
+
+<script type="text/javascript">
+/**
+ * This script is included in the main containers.html page as well as public.html,
+ * adding itself as a selection listener to the jsTree in each case.
+ * It loads appropriate data into the right-hand 'general' tab on selection changes in the jsTree.
+**/
+
+$(function () {
+
+    $("#annotation_tabs").tabs({cache: true, disabled: true});
+    var $metadata_general = $("#metadata_general");
+    var general_tab_index = 0;
+
+    // this is called on change in jstree selection, or switching tabs
+    var update_metadata_general_tab = function() {
+        var selected = $("body").data("selected_objects.ome");
+
+        var prefix = '/webclient/';
+
+        if(selected.length == 0) {
+            return;
+        }
+        if (selected.length > 1) {
+            // handle batch annotation...
+            var productListQuery = new Array();
+            var well_index;
+            for (var i=0; i<selected.length; i++) {
+                productListQuery[i] = selected[i]["id"].replace("-","=");
+                well_index = well_index || selected[i]["index"];
+            }
+            var query = '/webclient/batch_annotate/'+"?"+productListQuery.join("&");
+            if (well_index) {
+                query += "&index=" + well_index;
+            }
+            // Load right hand panel...
+            $.ajax({
+                url: query,
+                dataType: "html",
+                // Need to check that the selected objects haven't changed during AJAX call...
+                success: function(data) {
+                    var selected_ids = [], i,
+                        selected_data = $("body").data("selected_objects.ome");
+                    for(i=0; i<selected_data.length; i++) {
+                        selected_ids.push(selected_data[i].id);
+                    }
+                    var oids = $(data).filter("#object-ids").text().split("|");
+                    // need to compare two arrays of strings...
+                    selected_ids.sort();
+                    oids.sort();
+                    for(i=0;i<oids.length; i++) {
+                        if (oids[i] !== selected_ids[i]) {
+                            return;     // any differences, don't load panel.
+                        }
+                    }
+                    $metadata_general.html(data);
+                },
+                error: function(data) {
+                    // If request string too long. e.g. image=1&image=2&image=3.... etc
+                    // Just show the error message in right panel.
+                    // This error will be ignored by OME.setupAjaxError();
+                    if (data.status == 414 || data.responseText.indexOf('Request Line is too large') > -1) {
+                        $metadata_general.html(data.responseText);
+                    }
+                }
+            });
+            
+        } else {
+            $("#annotation_tabs").tabs("enable", general_tab_index);    // always want metadata_general enabled
+            var url = null;
+            //var oid = selected.attr('id');
+            //var orel = selected[0].attr('rel');
+            var oid = selected[0]["id"];
+            var orel = oid.split("-")[0];
+            if (typeof oid =="undefined" || oid==false) return;
+            
+            // handle loading of GENERAL tab
+            if ($metadata_general.is(":visible") && $metadata_general.is(":empty")) {
+                // orphaned
+                if (oid.indexOf("orphaned")>=0) {
+                    $metadata_general.html('<div class="right_tab_inner"><p class="description">This is a virtual container with orphaned images. These images are not linked anywhere. Just drag them to the selected container.</p></div>');
+                    //return;
+                // experimenter
+                } else if (oid.indexOf("experimenter")>=0) {
+                    //$metadata_general.html('<p>'+selected.children().eq(1).text()+'</p>');
+                // everything else
+                } else {
+                    if(orel=="image") {
+                        if (selected[0]["shareId"]) {
+                            url = prefix+'metadata_details/'+orel+'/'+oid.split("-")[1]+'/'+selected[0]["shareId"]+'/';
+                        } else {
+                            url = prefix+'metadata_details/'+orel+'/'+oid.split("-")[1]+'/';
+                        }
+                    } else if(orel=="well"){
+                        var well_index = selected[0]["index"] || 0;
+                        url = '/webclient/metadata_details/well/'+oid.split('-')[1]+'/?index='+ well_index;
+                    } else {
+                        url = prefix+'metadata_details/'+orel+'/'+oid.split("-")[1]+'/';
+                    }
+                }
+                if (url !== null) {
+                    // We are effectively doing $metadata_general.load(url) BUT we need to check that selection
+                    // is still correct (hasn't changed during the AJAX call);
+                    $.ajax({
+                        url: url,
+                        dataType: "html",
+                        success: function(data) {
+                            var selected_id = $("body").data("selected_objects.ome")[0].id;
+                            var oid = $(data).filter("#object-id").text();
+                            if (oid === selected_id) {
+                                $metadata_general.html(data);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    // update tabs when tabs switch
+    $("#annotation_tabs").on( "tabsactivate", function(event, ui){
+        // we get a "tabsactivate" event, but need to check if 'this' tab was chosen...
+        if (ui.newTab.index() == general_tab_index) {
+            // sometimes this doesn't get shown until too late, so the :visible check above failed
+            $metadata_general.show();
+            update_metadata_general_tab();
+        }
+    });
+
+    // on selection change, clear tab contents then update
+    $("body").on("selection_change.ome", function(event) {
+        // clear contents of panel
+        $("#metadata_general").empty();
+
+        update_metadata_general_tab();     // update
+    });
+
+});
+</script>
+
+
+
+    <!-- include scripts for loading data into right-hand tabs -->
+    <!-- these are configured in settings.py under "omero.web.ui.right_tabs" -->
+    
+        
+
+<script>
+
+$(document).ready(function() {
+    
+    $("#metadata_tab").omeroweb_right_plugin({
+        plugin_index:1,
+        load_plugin_content: function(selected, obj_dtype, obj_id) {    // Url based on selected object(s)
+            var well_index = selected[0]["index"] || 0;
+            var url;
+            if (selected[0]["shareId"]) {
+                url = '/webclient/metadata_acquisition/'+obj_dtype+'/'+obj_id+'/'+selected[0]["shareId"]+'/';
+            } else {
+                url = '/webclient/metadata_acquisition/'+obj_dtype+'/'+obj_id+'/';
+            }
+            if (well_index > 0) {
+                url = url + '?index='+well_index;
+            }
+            $(this).html("<h1 style='padding: 20px 15px'><img src='/static/webgateway/img/spinner.gif'/>Loading metadata...</h1>");
+            $(this).load(url);
+        },
+        supported_obj_types: ['image']
+    });
+
+});
+
+</script>
+    
+        
+
+<script>
+
+$(document).ready(function() {
+
+    $("#right_panel").bind('resize', function(event) {
+
+        // This behaviour is also in the metatdata_preview.html itself
+        var vpWidth = $(this).width() - 50,
+            vpHeight = Math.min(vpWidth, $("#preview_tab").height() - 100);
+        vpHeight = Math.max(300, vpHeight);
+
+        if (OME.preview_viewport) {
+            // Need to set a few sizes, then call viewport.refresh()
+            $("#viewport").css({'width': vpWidth + 'px', 'height': vpHeight + 'px'});
+            $("#viewport-vp").css({'width': vpWidth + 'px'});
+            $("#viewport-top").css({'height': vpHeight + 'px'});
+            OME.preview_viewport.refresh(true);
+        }
+    });
+
+    $("#preview_tab").omeroweb_right_plugin({
+        plugin_index:2,
+        load_plugin_content: function(selected, obj_dtype, obj_id) {    // Url based on selected object(s)
+            var url;
+            var well_index = selected[0]["index"] || 0;
+            if (selected[0]["shareId"]) {
+                url = '/webclient/metadata_preview/'+obj_dtype+'/'+obj_id+'/'+selected[0]["shareId"] + '/';
+            } else {
+                url = '/webclient/metadata_preview/'+obj_dtype+'/'+obj_id + '/';
+            }
+            if (well_index > 0) {
+                url = url + '?index='+well_index;
+            }
+            //$this.html("<h1 style='padding: 20px 15px'>Loading...</h1>");
+            $(this).load(url);
+        },
+        supported_obj_types: ['image', 'well']
+    });
+
+});
+
+</script>
+    
+    
+    
+    
+
+    <script type="text/javascript" src="/static/3rdparty/jquery.tooltip/jquery.tooltip.pack.js"></script>
+    <script src="/static/webclient/javascript/jquery.infieldlabel-0.1.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/3rdparty/jquery.tablesorter-2.0.3/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/static/3rdparty/jquery.quicksearch-1.0.js"></script>
+
+    
+    <script src="/static/tagsearch/3rd-party/chosen/chosen.jquery.js"></script>
+    <script src="/static/tagsearch/3rd-party/chosen.order.jquery.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function()
+            {
+                $("#id_selectedTags").chosen({placeholder_text:'Choose tags'});
+
+                $(".searching_info").tooltip({
+                    track: true,
+                    delay: 0,
+                    showURL: false,
+                    opacity: 1,
+                    fixPNG: true,
+                    showBody: " - ",
+                    top: -15,
+                    left: 5
+                });
+
+                // Form Submission
+                $("#tagSearchForm").ajaxForm({
+                  beforeSubmit: function() {
+                    // prevent submitting the form again while waiting
+                    $("div#content_details").html('<p>Loading data... please wait <img src ="/static/webgateway/img/spinner.gif"/></p>');
+                  },
+                  success: function(data) {
+                    $("div#content_details").html(data.html);
+
+                      if (data.project_count > 0) {
+                        $("#tagnav-project span").html(data.project_count);
+                      } else {
+                          $("#tagnav-project span").html('0');
+                      }
+
+                      if (data.dataset_count > 0) {
+                        $(".tagnav-dataset span").html(data.dataset_count);
+                      } else {
+                        $(".tagnav-dataset span").html('0');
+                      }
+
+                      if (data.screen_count > 0) {
+                        $(".tagnav-screen span").html(data.screen_count);
+                      } else {
+                        $(".tagnav-screen span").html('0');
+                      }
+
+                      if (data.plate_count > 0) {
+                        $(".tagnav-plate span").html(data.plate_count);
+                      } else {
+                        $(".tagnav-plate span").html('0');
+                      }
+
+                      if (data.acquisition_count > 0) {
+                        $(".tagnav-acquisition span").html(data.acquisition_count);
+                      } else {
+                        $(".tagnav-acquisition span").html('0');
+                      }
+
+                      if (data.image_count > 0) {
+                        $(".tagnav-image span").html(data.image_count);
+                      } else {
+                        $(".tagnav-image span").html('0');
+                      }
+
+                      if (data.preview) {
+                        $("#filtersearch").removeClass('hidden');
+                        OME.table_selection_changed();
+                      } else {
+                        $("#filtersearch").addClass('hidden');
+                      }
+
+
+                    // Hide any options that are no longer possible and
+                    // show any that have become possible
+                    $("#id_selectedTags option").each(function() {
+                      if (($.inArray(parseInt(this.value), data.navdata) == -1) && (data.navdata.length != 0)) {
+                        $(this).hide();
+                      } else {
+                        $(this).css('display', '');
+                      }
+                    });
+
+                    // Preserve the order of the select because otherwise Chosen will show the same order as
+                    // the underlying select. i.e. the original option ordering
+                    var selection = $('#id_selectedTags').getSelectionOrder();
+
+                    // Update the chosen selector
+                    $("#id_selectedTags").trigger("chosen:updated");
+                    // Old style chosen update
+                    // $("#id_selectedTags").trigger("liszt:updated");
+
+                    // Restore the ordering
+                    $('#id_selectedTags').setSelectionOrder(selection);
+
+                  }
+                });
+
+                // Selection change
+                $( "#id_selectedTags" ).chosen().change(function(event, params) {
+
+                  // Selection made
+                  if (params.selected) {
+                    // Instead of submitting, serialize the input data and load the url
+                    $("#tagSearchForm").submit();
+
+                  // Deselection made
+                  } else if (params.deselected) {
+                    $("#tagSearchForm").submit();
+                  }
+
+
+                });
+
+                // Preview change
+                $('#id_results_preview').change(function() {
+                    if($(this).is(":checked")) {
+                        // Check if there is anything to submit
+                        // Above Success should be able to handle no results though
+                        if ($("#id_selectedTags option:selected").length) {
+                          $("#tagSearchForm").submit();
+                        }
+
+                    } else {
+                        $("div#content_details").empty();
+                        $("#filtersearch").addClass('hidden');
+                        // TODO Hide filter
+                    }
+                });
+
+
+                $("#filtersearch label").inFieldLabels();
+
+                OME.table_selection_changed();     // clear selection (hides acquisition & preview tabs)
+        })
+    </script>
+
+
+
+    
+        <!-- block for extra head elements (not css or javascript) E.g. icon, meta tags -->
+        
+
+<link rel="shortcut icon" href="/static/webgateway/img/ome.ico" type="image/x-icon" />
+
+
+    
+
+</head>
+<body>
+
+
+        
+        
+        <div id="middle_header">
+
+            <a id="logo">
+                <img src="/static/webgateway/img/logo2.png"/>
+            </a>
+
+            
+            <div id="middle_header_left">
+				
+				    
+
+
+<ul>
+    <!-- Handle links from settings -->
+    
+        <li class="menu_link">
+          <a href="/webclient/"
+            
+               title="Browse Data via Projects, Tags etc"
+            
+          >Data</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/webclient/history/"
+            
+               title="History"
+            
+          >History</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="http://help.openmicroscopy.org/"
+            
+               target="new" title="Open OMERO user guide in a new tab"
+            
+          >Help</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/figure/"
+            
+               target="_blank" title="Open Figure in new tab"
+            
+          >Figure</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/omero_webtagging_tagsearch/"
+            
+          >Tag Search</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/omero_forms/designer/"
+            
+               target="new" title="Open OMERO.Forms in a new tab"
+            
+          >Forms Designer</a>
+        </li>
+    
+
+    
+</ul>
+
+				
+            </div>
+			
+			
+            <div id="middle_header_right">
+				
+
+        <!-- Global Tools -->
+        <ul class="header_toolbar" id="script_notifications">
+                
+
+
+    <li>
+        <!-- Script launcher -->
+        <span id="scriptButton" class="scriptButton toolbar_button" href="/webclient/list_scripts/" title="Run Script"></span>
+        <div id="scriptList" class="sub_menu info_panel" style="min-width: 200px !important">
+        <img id="scriptSpinner" style="display:none" src="/static/webgateway/img/spinner.gif" />
+            <!-- script list-items loaded here by AJAX -->
+        </div>
+    </li>
+
+
+            
+
+
+
+
+
+<script>
+
+    if (typeof OME === "undefined"){ OME = {}}
+    OME.showActivities = function() {
+        $("#activities_panel").show();
+        OME.displayStatus(-1);  // reset new_results
+        OME.refreshActivities();
+    }
+
+    // this is called by the setInterval loop below
+    OME.activitiesUpdate = function(i) {
+        $.get("/webclient/activities/", function(data) {
+            $('#activities_spinner').hide();
+            var inprogress = $("#inprogress", data).text();
+            var new_results = $("#new_results", data).text();
+            var failure = $("#failure", data).text();
+            
+            // if we've got no jobs still running, stop checking
+            if ((typeof inprogress == 'undefined') || (inprogress.length == 0)) {
+                if (i) clearInterval(i);
+                showJobCount(0);
+                //return;
+            }
+            inprogress = parseInt( inprogress );
+            if (inprogress==0) {
+                if (i != undefined) clearInterval(i);
+            }
+            
+            // display what we recieved, bind events etc
+            $("#activities_content").empty();
+            $("#activities_content").append( $("#jobsTable", $(data)) );
+            $("#jobsTable").alternateRowColors();
+            
+            // bind events
+            $("#activities_content a").click(function() {
+                var href = $(this).attr('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+            // show chgrp errors in new window
+            $(".chgrp_error a").click(function(event) {
+                var error_msg = $(this).next().html();
+                var newWindow=window.open('','','height=500,width=500,scrollbars=yes, top=50, left=100');
+                newWindow.document.write(error_msg);
+                newWindow.document.close();
+                return false;
+            });
+
+            // If we've got new errors - show Activities
+            if ($("#new_errors", data).length > 0) {
+                $("#activities_panel").show();
+                new_results = -1;   // hide notification number
+            }
+            OME.displayStatus(new_results, inprogress);
+
+        }).error(function() {
+            // this requires jQuery 1.5 or later
+            clearInterval(i);
+        });
+    }
+
+    // Add new results to the count, unless we have the Activities panel open
+    OME.displayStatus = function(newresults, inprogress) {
+        // update inprogress 'spinner'
+        if (typeof inprogress != 'undefined') {
+            if ((inprogress == '0') || (inprogress == 0)) {
+                $("#runningStatus").hide();
+            } else {
+                $("#runningStatus").show();
+            }
+        }
+        
+        // update result count
+        var results_count = parseInt($('#jobstatus').text()) || 0;
+        if (typeof newresults != 'undefined') {
+            var new_results = parseInt(newresults);
+            if (new_results < 0) results_count = 0  // clear
+            else results_count += new_results
+        }
+        // only display if we're not showing activities
+        if ((results_count > 0) && !$("#activities_panel").is(":visible")) {
+            $('#jobstatus').show();
+        } else {
+            results_count = 0;
+            $('#jobstatus').hide()
+        }
+        $('#jobstatus').text(results_count + '');
+        
+        // if neither flag is showing, fade out the main icon
+        if ($('#jobstatus').is(":visible") || $('#runningStatus').is(":visible")) {
+            // turning off, see #9154 $("#launch_activities").css('opacity', 1.0);
+        } else {
+            // turning off, see #9154 $("#launch_activities").css('opacity', 0.5);
+        }
+    }
+
+    OME.refreshActivities = function() {
+        var i = setInterval(function (){
+                OME.activitiesUpdate(i);
+        }, 5000);
+        OME.activitiesUpdate(i);
+    }
+    $(document).ready(function() {
+        OME.displayStatus(-1);  // reset new_results
+        OME.refreshActivities();
+        $("#activities_panel").hide();
+        
+        // add click handler to entire body, to close the activities panel 
+        $('body').click(function(event) {
+            var id = event.target.id;
+            //$(".info_panel").hide();
+            if ((id == 'launch_activities') || (id == 'jobstatus') || (id == 'runningStatus')) {
+                OME.showActivities();
+            } else {
+                $("#activities_panel .new_result").removeClass('new_result');
+                $("#activities_panel").hide();
+            }
+
+        }); // BUT also stop any events bubbling up from panel itself
+        $("#activities_panel").click(function(event) {
+            return false;
+        });
+        
+        $("#clear_activities").click(function() {
+            $.post("/webclient/activities_update/clean/");
+            $("#jobsTable>tbody>tr").filter(":not(.in_progress)").remove();
+        });
+
+        // close panels on 'ESCAPE'
+        $("body").bind('keyup', function(event){
+            if (event.keyCode === $.ui.keyCode.ESCAPE) {
+                $(".info_panel").hide();
+            }
+        });
+
+        // If a chgrp fails due to filesets, we provide a 'move all' button:
+        $("#activities_content").on("click", ".chgrp_move_all", function(event){
+            var $this = $(this);
+            if ($this.prop('disabled')){
+                return false;
+            }
+            $this.prop('disabled', true);
+            $.get($this.attr('url'), function(){
+                OME.refreshActivities();
+            });
+            event.preventDefault();
+            return false;
+        });
+    });
+</script>
+
+
+        <li id="queue">
+			
+            <span class="toolbar_button" id="launch_activities" title="Activities">
+                <span id="jobstatus" class="notifier">0</span>
+                <span id="runningStatus" style="display:none;"></span>
+            </span>
+            
+            <div id="activities_panel" class="info_panel">
+
+			<div class="info_panel_title">
+			
+                <h3>
+                    Activities
+                    <img id='activities_spinner' src="/static/webgateway/img/spinner.gif"/>
+                    
+                </h3>
+             <button type="button" id="clear_activities">Clear List</button>
+			 </div>
+				
+                <div id="activities_content">
+                </div>
+                
+            </div>
+        </li>
+
+        </ul>
+        
+        <!-- Global Search -->
+        
+
+
+<form id="search" action="/webclient/search/" title="Search OMERO">
+
+    <div id="top_search_field">
+        <label class="inline_label" for="id_search_query">Search:</label>
+        <input id="id_search_query" name="search_query" size="25" type="text" />
+        <input type="submit" value="Go" />
+    </div>
+    
+</form>
+        
+        <!-- User Dropdown -->
+        
+
+    <div id="user_dropdown">
+        <div id="show_user_dropdown">
+            <img src="/webadmin/myphoto/" />
+            <span>John Hoffer</span>
+        </div>
+        <ul class="dropdown">
+            
+              <li id="user_settings"><a href="/webadmin/myaccount/edit/" title="User settings">
+                User settings
+              </a></li>
+            
+			<!-- Help -->
+            <li id="send"><a href="#" onclick="return OME.openPopup('/feedback/comment/')">Send Feedback</a></li>
+			<li id="logout">
+
+
+<form action="/webclient/logout/" method="post"><input type='hidden' name='csrfmiddlewaretoken' value='xAcWApPkpUIGQGmAc41XMvwrbLHNmC79' />
+    <a href="javascript:;" onclick="parentNode.submit();">Logout</a>
+</form>
+</li>
+        </ul>
+    </div>
+
+
+            </div>
+			
+	        <div class="clear"></div>
+	
+		</div>
+    	
+        
+        <div id="content">
+        
+
+<div id="group_user_selection">
+    
+
+
+
+
+
+<script>
+    $(document).ready(function(){
+
+        var $groupList,
+            $listViewPort = $("#listViewPort").css("visibility", "visible").hide(),
+            $usersList,
+            DROPDOWN_HEIGHT = $(document).height()-110;
+
+        // Button toggles visibility of group chooser dropdown
+        $("#groupsUsersButton").click(function(event){
+            event.preventDefault();
+
+            if ($listViewPort.is(":visible")) {
+                $listViewPort.hide();
+            } else {
+                $listViewPort.show();
+
+                // First time we show menu, load if empty, then setup events...
+                if ($listViewPort.is(':empty')) {
+                    $listViewPort.append("<h1 style='margin: 10px'>Loading Groups...</h1>");
+                    $listViewPort.load("/webclient/group_user_content/?url=/omero_webtagging_tagsearch/", function() {
+                        // prepare lists for show/hide
+                        $groupList = $("#groupList");
+                        $usersList = $(".usersList");
+                        $groupList.css('max-height', DROPDOWN_HEIGHT + 'px');
+                        $usersList.css('max-height', DROPDOWN_HEIGHT + 'px');
+                        $groupList.css('visibility', 'visible');
+                        $usersList.css('visibility', 'visible').hide();
+
+                        // When hover or click on a Group, show Users...
+                        $( "#groupList" ).on( "mouseenter click", "li a", function(event) {
+                            event.preventDefault();
+                            var gid = $(this).attr("data-gid");
+                            $usersList.hide();
+                            $("#groupMembers-" + gid).show();
+                            return false;
+                        });
+                    });
+                }
+            }
+            return false;
+        });
+
+        // Any clicks that bubble up to body hide list...
+        $('body').click(function(event) {
+            $listViewPort.hide();
+        });
+
+    });
+</script>
+
+<ul id="group_user_chooser">
+	
+	
+    <li class="dropdown_menu">
+       
+	    <!-- Group / User drop-down -->
+        
+        <div id="groupsUsersButton" title="Switch Group/User">
+            <img 
+            
+                 src="/static/webclient/image/group_orange16.png"
+                
+             />
+            <span>Laboratory for Systems Pharmacology</span><span>John Hoffer</span>
+        </div>
+
+        <div id="listViewPort" class="dropdown"></div>
+    </li>
+</ul>
+
+</div>
+
+<div id="left_panel">
+	
+
+
+<div id="user_selection">
+
+
+
+
+
+
+</div>
+
+
+<div id="searching">
+  <div class="left_panel_inner">
+      <form id="tagSearchForm" action="/omero_webtagging_tagsearch/images" method="post" class="standard_form"><input type='hidden' name='csrfmiddlewaretoken' value='xAcWApPkpUIGQGmAc41XMvwrbLHNmC79' />
+          <h2>Tag Search</h2>
+          
+          
+          <div class="fieldWrapper">
+              <div class="tagSearchDivider">
+                  
+                  <label for="id_selectedTags">Selected Tags:</label>
+                  <select multiple="multiple" id="id_selectedTags" name="selectedTags">
+<option value="3204">Time Lapse</option>
+</select>
+                  <span class="searching_info"
+                    title="Tag Search - <small>Perform a query for Projects, Datasets and Images based on the tag specified. The query gets all Projects, Datasets and Images which have <b>all</b> of the specified tags.
+                    Each time a tag is added, the list of potential tags to add is reduced to those that overlap with the tags already specified.
+                    A count of results is shown in the search panel and at any time it is possible to show the Projects, Datasets and Images that match by turning on the <b>Preview<b></small>">
+                    <img src="/static/webgateway/img/help16.png" />
+                  </span>
+              </div>
+
+              
+              <label for="id_results_preview">Preview:</label>
+              <input checked="checked" id="id_results_preview" name="results_preview" type="checkbox" />
+              <h2>Results</h2>
+              <ul>
+                  <li class="tagnav-project"><div class="tagnav-icon">&nbsp;</div>Project:&nbsp;<span>0</span></li>
+                  <li class="tagnav-dataset"><div class="tagnav-icon">&nbsp;</div>Dataset:&nbsp;<span>0</span></li>
+                  <li class="tagnav-screen"><div class="tagnav-icon">&nbsp;</div>Screen:&nbsp;<span>0</span></li>
+                  <li class="tagnav-plate"><div class="tagnav-icon">&nbsp;</div>Plate:&nbsp;<span>0</span></li>
+                  <li class="tagnav-acquisition"><div class="tagnav-icon">&nbsp;</div>Plate Acquisition/Run:&nbsp;<span>0</span></li>
+                  <li class="tagnav-image"><div class="tagnav-icon">&nbsp;</div>Image:&nbsp;<span>0</span></li>
+              </ul>
+
+          </div>
+
+
+      </form>
+
+  </div>
+</div>
+
+
+</div>
+
+<div id="center_container">
+    <div id="trayhandle_left">
+        <div id="swapTree"><img id="lhid_trayhandle_icon_left" class="expanded-left" src="/static/webgateway/img/spacer.gif"></div>
+        <div class="dragHandle" style="left: -2px">
+            <div id="dragLeft"></div>
+        </div>
+    </div>
+
+    <div id="center_panel">
+        
+
+  <div id="center_panel_header">
+
+    <form class="search filtersearch hidden" id="filtersearch" action="#">
+        <div>
+            <label for="id_search">
+                Filter Results
+            </label>
+          <input type="text" id="id_search" size="25" />
+      </div>
+      <input type="submit" value="Go" />
+      <span class="loading">
+        <img class="loader" alt="Loading" src="/static/webgateway/img/spinner.gif">
+      </span>
+    </form>
+
+  </div>
+
+  <div id="content_details" class="center_panel_content"> </div>
+
+
+    </div>
+	
+    <div id="trayhandle_right">
+        <div id="swapMeta"><img id="lhid_trayhandle_icon_right" class="collapsed-right" src="/static/webgateway/img/spacer.gif"></div>
+        <div class="dragHandle" style="right: -2px">
+            <div id="dragRight"></div>
+        </div>
+    </div>
+</div>
+
+<div id="right_panel">
+    
+<div>
+    <div id="annotation_tabs" class="absolute_fill">
+        <ul id="annotation_tabs_list">
+            <li><a href="#metadata_general">General</a></li>
+            <!-- include right tabs, as configured in settings.py under "omero.web.ui.right_tabs" -->
+            
+                <li><a href="#metadata_tab">Acquisition</a></li>
+            
+                <li><a href="#preview_tab">Preview</a></li>
+            
+        </ul>
+        <div id="metadata_general" class="right_tab_content" ></div>
+        <!-- include right tab bodies, as configured in settings.py under "omero.web.ui.right_tabs" -->
+        
+        <div id="metadata_tab" class="right_tab_content"></div>
+        
+        <div id="preview_tab" class="right_tab_content"></div>
+        
+    </div>
+</div>
+
+</div>
+
+
+        </div>
+		
+		<!--
+        
+            <div id="footer">
+                
+                    <p>&copy; 2007-2011 University of Dundee &amp; Open Microscopy Environment</p>
+                
+            </div>
+        
+		-->
+
+
+
+
+    <!-- settings.BASE_INCLUDE_TEMPLATE included here -->
+    
+</body>
+</html>
