@@ -1,4 +1,4 @@
-git+git://github.com/thejohnhoffer/minerva-scripts@d203d712af45591b3ef4f6a3e2ec09a88a044ecb#egg=minerva-scripts
+git+git://github.com/thejohnhoffer/minerva-scripts@c48685b12b63e9565d95ee5f20618db9bc36d75c#egg=minerva-scripts
 git+git://github.com/thejohnhoffer/minerva-lib-python@3cfba513cf326c8e6c4ece252c7142ed04dafd58#egg=minerva-lib
 tornado>=5.1
 pypng>=0.0.18
