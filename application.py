@@ -5,6 +5,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application
 from statichandler import StaticHandler
 from regionhandler import RegionHandler
+from savefigurehandler import SaveFigureHandler
 from listfigurehandler import ListFigureHandler
 from metahandler import MetaHandler
 
@@ -35,6 +36,9 @@ class Webserver(object):
             (r'/webgateway/render_scaled_region/(.*)', RegionHandler, keys),
             (r'/webgateway/render_image/(.*)', RegionHandler, keys),
             (r'/figure/list_web_figures(/)', ListFigureHandler, {
+                'bucket': figure_bucket
+            }),
+            (r'/figure/save_web_figure(/)', SaveFigureHandler, {
                 'bucket': figure_bucket
             }),
             (r'/figure/imgData/(.*)/', MetaHandler, keys),
