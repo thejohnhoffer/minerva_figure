@@ -5,6 +5,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application
 from statichandler import StaticHandler
 from regionhandler import RegionHandler
+from listfigurehandler import ListFigureHandler
 from metahandler import MetaHandler
 
 import asyncio
@@ -28,10 +29,20 @@ class Webserver(object):
             'domain': minerva_domain
         }
 
+        figure_bucket = 'minerva-figure-figures'
+
         self.webApp = Application([
             (r'/webgateway/render_scaled_region/(.*)', RegionHandler, keys),
             (r'/webgateway/render_image/(.*)', RegionHandler, keys),
+            (r'/figure/list_web_figures(/)', ListFigureHandler, {
+                'bucket': figure_bucket
+            }),
             (r'/figure/imgData/(.*)/', MetaHandler, keys),
+            (r'/render_thumbnail/(.*)/', StaticHandler, {
+                'root': __name__,
+                'index': 'index.json',
+                'subfolder': 'open_with'
+            }),
             (r'/webgateway/open_with/(.*)', StaticHandler, {
                 'root': __name__,
                 'index': 'index.json',
