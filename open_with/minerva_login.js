@@ -180,17 +180,22 @@ const use_token = function(token, importImage, get_img_src) {
     };
 };
 
-const login_form = $('#addImagesModal').find('form');
-const form_group = $(login_form).find('.form-group');
+console.log('heyyyy');
+const login_body = $('#welcomeModal').find('.modal-body');
+const login_form = document.createElement('form');
+$(login_body).prepend(login_form);
 
-const login_button = $(login_form).find('button:submit');
-$(login_button).removeAttr('disabled');
+const add_img_form = $('#addImagesModal').find('form');
+const add_img_group = $(add_img_form).find('.form-group');
+
+const add_img_button = $(add_img_form).find('button:submit');
+$(add_img_button).removeAttr('disabled');
 
 // Hidden unused fake id just to pass integer regex
-const enter_fake_id = $(login_form).find('.imgIds');
+const enter_fake_id = $(add_img_form).find('.imgIds');
 // This allows fake field to pass old integer regex for ids
 const fake_id_regex = function() {
-    $(login_button).removeAttr('disabled');
+    $(add_img_button).removeAttr('disabled');
     $(enter_fake_id).val('0');
     $(enter_fake_id).hide();
 };
@@ -200,6 +205,9 @@ const enter_uuids = document.createElement('input');
 enter_uuids.placeholder = 'Minerva Image UUID';
 enter_uuids.id = 'enter_uuids';
 enter_uuids.type = 'text';
+
+$(enter_uuids).addClass('form-control');
+add_img_group.append(enter_uuids);
 
 const enter_username = document.createElement('input');
 enter_username.placeholder = 'Minerva Username';
@@ -211,12 +219,10 @@ enter_password.placeholder = 'Minerva Password';
 enter_password.id = 'enter_password';
 enter_password.type = 'password';
 
-$(enter_uuids).addClass('form-control');
 $(enter_username).addClass('form-control');
 $(enter_password).addClass('form-control');
-form_group.append(enter_uuids);
-form_group.append(enter_username);
-form_group.append(enter_password);
+login_form.append(enter_username);
+login_form.append(enter_password);
 
 // Completely new function to add images
 const newAddImages = function(iIds) {
