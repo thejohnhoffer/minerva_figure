@@ -1,4 +1,3 @@
-import json
 import boto3
 from mimetypes import types_map
 from tornado import web
@@ -33,7 +32,7 @@ class ListFigureHandler(web.RequestHandler):
         mime_type = types_map.get('json', self._basic_mime)
         self.set_header('Content-Type', mime_type)
 
-        self.write(json.dumps(data))
+        self.write(data)
 
     def parse(self, path):
         ''' Get image data for uuid
@@ -46,9 +45,13 @@ class ListFigureHandler(web.RequestHandler):
         '''
 
         bucket = self.s3.Bucket(self.bucket)
-        out = []
+        index_bodies = []
 
         for obj in bucket.objects.all():
-            print(obj)
+            if 'indexJSON/' not in obj.key:
+                continue
+            index_body = obj.get()['Body'].read().decode('utf-8')
+            index_bodies.append(index_body)
 
+        out = '[{}]'.format(','.join(index_bodies))
         return out
