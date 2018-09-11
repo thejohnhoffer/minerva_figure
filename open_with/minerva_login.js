@@ -261,8 +261,9 @@ const newAddImages = function(iIds) {
 };
 
 // Overwrite AddImagesModalView submit event
-(function(addImages, importImage, get_img_src) {
+(function(addImages, load_from_OMERO, importImage, get_img_src) {
     FigureModel.prototype.addImages = function() {
+
         const uuids = $(enter_uuids).val();
         const username = $(enter_username).val();
         const password = $(enter_password).val();
@@ -278,8 +279,25 @@ const newAddImages = function(iIds) {
             fake_id_regex();
         });
     };
+
+    FigureModel.prototype.load_from_OMERO = function(fileId, success) {
+
+        const username = $(enter_username).val();
+        const password = $(enter_password).val();
+
+        const THIS = this;
+        const ARGS = arguments;
+
+        minerva_authenticate(username, password).then(function(token) {
+            use_token(token, importImage, get_img_src);
+            load_from_OMERO.apply(THIS, ARGS);
+        }).catch(function(e) {
+            alert('Invalid Minerva Username or Password');
+        });
+    }
 })(
     newAddImages,
+    FigureModel.prototype.load_from_OMERO,
     FigureModel.prototype.importImage,
     Panel.prototype.get_img_src
 );
