@@ -11,7 +11,7 @@ class SaveFigureHandler(web.RequestHandler):
     ''' Returns metadata
     '''
     _basic_mime = 'text/plain'
-    charset = string.ascii_uppercase + string.digits
+    charset = string.digits
     s3 = boto3.resource('s3')
 
     def initialize(self, bucket):
@@ -55,7 +55,9 @@ class SaveFigureHandler(web.RequestHandler):
         def make_index_key(k):
             return f'indexJSON/{k}.json'
 
-        uuid = ''.join(random.choices(self.charset, k=64))
+        unix_time = int(time.time())
+        # Calculate pseudo-unique 16-digit id from current time
+        uuid = '{:016d}'.format(int(time.time()*10**6))[::-1][:16][::-1]
 
         # Write the figure json to s3
         figure_obj = self.s3.Object(self.bucket, make_figure_key(uuid))
@@ -77,7 +79,7 @@ class SaveFigureHandler(web.RequestHandler):
                 'imageId': first_image
             }),
             'ownerFullName': 'Minerva',
-            'creationDate': int(time.time()),
+            'creationDate': int(unix_time),
             'name': figure_name,
             'canEdit': False,
             'id': uuid,
