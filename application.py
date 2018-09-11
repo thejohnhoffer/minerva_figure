@@ -7,6 +7,7 @@ from statichandler import StaticHandler
 from regionhandler import RegionHandler
 from savefigurehandler import SaveFigureHandler
 from listfigurehandler import ListFigureHandler
+from loadfigurehandler import LoadFigureHandler
 from metahandler import MetaHandler
 
 import asyncio
@@ -35,6 +36,9 @@ class Webserver(object):
         self.webApp = Application([
             (r'/webgateway/render_scaled_region/(.*)', RegionHandler, keys),
             (r'/webgateway/render_image/(.*)', RegionHandler, keys),
+            (r'/figure/load_web_figure/(.*)/', LoadFigureHandler, {
+                'bucket': figure_bucket
+            }),
             (r'/figure/list_web_figures(/)', ListFigureHandler, {
                 'bucket': figure_bucket
             }),

@@ -1,7 +1,6 @@
 import time
 import boto3
 import string
-import random
 from mimetypes import types_map
 from tornado import escape
 from tornado import web
@@ -15,7 +14,7 @@ class SaveFigureHandler(web.RequestHandler):
     s3 = boto3.resource('s3')
 
     def initialize(self, bucket):
-        ''' Create new handler for metadata
+        ''' Create new handler for saving figure json
 
         Arguments:
             bucket: s3 tile bucket name
@@ -26,10 +25,10 @@ class SaveFigureHandler(web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST')
 
     def post(self, path):
-        ''' Get image data
+        ''' Store figure json
 
         Arguments:
-            path: the imgData request
+            path: '/'
         '''
         data = self.parse(path)
 
@@ -40,13 +39,13 @@ class SaveFigureHandler(web.RequestHandler):
         self.write(str(data))
 
     def parse(self, path):
-        ''' Get image data for uuid
+        ''' Store figure json
 
         Arguments:
             path: '/'
 
         Returns:
-            the imagedata dictionary
+            the figure id
         '''
 
         def make_figure_key(k):

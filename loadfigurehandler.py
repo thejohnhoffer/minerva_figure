@@ -3,14 +3,14 @@ from mimetypes import types_map
 from tornado import web
 
 
-class ListFigureHandler(web.RequestHandler):
-    ''' Returns json index of figure json files
+class LoadFigureHandler(web.RequestHandler):
+    ''' Returns figure json
     '''
     _basic_mime = 'text/plain'
     s3 = boto3.resource('s3')
 
     def initialize(self, bucket):
-        ''' Create new handler for json index
+        ''' Create new handler for figure json
 
         Arguments:
             bucket: s3 tile bucket name
@@ -21,10 +21,10 @@ class ListFigureHandler(web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
     def get(self, path):
-        ''' Get json index
+        ''' Get figure data
 
         Arguments:
-            path: '/'
+            path: figure id
         '''
         data = self.parse(path)
 
@@ -35,22 +35,16 @@ class ListFigureHandler(web.RequestHandler):
         self.write(data)
 
     def parse(self, path):
-        ''' Get json index
+        ''' Get figure json for uuid
 
         Arguments:
-            path: '/'
+            path: figure id
 
         Returns:
-            the json index text
+            the json text defining the figure
         '''
 
-        bucket = self.s3.Bucket(self.bucket)
-        index_bodies = []
-
-        for obj in bucket.objects.all():
-            if 'indexJSON/' not in obj.key:
-                continue
-            index_body = obj.get()['Body'].read().decode('utf-8')
-            index_bodies.append(index_body)
-
-        return '[{}]'.format(','.join(index_bodies))
+        key = f'figureJSON/{path}.json'
+        print(key)
+        obj = self.s3.Object(self.bucket, key)
+        return obj.get()['Body'].read().decode('utf-8')
