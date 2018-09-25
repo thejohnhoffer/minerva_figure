@@ -176,11 +176,11 @@ const use_token = function(token, importImage, get_img_src) {
         var img_src = get_img_src.apply(this, arguments);
         var src_list = img_src.split('/');
         src_list.splice(3, 0, token);
-        return src_list.join('/');
+        var new_src = src_list.join('/');
+        return encodeURI(new_src);
     };
 };
 
-console.log('heyyyy');
 const login_body = $('#welcomeModal').find('.modal-body');
 const login_form = document.createElement('form');
 $(login_body).prepend(login_form);

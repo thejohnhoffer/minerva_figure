@@ -80,14 +80,14 @@ class RegionHandler(web.RequestHandler):
         inputs = zip(keys['chan'], keys['c'], keys['r'])
         channels = map(MinervaApi.format_input, inputs)
 
-        # OMERO loads the tiles
-        def ask_minerva(c, l, i, j):
+        # Minerva loads the tiles
+        def ask_minerva(c, l, y, x):
             keywords = {
                 't': 0,
                 'z': 0,
                 'l': l,
-                'x': i,
-                'y': j
+                'x': x,
+                'y': y
             }
             limit = keys['limit']
             return MinervaApi.image(uuid, token, c, limit, **keywords)
@@ -98,7 +98,7 @@ class RegionHandler(web.RequestHandler):
         outer_end = np.array(outer_origin) + outer_shape
 
         # Actual image content
-        image_shape = keys['image_size']
+        image_shape = keys['image_shape']
         request_origin = np.maximum(outer_origin, 0)
         request_end = np.minimum(outer_end, image_shape)
         request_shape = request_end - request_origin
@@ -110,21 +110,17 @@ class RegionHandler(web.RequestHandler):
             return None
 
         # Minerva does the cropping
-        image = do_crop(ask_minerva, channels, keys['tile_size'],
+        image = do_crop(ask_minerva, channels, keys['tile_shape'],
                         request_origin, request_shape, keys['levels'],
                         keys['max_size'])
 
         # Use y, x, color output shape
-        out_w, out_h = outer_shape.astype(np.int64)
+        out_h, out_w = outer_shape.astype(np.int64)
         out = np.ones((out_h, out_w, 3)) * 0.5
 
         # Position cropped region within margins
-        position = (request_origin - outer_origin).astype(np.int64)
-        subregion = np.array([
-            [0, 0],
-            request_shape
-        ], dtype=np.int64)
-
-        out = crop.stitch_tile(out, subregion, position, image)
+        y_0, x_0 = (request_origin - outer_origin).astype(np.int64)
+        y_1, x_1 = [y_0, x_0] + request_shape
+        out[y_0:y_1, x_0:x_1] = image
 
         return np.uint8(255 * out)
