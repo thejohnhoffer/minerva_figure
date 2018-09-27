@@ -51,11 +51,6 @@ class Webserver(object):
                 'index': 'index.json',
                 'subfolder': 'open_with'
             }),
-            (r'/webgateway/open_with/(.*)', StaticHandler, {
-                'root': __name__,
-                'index': 'index.json',
-                'subfolder': 'open_with'
-            }),
             (r'/static/(.*)', StaticHandler, {
                 'root': __name__,
                 'index': 'index.html',

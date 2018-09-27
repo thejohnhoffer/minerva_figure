@@ -176,4 +176,6 @@ rm -rf static
 mv omero.hms.harvard.edu/static static
 mv omero.hms.harvard.edu/figure/* static/figure/
 for i in `find static -type f`; do mv $i `echo $i | cut -d? -f1`; done
+
+cp -R open_with static/webgateway
 ```
