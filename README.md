@@ -17,5 +17,4 @@ for i in `find . -type f`; do mv $i `echo $i | cut -d? -f1`; done
 vim figure/index.html '+:source test.vim | wq!'
 ```
 
-For a http server in python3, run `python -m http.server`
-Then open `localhost:8000/figure` in a web browser.
+For an http server in python3, run `python -m http.server` then open `localhost:8000/figure` in a web browser.
