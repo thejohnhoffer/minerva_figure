@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+    
+    
+    
+    
+    
+		<link rel="stylesheet" href="/static/webgateway/css/reset.css?_5.4.7.25-gs-ice36" type="text/css" />   
+		<link rel="stylesheet" href="/static/webgateway/css/ome.body.css?_5.4.7.25-gs-ice36" type="text/css" />
+		<link rel="stylesheet" href="/static/webclient/css/dusty.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+    
+    <link rel="stylesheet" href="/static/webgateway/css/ome.header.css?_5.4.7.25-gs-ice36" type="text/css" />
+    <link rel="stylesheet" href="/static/webclient/css/layout.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webgateway/css/ome.toolbar.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webadmin/css/dusty.css?_5.4.7.25-gs-ice36" type="text/css" media="screen"/>
+
+    <link rel="stylesheet" href="/static/webadmin/javascript/jquery.imgareaselect-0.9.10/css/imgareaselect-default.css" type="text/css" media="screen"/>
+
+
+
+    <!-- extend here to add page title -->
+    <title>
+        Change avatar
+    </title>
+
+    
+    
+    
+    
+    
+        <!-- block for javascript <script> -->
+    
+    
+
+<script type="text/javascript" src="/static/3rdparty/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="/static/webgateway/js/ome.csrf.js?_5.4.7.25-gs-ice36"></script>
+
+
+
+	<!--[if lte IE 8]>
+	<script>
+		$(function(){
+		   $(".header_toolbar li:last-child").addClass('last-child'),
+		   $("#activities_panel table tr:last-child").addClass('last-child'),
+		    $("#groupsUsersButton span:last-child").addClass('last-child')
+		   
+		})
+		</script>
+	<![endif]-->
+	
+
+    <!-- Include our current version of jQuery-UI and an ome utility script used by many pages -->
+    
+
+<link rel="stylesheet" href="/static/3rdparty/jquery-ui-1.10.4/themes/base/jquery.ui.base.css" type="text/css" />
+<script type="text/javascript" src="/static/3rdparty/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js"></script>
+
+<!-- Disable JQuery UI Tabs Keyboard Navigation -->
+<script type="text/javascript">
+    $.widget("ui.tabs", $.ui.tabs, {
+        _tabKeydown: function (event) {
+            if (event.keyCode !== 37 &&
+                event.keyCode !== 38 &&
+                event.keyCode !== 39 &&
+                event.keyCode !== 40) {
+                this._super(event);
+            }
+        }
+    });
+</script>
+    
+
+<script type="text/javascript" src="/static/webgateway/js/ome.popup.js?_5.4.7.25-gs-ice36"></script>
+
+    <!-- Turn touch events into drag events for jquery-ui -->
+    <script type="text/javascript" src="/static/3rdparty/jquery.ui.touch-punch-0.2.3.min.js"></script>
+
+    <!-- Make the width fit the mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- Allow webclient to be 'added to home-screen' as a full-screen app on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+    <script src="/static/webclient/javascript/jquery.infieldlabel-0.1.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            // initially hidden
+            $("#user_dropdown ul").css('visibility', 'hidden');
+            // show on click
+            $("#show_user_dropdown").click(function(e) {
+                
+                $("ul", $(this).parent()).css('visibility', 'visible');
+                e.preventDefault();
+                return false;
+            });
+            // on hover-out, hide drop-down menus
+            $("#user_dropdown ul").hover(function(){}, function(){
+                $(this).css('visibility', 'hidden');
+            });
+            
+            $("#top_search_field label").inFieldLabels();
+        });
+    </script>
+
+    <!-- keep-alive ping so that OMERO session doesn't die -->
+    
+
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        
+        var ping_interval = 60000;
+        var i = setInterval(function (){
+            $.get("/webclient/keepalive_ping/");
+        }, ping_interval);
+    });
+</script>
+
+
+
+
+
+
+    <script type="text/javascript" src="/static/webadmin/javascript/jquery.imgareaselect-0.9.10/jquery.imgareaselect.js"></script>
+    
+    <script type="text/javascript">
+    
+    
+    
+    $(document).ready(function () { 
+        
+        
+    }); 
+
+    
+    </script>
+    
+    
+
+
+    
+        <!-- block for extra head elements (not css or javascript) E.g. icon, meta tags -->
+        
+
+<link rel="shortcut icon" href="/static/webgateway/img/ome.ico" type="image/x-icon" />
+
+
+    
+
+</head>
+<body>
+
+
+        
+        
+        <div id="middle_header">
+
+            <a id="logo">
+                <img src="/static/webgateway/img/logo2.png"/>
+            </a>
+
+            
+            <div id="middle_header_left">
+				
+				    
+
+
+<ul>
+    <!-- Handle links from settings -->
+    
+        <li class="menu_link">
+          <a href="/webclient/"
+            
+               title="Browse Data via Projects, Tags etc"
+            
+          >Data</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/webclient/history/"
+            
+               title="History"
+            
+          >History</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="http://help.openmicroscopy.org/"
+            
+               target="new" title="Open OMERO user guide in a new tab"
+            
+          >Help</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/figure/"
+            
+               target="_blank" title="Open Figure in new tab"
+            
+          >Figure</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/omero_webtagging_tagsearch/"
+            
+          >Tag Search</a>
+        </li>
+    
+        <li class="menu_link">
+          <a href="/omero_forms/designer/"
+            
+               target="new" title="Open OMERO.Forms in a new tab"
+            
+          >Forms Designer</a>
+        </li>
+    
+
+    
+</ul>
+
+				
+            </div>
+			
+			
+            <div id="middle_header_right">
+				
+                <ul class="header_toolbar" id="script_notifications">
+                    
+
+
+    <li>
+        <!-- Script launcher -->
+        <span id="scriptButton" class="scriptButton toolbar_button" href="/webclient/list_scripts/" title="Run Script"></span>
+        <div id="scriptList" class="sub_menu info_panel" style="min-width: 200px !important">
+        <img id="scriptSpinner" style="display:none" src="/static/webgateway/img/spinner.gif" />
+            <!-- script list-items loaded here by AJAX -->
+        </div>
+    </li>
+
+
+                    
+
+
+
+
+
+<script>
+
+    if (typeof OME === "undefined"){ OME = {}}
+    OME.showActivities = function() {
+        $("#activities_panel").show();
+        OME.displayStatus(-1);  // reset new_results
+        OME.refreshActivities();
+    }
+
+    // this is called by the setInterval loop below
+    OME.activitiesUpdate = function(i) {
+        $.get("/webclient/activities/", function(data) {
+            $('#activities_spinner').hide();
+            var inprogress = $("#inprogress", data).text();
+            var new_results = $("#new_results", data).text();
+            var failure = $("#failure", data).text();
+            
+            // if we've got no jobs still running, stop checking
+            if ((typeof inprogress == 'undefined') || (inprogress.length == 0)) {
+                if (i) clearInterval(i);
+                showJobCount(0);
+                //return;
+            }
+            inprogress = parseInt( inprogress );
+            if (inprogress==0) {
+                if (i != undefined) clearInterval(i);
+            }
+            
+            // display what we recieved, bind events etc
+            $("#activities_content").empty();
+            $("#activities_content").append( $("#jobsTable", $(data)) );
+            $("#jobsTable").alternateRowColors();
+            
+            // bind events
+            $("#activities_content a").click(function() {
+                var href = $(this).attr('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+            // show chgrp errors in new window
+            $(".chgrp_error a").click(function(event) {
+                var error_msg = $(this).next().html();
+                var newWindow=window.open('','','height=500,width=500,scrollbars=yes, top=50, left=100');
+                newWindow.document.write(error_msg);
+                newWindow.document.close();
+                return false;
+            });
+
+            // If we've got new errors - show Activities
+            if ($("#new_errors", data).length > 0) {
+                $("#activities_panel").show();
+                new_results = -1;   // hide notification number
+            }
+            OME.displayStatus(new_results, inprogress);
+
+        }).error(function() {
+            // this requires jQuery 1.5 or later
+            clearInterval(i);
+        });
+    }
+
+    // Add new results to the count, unless we have the Activities panel open
+    OME.displayStatus = function(newresults, inprogress) {
+        // update inprogress 'spinner'
+        if (typeof inprogress != 'undefined') {
+            if ((inprogress == '0') || (inprogress == 0)) {
+                $("#runningStatus").hide();
+            } else {
+                $("#runningStatus").show();
+            }
+        }
+        
+        // update result count
+        var results_count = parseInt($('#jobstatus').text()) || 0;
+        if (typeof newresults != 'undefined') {
+            var new_results = parseInt(newresults);
+            if (new_results < 0) results_count = 0  // clear
+            else results_count += new_results
+        }
+        // only display if we're not showing activities
+        if ((results_count > 0) && !$("#activities_panel").is(":visible")) {
+            $('#jobstatus').show();
+        } else {
+            results_count = 0;
+            $('#jobstatus').hide()
+        }
+        $('#jobstatus').text(results_count + '');
+        
+        // if neither flag is showing, fade out the main icon
+        if ($('#jobstatus').is(":visible") || $('#runningStatus').is(":visible")) {
+            // turning off, see #9154 $("#launch_activities").css('opacity', 1.0);
+        } else {
+            // turning off, see #9154 $("#launch_activities").css('opacity', 0.5);
+        }
+    }
+
+    OME.refreshActivities = function() {
+        var i = setInterval(function (){
+                OME.activitiesUpdate(i);
+        }, 5000);
+        OME.activitiesUpdate(i);
+    }
+    $(document).ready(function() {
+        OME.displayStatus(-1);  // reset new_results
+        OME.refreshActivities();
+        $("#activities_panel").hide();
+        
+        // add click handler to entire body, to close the activities panel 
+        $('body').click(function(event) {
+            var id = event.target.id;
+            //$(".info_panel").hide();
+            if ((id == 'launch_activities') || (id == 'jobstatus') || (id == 'runningStatus')) {
+                OME.showActivities();
+            } else {
+                $("#activities_panel .new_result").removeClass('new_result');
+                $("#activities_panel").hide();
+            }
+
+        }); // BUT also stop any events bubbling up from panel itself
+        $("#activities_panel").click(function(event) {
+            return false;
+        });
+        
+        $("#clear_activities").click(function() {
+            $.post("/webclient/activities_update/clean/");
+            $("#jobsTable>tbody>tr").filter(":not(.in_progress)").remove();
+        });
+
+        // close panels on 'ESCAPE'
+        $("body").bind('keyup', function(event){
+            if (event.keyCode === $.ui.keyCode.ESCAPE) {
+                $(".info_panel").hide();
+            }
+        });
+
+        // If a chgrp fails due to filesets, we provide a 'move all' button:
+        $("#activities_content").on("click", ".chgrp_move_all", function(event){
+            var $this = $(this);
+            if ($this.prop('disabled')){
+                return false;
+            }
+            $this.prop('disabled', true);
+            $.get($this.attr('url'), function(){
+                OME.refreshActivities();
+            });
+            event.preventDefault();
+            return false;
+        });
+    });
+</script>
+
+
+        <li id="queue">
+			
+            <span class="toolbar_button" id="launch_activities" title="Activities">
+                <span id="jobstatus" class="notifier">0</span>
+                <span id="runningStatus" style="display:none;"></span>
+            </span>
+            
+            <div id="activities_panel" class="info_panel">
+
+			<div class="info_panel_title">
+			
+                <h3>
+                    Activities
+                    <img id='activities_spinner' src="/static/webgateway/img/spinner.gif"/>
+                    
+                </h3>
+             <button type="button" id="clear_activities">Clear List</button>
+			 </div>
+				
+                <div id="activities_content">
+                </div>
+                
+            </div>
+        </li>
+
+                </ul>
+				<!-- Global Search -->
+				
+
+
+<form id="search" action="/webclient/search/" title="Search OMERO">
+
+    <div id="top_search_field">
+        <label class="inline_label" for="id_search_query">Search:</label>
+        <input id="id_search_query" name="search_query" size="25" type="text" />
+        <input type="submit" value="Go" />
+    </div>
+    
+</form>
+						
+				<!-- User Dropdown -->
+				
+
+    <div id="user_dropdown">
+        <div id="show_user_dropdown">
+            <img src="/webadmin/myphoto/" />
+            <span>John Hoffer</span>
+        </div>
+        <ul class="dropdown">
+            
+              <li id="user_settings"><a href="/webadmin/myaccount/edit/" title="User settings">
+                User settings
+              </a></li>
+            
+			<!-- Help -->
+            <li id="send"><a href="#" onclick="return OME.openPopup('/feedback/comment/')">Send Feedback</a></li>
+			<li id="logout">
+
+
+<form action="/webclient/logout/" method="post"><input type='hidden' name='csrfmiddlewaretoken' value='TgA1cBHWXIkaGxUmrPAmTEhIiT9kUTqF' />
+    <a href="javascript:;" onclick="parentNode.submit();">Logout</a>
+</form>
+</li>
+        </ul>
+    </div>
+
+			
+            </div>
+			
+	        <div class="clear"></div>
+	
+		</div>
+    	
+        
+        <div id="content">
+        
+    <div id="center_details">
+        
+        
+
+<div class="one_column_content">
+    <h1>Change avatar</h1>
+    
+    <h1><a href="/webadmin/myaccount/" style="position:relative; top:-38px; float:right" title="Go Back to User settings">Back to User Settings</a></h1>
+    
+    
+
+    <div style="width:150px">
+        
+        <p><center><img src="/webadmin/myphoto/" class="imgzoom"/></center>
+        <br/><ul class="errorlist"><li>No avatar set.</li></ul></p>
+        
+    </div>
+    
+    <div >
+      
+        <form enctype="multipart/form-data" method="post" action="/webadmin/change_avatar/2113/upload/" class="standard_form settings_form"><input type='hidden' name='csrfmiddlewaretoken' value='TgA1cBHWXIkaGxUmrPAmTEhIiT9kUTqF' />
+            <p>Upload new picture. Select an image file on your computer (max 200KB):</p>
+            
+            
+                <br />
+                <input id="id_photo" name="photo" type="file" />
+                <br />
+            
+             <input type="submit" value="Upload" />
+        </form>
+    </div>
+</div>
+
+
+
+    </div>
+
+        </div>
+		
+		<!--
+        
+            <div id="footer">
+                
+                    <p>&copy; 2007-2011 University of Dundee &amp; Open Microscopy Environment</p>
+                
+            </div>
+        
+		-->
+
+
+
+
+    <!-- settings.BASE_INCLUDE_TEMPLATE included here -->
+    
+</body>
+</html>
